@@ -6,10 +6,6 @@
   "author": "“Jakob <steiningerjakob@gmail.com>",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "frontend",
-    "server"
-  ],
   "devDependencies": {
     "@next/eslint-plugin-next": "^10.2.2",
     "@types/node": "^15.0.1",
