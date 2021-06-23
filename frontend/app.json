@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "my-coffee-app",
+    "slug": "my-coffee-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/default.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F3EEEE"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    }
+  }
+}
