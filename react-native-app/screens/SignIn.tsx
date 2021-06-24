@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
+import { LoginResponse } from '../../common/types';
 import Button from '../components/Button';
 import Container from '../components/Container';
 import Header from '../components/Header';
@@ -10,12 +11,18 @@ import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
 import { Paragraph } from '../components/Text';
 
-export default function SignUp() {
+const errorStyles = StyleSheet.create({
+  text: {
+    color: 'red',
+    fontSize: 16,
+  },
+});
+
+export default function SignIn() {
   const navigation = useNavigation();
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const { manifest } = Constants;
 
@@ -27,48 +34,37 @@ export default function SignUp() {
 
   const apiBaseUrl = `http:${apiBaseUrlDraft}`;
 
-  async function createUser() {
-    const response = await fetch(`${apiBaseUrl}/register`, {
+  async function verifyUser() {
+    const response = await fetch(`${apiBaseUrl}/login`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
         email: email,
         password: password,
       }),
     });
-    // Navigate to the profile page when the user has been created
-    navigation.navigate('Profile');
+
+    const json = (await response.json()) as LoginResponse;
+
+    // Return error if verification goes wrong
+    if ('errors' in json) {
+      setError(json.errors[0].message);
+      return;
+    }
+
+    // Navigate to the profile page when the user has successfully logged in
+    navigation.navigate('Home');
     return response;
   }
 
   return (
     <Screen>
-      <Header label="Sign up" />
+      <Header label="Sign in" />
       <ScrollView style={{ flex: 1 }}>
         <Container fill>
-          <Spacer />
-          <Paragraph>First name:</Paragraph>
-          <Input
-            value={firstName}
-            onChangeText={(text) => setFirstName(text)}
-            placeholder="First name"
-            clearButtonMode="while-editing"
-            type="name"
-          />
-          <Spacer />
-          <Paragraph>Last name:</Paragraph>
-          <Input
-            value={lastName}
-            onChangeText={(text) => setLastName(text)}
-            placeholder="Last name"
-            clearButtonMode="while-editing"
-            type="name"
-          />
           <Spacer />
           <Paragraph>Email:</Paragraph>
           <Input
@@ -90,8 +86,9 @@ export default function SignUp() {
         </Container>
       </ScrollView>
       <Container>
-        <Button label="sign up" onPress={createUser} />
+        <Button label="sign in" onPress={verifyUser} />
       </Container>
+      <Text style={errorStyles.text}>{error}</Text>
       <Container>
         <Button label="go back" onPress={() => navigation.goBack()} />
       </Container>

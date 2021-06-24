@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
-import { User } from '../../common/types';
+import { User, UserWithPasswordHash } from '../../common/types';
 import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
 
 setPostgresDefaultsOnHeroku();
@@ -51,6 +51,39 @@ export async function getAllUsers() {
       users
   `;
   return users.map((user) => camelcaseKeys(user));
+}
+
+export async function getUserByEmail(email?: string) {
+  // Return undefined if email is falsy
+  if (!email) return undefined;
+
+  const users = await sql<[User]>`
+    SELECT
+      id,
+      first_name,
+      last_name,
+      email
+    FROM
+      users
+    WHERE
+      email = ${email}
+  `;
+  return users.map((user) => camelcaseKeys(user))[0];
+}
+
+export async function getUserWithPasswordHashByEmail(email?: string) {
+  // Return undefined if email is falsy
+  if (!email) return undefined;
+
+  const users = await sql<[UserWithPasswordHash]>`
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      email = ${email}
+  `;
+  return users.map((user) => camelcaseKeys(user))[0];
 }
 
 export async function insertUser(
