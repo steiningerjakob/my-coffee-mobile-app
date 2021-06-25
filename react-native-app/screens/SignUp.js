@@ -17,17 +17,16 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { manifest } = Constants;
-
-  // TODO: adjust to api.example.com to Heroku url for deployment
-  const apiBaseUrlDraft =
-    typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-      ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
-      : `api.example.com`;
-
-  const apiBaseUrl = `http:${apiBaseUrlDraft}`;
-
   async function createUser() {
+    const { manifest } = Constants;
+
+    // TODO: adjust to api.example.com to Heroku url for deployment
+    const apiBaseUrlDraft =
+      typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
+        ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
+        : `api.example.com`;
+
+    const apiBaseUrl = `http:${apiBaseUrlDraft}`;
     const response = await fetch(`${apiBaseUrl}/register`, {
       method: 'POST',
       headers: {
@@ -85,7 +84,7 @@ export default function SignUp() {
             onChangeText={(text) => setPassword(text)}
             placeholder="Password"
             clearButtonMode="while-editing"
-            type="password"
+            secureTextEntry={true}
           />
         </Container>
       </ScrollView>

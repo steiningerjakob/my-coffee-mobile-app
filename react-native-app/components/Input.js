@@ -21,6 +21,7 @@ export default function Input(props) {
       type={props.type}
       clearButtonMode={props.clearButtonMode}
       style={inputStyles.input}
+      secureTextEntry={props.secureTextEntry}
     />
   );
 }

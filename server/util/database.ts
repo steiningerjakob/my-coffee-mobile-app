@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
-import { User, UserWithPasswordHash } from '../../common/types';
+import { Session, User, UserWithPasswordHash } from '../../common/types';
 import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
 
 setPostgresDefaultsOnHeroku();
@@ -104,4 +104,37 @@ export async function insertUser(
       email
   `;
   return users.map((user) => camelcaseKeys(user))[0];
+}
+
+export async function insertSession(token: string, userId: number) {
+  const sessions = await sql<Session[]>`
+    INSERT INTO sessions
+      (token, user_id)
+    VALUES
+      (${token}, ${userId})
+    RETURNING *
+  `;
+  return sessions.map((session) => camelcaseKeys(session))[0];
+}
+
+export async function deleteExpiredSessions() {
+  const sessions = await sql<Session[]>`
+    DELETE FROM
+      sessions
+    WHERE
+      expiry < NOW()
+    RETURNING *
+  `;
+  return sessions.map((session) => camelcaseKeys(session));
+}
+
+export async function deleteSessionByToken(token: string) {
+  const sessions = await sql<Session[]>`
+    DELETE FROM
+      sessions
+    WHERE
+      token = ${token}
+    RETURNING *
+  `;
+  return sessions.map((session) => camelcaseKeys(session))[0];
 }

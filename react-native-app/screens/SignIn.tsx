@@ -24,17 +24,17 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const { manifest } = Constants;
-
-  // TODO: adjust to api.example.com to Heroku url for deployment
-  const apiBaseUrlDraft =
-    typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-      ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
-      : `api.example.com`;
-
-  const apiBaseUrl = `http:${apiBaseUrlDraft}`;
-
   async function verifyUser() {
+    const { manifest } = Constants;
+
+    // TODO: adjust to api.example.com to Heroku url for deployment
+    const apiBaseUrlDraft =
+      typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
+        ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
+        : `api.example.com`;
+
+    const apiBaseUrl = `http:${apiBaseUrlDraft}`;
+
     const response = await fetch(`${apiBaseUrl}/login`, {
       method: 'POST',
       headers: {
@@ -81,7 +81,7 @@ export default function SignIn() {
             onChangeText={(text) => setPassword(text)}
             placeholder="Password"
             clearButtonMode="while-editing"
-            type="password"
+            secureTextEntry={true}
           />
         </Container>
       </ScrollView>
