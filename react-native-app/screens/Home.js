@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import Constants from 'expo-constants';
 import React from 'react';
 import Button from '../components/Button';
 import Container from '../components/Container';

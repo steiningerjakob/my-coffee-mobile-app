@@ -31,9 +31,12 @@ export default function SignIn() {
     const apiBaseUrlDraft =
       typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
         ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
-        : `api.example.com`;
+        : `jakobs-mobile-coffee-app.herokuapp.com`;
 
-    const apiBaseUrl = `http:${apiBaseUrlDraft}`;
+    const apiBaseUrl =
+      apiBaseUrlDraft === `jakobs-mobile-coffee-app.herokuapp.com`
+        ? `https:${apiBaseUrlDraft}`
+        : `http:${apiBaseUrlDraft}`;
 
     const response = await fetch(`${apiBaseUrl}/login`, {
       method: 'POST',
