@@ -91,9 +91,6 @@ export default function SignUp() {
       <Container>
         <Button label="sign up" onPress={createUser} />
       </Container>
-      <Container>
-        <Button label="go back" onPress={() => navigation.goBack()} />
-      </Container>
     </Screen>
   );
 }

@@ -19,3 +19,7 @@ export type Session = {
 export type ApplicationError = { message: string };
 
 export type LoginResponse = { user: User } | { errors: ApplicationError[] };
+
+export type SingleUserResponseType =
+  | { user: User | null }
+  | { errors: ApplicationError[] };

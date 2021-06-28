@@ -8,7 +8,7 @@ import ImagePreview from '../components/ImagePreview';
 import Spacer from '../components/Spacer';
 import { Headline } from '../components/Text';
 
-export default function Welcome() {
+export default function Splash() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -37,6 +37,8 @@ export default function Welcome() {
         variant
         onPress={() => navigation.navigate('SignIn')}
       />
+      <Spacer />
+      <Button label="Home" onPress={() => navigation.navigate('Home')} />
     </View>
   );
 }

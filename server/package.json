@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "dotenv ley"
+    "migrate": "dotenv ley",
+    "heroku-postbuild": "yarn migrate up && yarn build"
   },
   "dependencies": {
     "argon2": "^0.28.2",
@@ -27,5 +28,8 @@
     "@types/dotenv-safe": "^8.1.1",
     "eslint": "7.29.0",
     "eslint-config-next": "11.0.1"
-  }
+  },
+  "cacheDirectories": [
+    ".next/cache"
+  ]
 }

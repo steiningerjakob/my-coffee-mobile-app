@@ -64,7 +64,7 @@ export default function SignIn() {
     <Screen>
       <Header label="Sign in" />
       <ScrollView style={{ flex: 1 }}>
-        <Container fill>
+        <Container>
           <Spacer />
           <Paragraph>Email:</Paragraph>
           <Input
@@ -83,15 +83,10 @@ export default function SignIn() {
             clearButtonMode="while-editing"
             secureTextEntry={true}
           />
+          <Button label="sign in" onPress={verifyUser} />
         </Container>
       </ScrollView>
-      <Container>
-        <Button label="sign in" onPress={verifyUser} />
-      </Container>
       <Text style={errorStyles.text}>{error}</Text>
-      <Container>
-        <Button label="go back" onPress={() => navigation.goBack()} />
-      </Container>
     </Screen>
   );
 }

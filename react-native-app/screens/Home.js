@@ -3,43 +3,33 @@ import Constants from 'expo-constants';
 import React from 'react';
 import Button from '../components/Button';
 import Container from '../components/Container';
+import Header from '../components/Header';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
-import { Headline } from '../components/Text';
+import { logoutUser } from '../util/apiFunctions';
 
-export default function Home() {
+export default function Home(props) {
   const navigation = useNavigation();
 
-  // ping the logout API - cookie gets sent automatically
-  async function logoutUser() {
-    const { manifest } = Constants;
-
-    // TODO: adjust to api.example.com to Heroku url for deployment
-    const apiBaseUrlDraft =
-      typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-        ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
-        : `api.example.com`;
-
-    const apiBaseUrl = `http:${apiBaseUrlDraft}`;
-
-    await fetch(`${apiBaseUrl}/logout`);
+  function logoutButtonHandler() {
+    logoutUser();
+    navigation.navigate('Splash');
   }
 
   return (
     <Screen>
-      <Container>
-        <Headline>Home</Headline>
-      </Container>
+      <Header label="Home" firstName={props.firstName} />
+      {console.log('Header props.firstName', props.firstName)}
       <Container>
         <Button
           label="back to welcome screen"
           variant
-          onPress={() => navigation.navigate('Welcome')}
+          onPress={() => navigation.navigate('Splash')}
         />
       </Container>
       <Spacer />
       <Container>
-        <Button label="logout" variant onPress={logoutUser} />
+        <Button label="logout" variant onPress={logoutButtonHandler} />
       </Container>
     </Screen>
   );
