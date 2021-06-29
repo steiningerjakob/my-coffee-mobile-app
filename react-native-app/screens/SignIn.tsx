@@ -6,6 +6,7 @@ import { LoginResponse } from '../../common/types';
 import { userContext } from '../App';
 import Button from '../components/Button';
 import Container from '../components/Container';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Input from '../components/Input';
 import Screen from '../components/Screen';
@@ -92,10 +93,12 @@ export default function SignIn() {
             clearButtonMode="while-editing"
             secureTextEntry={true}
           />
+          <Spacer />
           <Button label="sign in" onPress={verifyUser} />
         </Container>
       </ScrollView>
       <Text style={errorStyles.text}>{error}</Text>
+      <Footer />
     </Screen>
   );
 }

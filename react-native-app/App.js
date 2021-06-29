@@ -29,7 +29,6 @@ export default function App() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  console.log('App.js firstName', firstName);
 
   const refreshUserContext =
     // useCallback: Prevent this function from getting
@@ -53,7 +52,7 @@ export default function App() {
         // error handling to be added here if necessary
         return;
       } else if (!json.user) {
-        //
+        // error handling to be added here if necessary
       } else {
         setFirstName(json.user.firstName);
         setLastName(json.user.lastName);

@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native';
 import { userContext } from '../App';
 import Button from '../components/Button';
 import Container from '../components/Container';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Input from '../components/Input';
 import Screen from '../components/Screen';
@@ -102,6 +103,7 @@ export default function SignUp() {
       <Container>
         <Button label="sign up" onPress={createUser} />
       </Container>
+      <Footer />
     </Screen>
   );
 }

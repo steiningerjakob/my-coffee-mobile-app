@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { userContext } from '../App';
 import Button from '../components/Button';
 import Container from '../components/Container';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
@@ -26,7 +27,11 @@ export default function Profile() {
 
   return (
     <Screen>
-      <Header label="Profile" firstName={firstName} />
+      <Header
+        label="Profile"
+        firstName={firstName}
+        refreshUserContext={refreshUserContext}
+      />
       <Container>
         <Headline>Welcome back, {firstName}</Headline>
         <Headline>Profile details:</Headline>
@@ -42,9 +47,12 @@ export default function Profile() {
         />
       </Container>
       <Spacer />
-      <Container>
-        <Button label="logout" variant onPress={logoutButtonHandler} />
-      </Container>
+      {firstName && (
+        <Container>
+          <Button label="logout" variant onPress={logoutButtonHandler} />
+        </Container>
+      )}
+      <Footer />
     </Screen>
   );
 }
