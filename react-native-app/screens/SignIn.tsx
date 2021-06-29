@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 import { LoginResponse } from '../../common/types';
+import { userContext } from '../App';
 import Button from '../components/Button';
 import Container from '../components/Container';
 import Header from '../components/Header';
@@ -23,6 +24,9 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const { firstName, refreshUserContext } = useContext(userContext);
+  console.log('refreshUserContext SignIn', refreshUserContext);
 
   async function verifyUser() {
     const { manifest } = Constants;
@@ -58,6 +62,8 @@ export default function SignIn() {
       return;
     }
 
+    refreshUserContext();
+
     // Navigate to the profile page when the user has successfully logged in
     navigation.navigate('Home');
     return response;
@@ -65,7 +71,7 @@ export default function SignIn() {
 
   return (
     <Screen>
-      <Header label="Sign in" />
+      <Header label="Sign in" firstName={firstName} />
       <ScrollView style={{ flex: 1 }}>
         <Container>
           <Spacer />

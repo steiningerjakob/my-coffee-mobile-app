@@ -3,7 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  Fragment,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import Detail from './screens/Detail';
 import Favourites from './screens/Favourites';
 import Home from './screens/Home';
@@ -17,20 +23,21 @@ import Splash from './screens/Splash';
 
 const Stack = createStackNavigator();
 
+export const userContext = createContext(null);
+
 export default function App() {
   const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   console.log('App.js firstName', firstName);
 
-  // TODO: pass this as a prop to other components / screens
-
-  const refreshFirstName =
+  const refreshUserContext =
     // useCallback: Prevent this function from getting
     // a different reference on every rerender
     useCallback(async () => {
       console.log('i am the useCallback');
       const { manifest } = Constants;
 
-      // TODO: adjust to api.example.com to Heroku url for deployment
       const apiBaseUrlDraft =
         typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
           ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
@@ -49,15 +56,25 @@ export default function App() {
         //
       } else {
         setFirstName(json.user.firstName);
+        setLastName(json.user.lastName);
+        setEmail(json.user.email);
       }
     }, []);
 
-  // Retrieve user first name information ONCE the first time
-  // that a user loads the page
+  // Retrieve user first name information ONCE the first
+  // time that a user loads the page
   useEffect(() => {
     console.log('i am the useEffect');
-    refreshFirstName();
-  }, [refreshFirstName]);
+    refreshUserContext();
+  }, [refreshUserContext]);
+
+  const userContextValue = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    refreshUserContext: refreshUserContext,
+  };
+  console.log('userContextValue App', userContextValue);
 
   // WIP: Conditional routing based on login state:
 
@@ -101,30 +118,32 @@ export default function App() {
   return (
     <Fragment>
       <StatusBar style="light" />
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Splash"
-          screenOptions={{ headerShown: false }}
-        >
-          <Stack.Screen name="Splash" component={Splash} />
-          {/* {firstName !== '' ? (
+      <userContext.Provider value={userContextValue}>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Splash"
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name="Splash" component={Splash} />
+            {/* {firstName !== '' ? (
             <> */}
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="Preferences" component={Preferences} />
-          <Stack.Screen name="Setup" component={Setup} />
-          <Stack.Screen name="Favourites" component={Favourites} />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="List" component={List} />
-          <Stack.Screen name="Detail" component={Detail} />
-          {/* </> */}
-          {/* // ) : (
+            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="Preferences" component={Preferences} />
+            <Stack.Screen name="Setup" component={Setup} />
+            <Stack.Screen name="Favourites" component={Favourites} />
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="List" component={List} />
+            <Stack.Screen name="Detail" component={Detail} />
+            {/* </> */}
+            {/* // ) : (
             // <> */}
-          <Stack.Screen name="SignIn" component={SignIn} />
-          <Stack.Screen name="SignUp" component={SignUp} />
-          {/* </> */}
-          {/* // )} */}
-        </Stack.Navigator>
-      </NavigationContainer>
+            <Stack.Screen name="SignIn" component={SignIn} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+            {/* </> */}
+            {/* // )} */}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </userContext.Provider>
     </Fragment>
   );
 }

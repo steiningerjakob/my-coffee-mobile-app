@@ -3,7 +3,6 @@ import Constants from 'expo-constants';
 export async function logoutUser() {
   const { manifest } = Constants;
 
-  // TODO: adjust to api.example.com to Heroku url for deployment
   const apiBaseUrlDraft =
     typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
       ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
@@ -15,4 +14,5 @@ export async function logoutUser() {
       : `http:${apiBaseUrlDraft}`;
 
   await fetch(`${apiBaseUrl}/logout`);
+  console.log('apiBaseUrl', apiBaseUrl);
 }

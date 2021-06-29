@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ScrollView } from 'react-native';
+import { userContext } from '../App';
 import Button from '../components/Button';
 import Container from '../components/Container';
 import Header from '../components/Header';
@@ -16,6 +17,9 @@ export default function SignUp() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { refreshUserContext } = useContext(userContext);
+  console.log('refreshUserContext SignUp', refreshUserContext);
 
   async function createUser() {
     const { manifest } = Constants;
@@ -44,6 +48,9 @@ export default function SignUp() {
         password: password,
       }),
     });
+
+    refreshUserContext();
+
     // Navigate to the profile page when the user has been created
     navigation.navigate('Profile');
     return response;
@@ -51,7 +58,7 @@ export default function SignUp() {
 
   return (
     <Screen>
-      <Header label="Sign up" />
+      <Header label="Sign up" firstName={firstName} />
       <ScrollView style={{ flex: 1 }}>
         <Container fill>
           <Spacer />
