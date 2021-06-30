@@ -8,10 +8,10 @@ exports.up = async function up(sql) {
 			origin varchar(20),
 			bean_type varchar(40) NOT NULL,
 			flavour_profile integer REFERENCES flavour_profiles (id),
-			price integer NOT NULL,
-			kg integer NOT NULL,
-			price_per_kg integer NOT NULL,
-			img varchar(10) NOT NULL,
+			price numeric NOT NULL,
+			kg numeric NOT NULL,
+			price_per_kg numeric,
+			img varchar(100) NOT NULL,
 			seller varchar(40),
 			theme varchar(40)
 		)

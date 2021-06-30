@@ -9,27 +9,28 @@ const listItemStyles = StyleSheet.create({
     padding: 12,
     borderBottomColor: 'lightgray',
     borderBottomWidth: 1,
+    width: 320,
   },
   image: {
     marginRight: 12,
     height: 48,
     width: 48,
   },
-  title: { fontSize: 24, color: 'black', textAlign: 'left' },
+  title: { fontSize: 16, color: 'black', textAlign: 'left' },
 });
 
 export default function ListItem(props) {
   return (
     <TouchableOpacity onPress={() => props.onPress()}>
       <View style={listItemStyles.wrapper}>
-        <Image
-          resizeMode="cover"
-          source={{
-            uri: props.item.image,
-          }}
-          style={listItemStyles.image}
-        />
-        <Text style={listItemStyles.title}>{props.item.title}</Text>
+        {props.item && (
+          <Image
+            resizeMode="cover"
+            source={props.item.img}
+            style={listItemStyles.image}
+          />
+        )}
+        <Text style={listItemStyles.title}>{props.item.productName}</Text>
       </View>
     </TouchableOpacity>
   );

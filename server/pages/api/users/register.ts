@@ -2,12 +2,12 @@ import argon2 from 'argon2';
 // eslint-disable-next-line unicorn/prefer-node-protocol
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createSerializedSessionTokenCookie } from '../../util/cookies';
+import { createSerializedSessionTokenCookie } from '../../../util/cookies';
 import {
   deleteExpiredSessions,
   insertSession,
   insertUser,
-} from '../../util/database';
+} from '../../../util/database';
 
 export default async function signUpHandler(
   req: NextApiRequest,

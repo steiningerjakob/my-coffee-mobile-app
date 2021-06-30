@@ -3,6 +3,9 @@ import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
 import {
   ApplicationError,
+  Bean,
+  Grinder,
+  Machine,
   Session,
   User,
   UserWithPasswordHash,
@@ -43,7 +46,7 @@ function connectOneTimeToDatabase() {
 // Connect to PostgreSQL
 const sql = connectOneTimeToDatabase();
 
-// Perform database queries:
+// 1. User-related queries:
 
 export async function getAllUsers() {
   const users = await sql<User[]>`
@@ -248,4 +251,66 @@ export async function getUserByValidSessionToken(token: string) {
   if (!session) return undefined;
 
   return await getUserById(session.userId);
+}
+
+// 2. Product-related queries:
+
+export async function getAllBeans() {
+  const beans = await sql<Bean[]>`
+    SELECT
+      id,
+      product_name,
+      roaster,
+      roaster_country,
+      origin,
+      bean_type,
+      flavour_profile,
+      price,
+      kg,
+      img,
+      seller
+    FROM
+      beans
+  `;
+  return beans.map((bean) => camelcaseKeys(bean));
+}
+
+export async function getBeanById(id?: number) {
+  const singleBean = await sql<Bean>`
+    SELECT
+      *
+    FROM
+      beans
+    WHERE
+      id = ${id}
+  `;
+  return singleBean.map((bean) => camelcaseKeys(bean))[0];
+}
+
+export async function getAllMachines() {
+  const machines = await sql<Machine[]>`
+    SELECT
+      id,
+      machine_name,
+      manufacturer,
+      price,
+      img
+    FROM
+      machines
+  `;
+  return machines.map((machine) => camelcaseKeys(machine));
+}
+
+export async function getAllGrinders() {
+  const grinders = await sql<Grinder[]>`
+    SELECT
+      id,
+      grinder_name,
+      manufacturer,
+      price,
+      img
+    FROM
+      grinders
+  `;
+  return grinders.map((grinder) => camelcaseKeys(grinder));
 }

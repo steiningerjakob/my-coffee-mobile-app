@@ -1,6 +1,6 @@
 import cookie from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { deleteSessionByToken } from '../../util/database';
+import { deleteSessionByToken } from '../../../util/database';
 
 export default async function logoutHandler(
   req: NextApiRequest,

@@ -27,15 +27,12 @@ const headerStyles = StyleSheet.create({
 });
 
 export default function Header(props) {
-  console.log('Header props', props);
   const navigation = useNavigation();
 
-  // TODO: fix logout function - refreshUserContext needs
-  // to be in props
   function logoutButtonHandler() {
-    console.log('i am the logout button handler in Profile');
     logoutUser();
-    props.refreshUserContext();
+    // pass in true as an argument to clear cookie
+    props.refreshUserContext(true);
     navigation.navigate('SignIn');
   }
 

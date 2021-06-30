@@ -2,13 +2,13 @@ import argon2 from 'argon2';
 // eslint-disable-next-line unicorn/prefer-node-protocol
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { LoginResponse } from '../../../common/types';
-import { createSerializedSessionTokenCookie } from '../../util/cookies';
+import { LoginResponse } from '../../../../common/types';
+import { createSerializedSessionTokenCookie } from '../../../util/cookies';
 import {
   deleteExpiredSessions,
   getUserWithPasswordHashByEmail,
   insertSession,
-} from '../../util/database';
+} from '../../../util/database';
 
 export default async function signInHandler(
   req: NextApiRequest,
@@ -29,8 +29,7 @@ export default async function signInHandler(
         .json({ errors: [{ message: 'Username or password did not match' }] });
     }
 
-    // Check that the entered plaintext password matches with the
-    // password hash stored in the database
+    // Check that the entered plaintext password matches with the password hash stored in the database
     const passwordMatches = await argon2.verify(
       userWithPasswordHash.passwordHash,
       password,

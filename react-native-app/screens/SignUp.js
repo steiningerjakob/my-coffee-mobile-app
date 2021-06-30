@@ -20,7 +20,6 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
 
   const { refreshUserContext } = useContext(userContext);
-  console.log('refreshUserContext SignUp', refreshUserContext);
 
   async function createUser() {
     const { manifest } = Constants;
@@ -36,7 +35,7 @@ export default function SignUp() {
         ? `https:${apiBaseUrlDraft}`
         : `http:${apiBaseUrlDraft}`;
 
-    const response = await fetch(`${apiBaseUrl}/register`, {
+    const response = await fetch(`${apiBaseUrl}/users/register`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

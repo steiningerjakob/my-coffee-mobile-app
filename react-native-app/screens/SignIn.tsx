@@ -27,12 +27,10 @@ export default function SignIn() {
   const [error, setError] = useState('');
 
   const { firstName, refreshUserContext } = useContext(userContext);
-  console.log('refreshUserContext SignIn', refreshUserContext);
 
   async function verifyUser() {
     const { manifest } = Constants;
 
-    // TODO: adjust to api.example.com to Heroku url for deployment
     const apiBaseUrlDraft =
       typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
         ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
@@ -43,7 +41,7 @@ export default function SignIn() {
         ? `https:${apiBaseUrlDraft}`
         : `http:${apiBaseUrlDraft}`;
 
-    const response = await fetch(`${apiBaseUrl}/login`, {
+    const response = await fetch(`${apiBaseUrl}/users/login`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
