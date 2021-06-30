@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { userContext } from '../App';
-import Button from '../components/Button';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';

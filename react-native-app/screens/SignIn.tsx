@@ -92,6 +92,7 @@ export default function SignIn() {
             secureTextEntry={true}
           />
           <Spacer />
+          <Spacer />
           <Button label="sign in" onPress={verifyUser} />
         </Container>
       </ScrollView>

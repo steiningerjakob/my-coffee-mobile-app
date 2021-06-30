@@ -15,6 +15,7 @@ export default function Preferences() {
       <Container>
         <Headline>Preferences</Headline>
       </Container>
+      <Container fill />
       <Footer />
     </Screen>
   );

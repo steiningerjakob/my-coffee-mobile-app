@@ -1,5 +1,7 @@
+import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { beanImages } from '../assets/beans/beansImages';
 
 const listItemStyles = StyleSheet.create({
   wrapper: {
@@ -17,6 +19,7 @@ const listItemStyles = StyleSheet.create({
     width: 48,
   },
   title: { fontSize: 16, color: 'black', textAlign: 'left' },
+  icon: { marginLeft: 'auto' },
 });
 
 export default function ListItem(props) {
@@ -25,12 +28,18 @@ export default function ListItem(props) {
       <View style={listItemStyles.wrapper}>
         {props.item && (
           <Image
-            resizeMode="cover"
-            source={props.item.img}
+            resizeMode="contain"
+            source={beanImages[`image${props.item.id}`]}
             style={listItemStyles.image}
           />
         )}
         <Text style={listItemStyles.title}>{props.item.productName}</Text>
+        <AntDesign
+          name="right"
+          size={24}
+          color="black"
+          style={listItemStyles.icon}
+        />
       </View>
     </TouchableOpacity>
   );

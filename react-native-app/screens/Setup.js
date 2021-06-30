@@ -15,6 +15,7 @@ export default function Setup() {
       <Container>
         <Headline>Setup</Headline>
       </Container>
+      <Container fill />
       <Footer />
     </Screen>
   );

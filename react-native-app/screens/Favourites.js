@@ -15,6 +15,7 @@ export default function Favourites() {
       <Container>
         <Headline>Favourites</Headline>
       </Container>
+      <Container fill />
       <Footer />
     </Screen>
   );
