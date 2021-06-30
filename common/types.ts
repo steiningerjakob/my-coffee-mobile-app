@@ -59,3 +59,10 @@ export type Grinder = {
   price: number;
   img: string;
 };
+
+export type FlavourProfile = {
+  id: number;
+  body: number;
+  fruit: number;
+  acidity: number;
+};

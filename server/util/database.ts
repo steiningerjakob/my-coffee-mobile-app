@@ -4,6 +4,7 @@ import postgres from 'postgres';
 import {
   ApplicationError,
   Bean,
+  FlavourProfile,
   Grinder,
   Machine,
   Session,
@@ -313,4 +314,16 @@ export async function getAllGrinders() {
       grinders
   `;
   return grinders.map((grinder) => camelcaseKeys(grinder));
+}
+
+export async function getFlavourProfileById(id?: number) {
+  const flavourProfile = await sql<FlavourProfile>`
+    SELECT
+      *
+    FROM
+      flavour_profiles
+    WHERE
+      id = ${id}
+  `;
+  return flavourProfile.map((flavour) => camelcaseKeys(flavour))[0];
 }

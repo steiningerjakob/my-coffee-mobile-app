@@ -6,7 +6,7 @@ const screenStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    backgroundColor: '#F3EEEE',
+    backgroundColor: 'white',
   },
 });
 
