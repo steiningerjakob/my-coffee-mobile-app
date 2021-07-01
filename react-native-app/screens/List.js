@@ -7,11 +7,15 @@ import Screen from '../components/Screen';
 import { Headline } from '../components/Text';
 
 export default function List() {
-  const { firstName } = useContext(userContext);
+  const { firstName, refreshUserContext } = useContext(userContext);
 
   return (
     <Screen>
-      <Header label="Product list" firstName={firstName} />
+      <Header
+        label="Product list"
+        firstName={firstName}
+        refreshUserContext={refreshUserContext}
+      />
       <Container>
         <Headline>Product list</Headline>
       </Container>

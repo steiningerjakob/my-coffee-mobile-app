@@ -58,7 +58,11 @@ export default function SignUp() {
 
   return (
     <Screen>
-      <Header label="Sign up" firstName={firstName} />
+      <Header
+        label="Sign up"
+        firstName={firstName}
+        refreshUserContext={refreshUserContext}
+      />
       <ScrollView style={{ flex: 1 }}>
         <Container fill>
           <Spacer />

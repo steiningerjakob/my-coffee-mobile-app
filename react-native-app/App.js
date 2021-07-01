@@ -27,6 +27,7 @@ const Stack = createStackNavigator();
 export const userContext = createContext(null);
 
 export default function App() {
+  const [id, setId] = useState();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -68,6 +69,7 @@ export default function App() {
       }
       // if cookie is cleared, also set state to empty
       else if (clearCookie) {
+        setId();
         setFirstName('');
         setLastName('');
         setEmail('');
@@ -75,6 +77,7 @@ export default function App() {
       }
       // otherwise set user details to info from API call
       else {
+        setId(json.user.id);
         setFirstName(json.user.firstName);
         setLastName(json.user.lastName);
         setEmail(json.user.email);
@@ -89,6 +92,7 @@ export default function App() {
   }, [refreshUserContext]);
 
   const userContextValue = {
+    id: id,
     firstName: firstName,
     lastName: lastName,
     email: email,

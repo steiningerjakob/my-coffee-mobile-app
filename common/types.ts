@@ -66,3 +66,9 @@ export type FlavourProfile = {
   fruit: number;
   acidity: number;
 };
+
+export type Favourite = {
+  id: number;
+  userId: number;
+  beanId: number;
+};

@@ -4,6 +4,7 @@ import postgres from 'postgres';
 import {
   ApplicationError,
   Bean,
+  Favourite,
   FlavourProfile,
   Grinder,
   Machine,
@@ -276,7 +277,7 @@ export async function getAllBeans() {
   return beans.map((bean) => camelcaseKeys(bean));
 }
 
-export async function getBeanById(id?: number) {
+export async function getBeansById(id?: number) {
   const singleBean = await sql<Bean>`
     SELECT
       *
@@ -286,6 +287,34 @@ export async function getBeanById(id?: number) {
       id = ${id}
   `;
   return singleBean.map((bean) => camelcaseKeys(bean))[0];
+}
+
+export async function getUserFavourites(userId?: number) {
+  const userFavourites = await sql<Bean[]>`
+    SELECT
+      beans.id as id,
+      beans.product_name as product_name,
+      beans.img as img,
+      beans.roaster as roaster,
+      beans.roaster_country as roaster_country,
+      beans.bean_type as bean_type,
+      beans.origin as origin,
+      beans.flavour_profile as flavour_profile,
+      flavour_profiles.body as body,
+      flavour_profiles.fruit as fruit,
+      flavour_profiles.acidity as acidity
+    FROM
+      users,
+      beans,
+      favourites,
+      flavour_profiles
+    WHERE
+      users.id = ${userId} AND
+      users.id = favourites.user_id AND
+      favourites.bean_id = beans.id AND
+      flavour_profiles.id = beans.flavour_profile
+  `;
+  return userFavourites.map((favourite) => camelcaseKeys(favourite));
 }
 
 export async function getAllMachines() {
@@ -326,4 +355,61 @@ export async function getFlavourProfileById(id?: number) {
       id = ${id}
   `;
   return flavourProfile.map((flavour) => camelcaseKeys(flavour))[0];
+}
+
+// 3. Actions-related queries:
+
+export async function insertFavourite(userId: number, beanId: number) {
+  const newFavourite = await sql<Favourite>`
+    INSERT INTO favourites
+      (user_id, bean_id)
+    VALUES
+      (${userId}, ${beanId})
+    RETURNING
+      id,
+      user_id,
+      bean_id
+  `;
+  return newFavourite.map((favourite) => camelcaseKeys(favourite))[0];
+}
+
+export async function removeFavourite(userId: number, beanId: number) {
+  const removedFavourite = await sql<Favourite>`
+    DELETE FROM
+      favourites
+    WHERE
+      user_id = ${userId} AND
+      bean_id = ${beanId}
+    RETURNING *
+  `;
+  return removedFavourite.map((favourite) => camelcaseKeys(favourite))[0];
+}
+
+export async function checkFavouriteStatus(userId: number, beanId: number) {
+  const favourite = await sql<number>`
+    SELECT
+      id
+    FROM
+      favourites
+    WHERE
+      user_id = ${userId} AND
+      bean_id = ${beanId}
+  `;
+  if (favourite) {
+    return favourite.map((favourite) => camelcaseKeys(favourite))[0];
+  } else {
+    return undefined;
+  }
+}
+
+export async function getFavouritesByUserId(userId: number) {
+  const favouriteBeansIds = await sql<number[]>`
+    SELECT
+      bean_id
+    FROM
+      favourites
+    WHERE
+      user_id = ${userId}
+  `;
+  return favouriteBeansIds.map((favourite) => camelcaseKeys(favourite));
 }

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import React, { useContext, useState } from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { LoginResponse } from '../../common/types';
 import { userContext } from '../App';
 import Button from '../components/Button';
@@ -13,10 +13,15 @@ import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
 import { Paragraph } from '../components/Text';
 
-const errorStyles = StyleSheet.create({
-  text: {
+const signInStyles = StyleSheet.create({
+  error: {
     color: 'red',
     fontSize: 16,
+  },
+  signUp: {
+    color: '#BC6C25',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
 
@@ -54,6 +59,7 @@ export default function SignIn() {
     });
 
     const json = (await response.json()) as LoginResponse;
+    console.log(json);
 
     // Return error if verification goes wrong
     if ('errors' in json) {
@@ -68,9 +74,17 @@ export default function SignIn() {
     return response;
   }
 
+  function signUpButtonHandler() {
+    navigation.navigate('SignUp');
+  }
+
   return (
     <Screen>
-      <Header label="Sign in" firstName={firstName} />
+      <Header
+        label="Sign in"
+        firstName={firstName}
+        refreshUserContext={refreshUserContext}
+      />
       <ScrollView style={{ flex: 1 }}>
         <Container>
           <Spacer />
@@ -94,9 +108,15 @@ export default function SignIn() {
           <Spacer />
           <Spacer />
           <Button label="sign in" onPress={verifyUser} />
+          <Spacer />
+          <TouchableOpacity onPress={signUpButtonHandler}>
+            <Text style={signInStyles.signUp}>
+              New to beanify? Sign up here
+            </Text>
+          </TouchableOpacity>
         </Container>
       </ScrollView>
-      <Text style={errorStyles.text}>{error}</Text>
+      <Text style={signInStyles.error}>{error}</Text>
       <Footer />
     </Screen>
   );

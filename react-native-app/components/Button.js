@@ -9,7 +9,7 @@ const buttonStyles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
-  wrapperMain: {
+  wrapper: {
     display: 'flex',
     alignItems: 'center',
     backgroundColor: '#BC6C25',
@@ -17,7 +17,7 @@ const buttonStyles = StyleSheet.create({
     padding: 16,
     width: '80%',
   },
-  wrapperVariant: {
+  wrapperDisabled: {
     display: 'flex',
     alignItems: 'center',
     backgroundColor: '#DDA15E',
@@ -31,7 +31,7 @@ export default function Button(props) {
   return (
     <TouchableOpacity
       style={
-        props.variant ? buttonStyles.wrapperVariant : buttonStyles.wrapperMain
+        props.disabled ? buttonStyles.wrapperDisabled : buttonStyles.wrapper
       }
       disabled={props.disabled}
       onPress={() => {

@@ -7,11 +7,15 @@ import Screen from '../components/Screen';
 import { Headline } from '../components/Text';
 
 export default function Preferences() {
-  const { firstName } = useContext(userContext);
+  const { firstName, refreshUserContext } = useContext(userContext);
 
   return (
     <Screen>
-      <Header label="Preferences" firstName={firstName} />
+      <Header
+        label="Preferences"
+        firstName={firstName}
+        refreshUserContext={refreshUserContext}
+      />
       <Container>
         <Headline>Preferences</Headline>
       </Container>
