@@ -6,10 +6,12 @@ const textStyles = StyleSheet.create({
     color: 'black',
     fontSize: 24,
     textAlign: 'center',
+    marginBottom: 8,
   },
   paragraph: {
     color: 'black',
     fontSize: 16,
+    marginBottom: 4,
   },
 });
 

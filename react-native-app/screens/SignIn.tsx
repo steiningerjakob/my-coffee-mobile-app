@@ -59,7 +59,6 @@ export default function SignIn() {
     });
 
     const json = (await response.json()) as LoginResponse;
-    console.log(json);
 
     // Return error if verification goes wrong
     if ('errors' in json) {
@@ -69,8 +68,7 @@ export default function SignIn() {
 
     refreshUserContext();
 
-    // Navigate to the profile page when the user has successfully logged in
-    navigation.navigate('Home');
+    navigation.navigate('Profile');
     return response;
   }
 

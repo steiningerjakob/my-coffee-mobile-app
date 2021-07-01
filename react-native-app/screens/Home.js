@@ -31,7 +31,7 @@ export default function Home() {
         refreshUserContext={refreshUserContext}
       />
       <Container>
-        <Headline>Browse our world of coffee!</Headline>
+        <Headline>Browse our world of coffee, {firstName}!</Headline>
       </Container>
       <Container fill>
         {beans.length > 0 && (

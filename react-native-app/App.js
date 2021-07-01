@@ -1,6 +1,4 @@
 import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import React, {
@@ -10,19 +8,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-// import Router from './routes/Router';
-import Detail from './screens/Detail';
-import Favourites from './screens/Favourites';
-import Home from './screens/Home';
-import List from './screens/List';
-import Preferences from './screens/Preferences';
-import Profile from './screens/Profile';
-import Setup from './screens/Setup';
-import SignIn from './screens/SignIn';
-import SignUp from './screens/SignUp';
-import Splash from './screens/Splash';
-
-const Stack = createStackNavigator();
+import Router from './routes/Router';
 
 export const userContext = createContext(null);
 
@@ -39,7 +25,6 @@ export default function App() {
     // clearCookie with default value of false,
     // becomes true upon logout function call
     useCallback(async (clearCookie = false) => {
-      console.log('i am the useCallback');
       const { manifest } = Constants;
 
       const apiBaseUrlDraft =
@@ -63,8 +48,8 @@ export default function App() {
       const response = await fetch(`${apiBaseUrl}/users/profile`, options);
       const json = await response.json();
 
-      if ('errors' in json) {
-        // error handling to be added here if necessary
+      if (!json.user) {
+        setLoading(false);
         return;
       }
       // if cookie is cleared, also set state to empty
@@ -87,9 +72,9 @@ export default function App() {
 
   // Retrieve user when this function is called
   useEffect(() => {
-    console.log('i am the useEffect');
     refreshUserContext();
-  }, [refreshUserContext]);
+    setLoading(false);
+  }, []);
 
   const userContextValue = {
     id: id,
@@ -104,24 +89,7 @@ export default function App() {
     <Fragment>
       <StatusBar style="light" />
       <userContext.Provider value={userContextValue}>
-        {/* <Router /> */}
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Splash"
-            screenOptions={{ headerShown: false }}
-          >
-            <Stack.Screen name="Splash" component={Splash} />
-            <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen name="Preferences" component={Preferences} />
-            <Stack.Screen name="Setup" component={Setup} />
-            <Stack.Screen name="Favourites" component={Favourites} />
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="List" component={List} />
-            <Stack.Screen name="Detail" component={Detail} />
-            <Stack.Screen name="SignIn" component={SignIn} />
-            <Stack.Screen name="SignUp" component={SignUp} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <Router />
       </userContext.Provider>
     </Fragment>
   );

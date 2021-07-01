@@ -90,7 +90,7 @@ export async function getUsersIfValidSessionToken(token?: string) {
       id,
       first_name,
       last_name,
-      username
+      email
     FROM
       users
   `;

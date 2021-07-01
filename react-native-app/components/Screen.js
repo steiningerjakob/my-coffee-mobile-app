@@ -7,6 +7,7 @@ const screenStyles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     backgroundColor: 'white',
+    position: 'relative',
   },
 });
 

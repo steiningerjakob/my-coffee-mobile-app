@@ -8,7 +8,11 @@ export default async function profileHandler(
 ) {
   const sessionToken = req.cookies.sessionToken;
 
-  const user: User = await getUserByValidSessionToken(sessionToken);
+  if (sessionToken) {
+    const user: User = await getUserByValidSessionToken(sessionToken);
 
-  return res.status(200).json({ user: user });
+    return res.status(200).json({ user: user });
+  } else {
+    return res.status(200).json(undefined);
+  }
 }

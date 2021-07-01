@@ -1,21 +1,29 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import React, { useCallback, useContext, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { userContext } from '../App';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import ListItem from '../components/ListItem';
 import Screen from '../components/Screen';
-import { Headline, Paragraph } from '../components/Text';
+import { Headline } from '../components/Text';
+
+const redirectStyles = StyleSheet.create({
+  redirect: {
+    color: '#BC6C25',
+    fontSize: 16,
+    fontWeight: '500',
+    textAlign: 'center',
+    padding: 24,
+  },
+});
 
 export default function Favourites() {
   const navigation = useNavigation();
   const { firstName, id, refreshUserContext } = useContext(userContext);
   const [userFavourites, setUserFavourites] = useState([]);
-  console.log('state variable', userFavourites);
-  console.log('type of state variable', typeof userFavourites);
 
   async function getUserFavourites() {
     const { manifest } = Constants;
@@ -55,6 +63,10 @@ export default function Favourites() {
     }, []),
   );
 
+  function redirectHandler() {
+    navigation.navigate('Home');
+  }
+
   return (
     <Screen>
       <Header
@@ -71,7 +83,7 @@ export default function Favourites() {
             <Container>
               {userFavourites.map((bean) => (
                 <ListItem
-                  key={bean.favouritesBeanId}
+                  key={bean.id}
                   item={bean}
                   onPress={() => navigation.navigate('Detail', { bean })}
                 />
@@ -79,10 +91,12 @@ export default function Favourites() {
             </Container>
           </ScrollView>
         ) : (
-          <Paragraph>
-            Nothing here yet... browse through our world of coffee and select
-            your favourites!
-          </Paragraph>
+          <TouchableOpacity onPress={redirectHandler}>
+            <Text style={redirectStyles.redirect}>
+              Nothing here yet... browse through our world of coffee and select
+              your favourites!
+            </Text>
+          </TouchableOpacity>
         )}
       </Container>
       <Footer />

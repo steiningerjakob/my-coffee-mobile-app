@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { userContext } from '../App';
 import { beanImages } from '../assets/beans/beansImages';
 import Container from '../components/Container';
@@ -10,6 +10,15 @@ import Header from '../components/Header';
 import ImagePreview from '../components/ImagePreview';
 import Screen from '../components/Screen';
 import { Headline, Paragraph } from '../components/Text';
+
+const buttonStyles = StyleSheet.create({
+  favourite: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 999,
+  },
+});
 
 export default function Detail(props) {
   const { firstName, id, refreshUserContext } = useContext(userContext);
@@ -92,37 +101,41 @@ export default function Detail(props) {
   }, []);
 
   async function addBeansToFavourites() {
-    const { manifest } = Constants;
-
-    const apiBaseUrlDraft =
-      typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-        ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
-        : `jakobs-mobile-coffee-app.herokuapp.com`;
-
-    const apiBaseUrl =
-      apiBaseUrlDraft === `jakobs-mobile-coffee-app.herokuapp.com`
-        ? `https:${apiBaseUrlDraft}`
-        : `http:${apiBaseUrlDraft}`;
-
-    const response = await fetch(`${apiBaseUrl}/actions/add_favourite`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: id,
-        beanId: params.bean.id,
-      }),
-    });
-
-    const data = await response.json();
-    if (data.message) {
-      alert(data.message);
+    if (firstName === '') {
+      alert('You need to sign in to perform this action');
     } else {
-      alert('Oops.. something went wrong');
+      const { manifest } = Constants;
+
+      const apiBaseUrlDraft =
+        typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
+          ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
+          : `jakobs-mobile-coffee-app.herokuapp.com`;
+
+      const apiBaseUrl =
+        apiBaseUrlDraft === `jakobs-mobile-coffee-app.herokuapp.com`
+          ? `https:${apiBaseUrlDraft}`
+          : `http:${apiBaseUrlDraft}`;
+
+      const response = await fetch(`${apiBaseUrl}/actions/add_favourite`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: id,
+          beanId: params.bean.id,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.message) {
+        alert(data.message);
+      } else {
+        alert('Oops.. something went wrong');
+      }
+      setFavourite(true);
     }
-    setFavourite(true);
   }
 
   async function removeBeansFromFavourites() {
@@ -167,23 +180,21 @@ export default function Detail(props) {
         refreshUserContext={refreshUserContext}
       />
       <ScrollView style={{ flex: 1 }}>
-        <Container>
+        <View style={buttonStyles.favourite}>
           {isFavourite ? (
             <TouchableOpacity onPress={removeBeansFromFavourites}>
-              <AntDesign name="star" size={32} color="#BC6C25" />
+              <AntDesign name="star" size={40} color="#BC6C25" />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={addBeansToFavourites}>
-              <AntDesign name="staro" size={32} color="#BC6C25" />
+              <AntDesign name="staro" size={40} color="#BC6C25" />
             </TouchableOpacity>
           )}
-        </Container>
+        </View>
         <Container>
           {params.bean.img && (
             <ImagePreview source={beanImages[`image${params.bean.id}`]} />
           )}
-        </Container>
-        <Container>
           <Headline>{params.bean.productName}</Headline>
           <Paragraph>
             Roaster: {params.bean.roaster}, {params.bean.roasterCountry}
