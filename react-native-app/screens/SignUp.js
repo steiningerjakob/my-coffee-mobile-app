@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import Constants from 'expo-constants';
 import React, { useContext, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { userContext } from '../App';
@@ -11,6 +10,7 @@ import Input from '../components/Input';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
 import { Paragraph } from '../components/Text';
+import { apiBaseUrl } from '../util/apiBaseUrl';
 
 export default function SignUp() {
   const navigation = useNavigation();
@@ -22,19 +22,6 @@ export default function SignUp() {
   const { refreshUserContext } = useContext(userContext);
 
   async function createUser() {
-    const { manifest } = Constants;
-
-    // TODO: adjust to api.example.com to Heroku url for deployment
-    const apiBaseUrlDraft =
-      typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-        ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
-        : `jakobs-mobile-coffee-app.herokuapp.com`;
-
-    const apiBaseUrl =
-      apiBaseUrlDraft === `jakobs-mobile-coffee-app.herokuapp.com`
-        ? `https:${apiBaseUrlDraft}`
-        : `http:${apiBaseUrlDraft}`;
-
     const response = await fetch(`${apiBaseUrl}/users/register`, {
       method: 'POST',
       headers: {

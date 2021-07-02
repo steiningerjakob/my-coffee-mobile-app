@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import Constants from 'expo-constants';
 import React, { useContext, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { LoginResponse } from '../../common/types';
@@ -12,6 +11,7 @@ import Input from '../components/Input';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
 import { Paragraph } from '../components/Text';
+import { apiBaseUrl } from '../util/apiBaseUrl';
 
 const signInStyles = StyleSheet.create({
   error: {
@@ -34,18 +34,6 @@ export default function SignIn() {
   const { firstName, refreshUserContext } = useContext(userContext);
 
   async function verifyUser() {
-    const { manifest } = Constants;
-
-    const apiBaseUrlDraft =
-      typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-        ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
-        : `jakobs-mobile-coffee-app.herokuapp.com`;
-
-    const apiBaseUrl =
-      apiBaseUrlDraft === `jakobs-mobile-coffee-app.herokuapp.com`
-        ? `https:${apiBaseUrlDraft}`
-        : `http:${apiBaseUrlDraft}`;
-
     const response = await fetch(`${apiBaseUrl}/users/login`, {
       method: 'POST',
       headers: {

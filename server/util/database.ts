@@ -8,6 +8,7 @@ import {
   FlavourProfile,
   Grinder,
   Machine,
+  Rating,
   Session,
   User,
   UserWithPasswordHash,
@@ -412,4 +413,68 @@ export async function getFavouritesByUserId(userId: number) {
       user_id = ${userId}
   `;
   return favouriteBeansIds.map((favourite) => camelcaseKeys(favourite));
+}
+
+export async function insertReview(
+  userId: number,
+  beanId: number,
+  rating: number,
+  review: string,
+) {
+  const newReview = await sql<Rating>`
+    INSERT INTO ratings
+      (user_id, bean_id, user_rating, user_review)
+    VALUES
+      (${userId}, ${beanId}, ${rating}, ${review})
+    RETURNING
+      id,
+      user_id,
+      bean_id,
+      user_rating,
+      user_review
+  `;
+  return newReview.map((rating) => camelcaseKeys(rating))[0];
+}
+
+export async function checkReviewStatus(userId: number, beanId: number) {
+  const userEntry = await sql<Rating>`
+    SELECT
+      id,
+      user_rating,
+      user_review
+    FROM
+      ratings
+    WHERE
+      user_id = ${userId} AND
+      bean_id = ${beanId}
+  `;
+  if (userEntry) {
+    return userEntry.map((r) => camelcaseKeys(r))[0];
+  } else {
+    return undefined;
+  }
+}
+
+export async function updateReview(
+  userId: number,
+  beanId: number,
+  rating: number,
+  review: string,
+) {
+  const updatedReview = await sql<Rating>`
+    UPDATE ratings
+    SET
+      user_rating = ${rating},
+      user_review = ${review}
+    WHERE
+      user_id = ${userId} AND
+      bean_id = ${beanId}
+    RETURNING
+      id,
+      user_id,
+      bean_id,
+      user_rating,
+      user_review
+  `;
+  return updatedReview.map((update) => camelcaseKeys(update))[0];
 }

@@ -22,6 +22,7 @@ export default function Input(props) {
       clearButtonMode={props.clearButtonMode}
       style={inputStyles.input}
       secureTextEntry={props.secureTextEntry}
+      multiline={props.multiline}
     />
   );
 }

@@ -72,3 +72,11 @@ export type Favourite = {
   userId: number;
   beanId: number;
 };
+
+export type Rating = {
+  id: number;
+  userId: number;
+  beanId: number;
+  rating: number;
+  review: string;
+};

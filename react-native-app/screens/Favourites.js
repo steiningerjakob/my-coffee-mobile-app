@@ -1,5 +1,4 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import Constants from 'expo-constants';
 import React, { useCallback, useContext, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { userContext } from '../App';
@@ -9,6 +8,7 @@ import Header from '../components/Header';
 import ListItem from '../components/ListItem';
 import Screen from '../components/Screen';
 import { Headline } from '../components/Text';
+import { apiBaseUrl } from '../util/apiBaseUrl';
 
 const redirectStyles = StyleSheet.create({
   redirect: {
@@ -26,18 +26,6 @@ export default function Favourites() {
   const [userFavourites, setUserFavourites] = useState([]);
 
   async function getUserFavourites() {
-    const { manifest } = Constants;
-
-    const apiBaseUrlDraft =
-      typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-        ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
-        : `jakobs-mobile-coffee-app.herokuapp.com`;
-
-    const apiBaseUrl =
-      apiBaseUrlDraft === `jakobs-mobile-coffee-app.herokuapp.com`
-        ? `https:${apiBaseUrlDraft}`
-        : `http:${apiBaseUrlDraft}`;
-
     const response = await fetch(`${apiBaseUrl}/actions/get_favourites`, {
       method: 'POST',
       headers: {

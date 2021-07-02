@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { checkFavouriteStatus } from '../../../util/database';
+import { checkReviewStatus } from '../../../util/database';
 
-export default async function ckeckFavouriteStatusHandler(
+export default async function ckeckReviewStatusHandler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -10,9 +10,9 @@ export default async function ckeckFavouriteStatusHandler(
     const { userId, beanId } = req.body;
 
     // Get status from database
-    const data = await checkFavouriteStatus(userId, beanId);
+    const userEntry = await checkReviewStatus(userId, beanId);
 
-    return res.status(200).json({ data: data });
+    return res.status(200).json({ userEntry: userEntry });
   }
   res.status(400).json(null);
 }
