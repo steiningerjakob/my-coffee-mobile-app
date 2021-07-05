@@ -1,22 +1,33 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useContext, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { userContext } from '../App';
+import coverImage from '../assets/favourites-cover.jpg';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import ListItem from '../components/ListItem';
 import Screen from '../components/Screen';
-import { Headline } from '../components/Text';
 import { getUserFavourites } from '../util/apiFunctions';
 
-const redirectStyles = StyleSheet.create({
+const favouritesStyles = StyleSheet.create({
   redirect: {
     color: '#BC6C25',
     fontSize: 16,
     fontWeight: '500',
     textAlign: 'center',
     padding: 24,
+  },
+  image: {
+    width: '100%',
+    height: 154,
+    resizeMode: 'contain',
   },
 });
 
@@ -46,9 +57,7 @@ export default function Favourites() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      <Container>
-        <Headline>{firstName}'s favourites</Headline>
-      </Container>
+      <Image source={coverImage} style={favouritesStyles.image} />
       <Container fill>
         {userFavourites.length > 0 ? (
           <ScrollView style={{ flex: 1 }}>
@@ -64,7 +73,7 @@ export default function Favourites() {
           </ScrollView>
         ) : (
           <TouchableOpacity onPress={redirectHandler}>
-            <Text style={redirectStyles.redirect}>
+            <Text style={favouritesStyles.redirect}>
               Nothing here yet... browse through our world of coffee and select
               your favourites!
             </Text>

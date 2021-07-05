@@ -296,6 +296,24 @@ export async function getBeansById(id?: number) {
   return singleBean.map((bean) => camelcaseKeys(bean))[0];
 }
 
+export async function getFilteredBeans(query?: string) {
+  const beans = await sql<Bean[]>`
+    SELECT
+      *
+    FROM
+      beans
+  `;
+  if (!query) {
+    return beans.map((bean) => camelcaseKeys(bean));
+  } else {
+    return beans
+      .filter((bean) => {
+        return Object.values(bean).some((str) => String(str).includes(query));
+      })
+      .map((filteredBean) => camelcaseKeys(filteredBean));
+  }
+}
+
 export async function getUserFavourites(userId?: number) {
   const userFavourites = await sql<Bean[]>`
     SELECT

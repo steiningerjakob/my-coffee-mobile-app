@@ -8,17 +8,22 @@ const listItemStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
+    paddingVertical: 12,
     borderBottomColor: 'lightgray',
     borderBottomWidth: 1,
     width: 320,
   },
   image: {
-    marginRight: 12,
-    height: 48,
-    width: 48,
+    marginRight: 8,
+    height: 64,
+    width: 64,
+  },
+  paragraph: {
+    display: 'flex',
+    flexDirection: 'column',
   },
   title: { fontSize: 16, color: 'black', textAlign: 'left' },
+  subTitle: { fontSize: 14, color: 'grey', textAlign: 'left', marginTop: 4 },
   icon: { marginLeft: 'auto' },
 });
 
@@ -33,7 +38,11 @@ export default function ListItem(props) {
             style={listItemStyles.image}
           />
         )}
-        <Text style={listItemStyles.title}>{props.item.productName}</Text>
+        <View style={listItemStyles.paragraph}>
+          <Text style={listItemStyles.title}>{props.item.productName}</Text>
+          <Text style={listItemStyles.subTitle}>{props.item.beanType}</Text>
+          <Text style={listItemStyles.subTitle}>{props.item.roaster}</Text>
+        </View>
         <AntDesign
           name="right"
           size={24}

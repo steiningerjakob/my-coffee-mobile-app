@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 
 const inputStyles = StyleSheet.create({
-  input: {
+  field: {
     borderColor: '#BC6C25',
     borderWidth: 1,
     borderRadius: 8,
@@ -20,7 +20,7 @@ export default function Input(props) {
       value={props.value}
       type={props.type}
       clearButtonMode={props.clearButtonMode}
-      style={inputStyles.input}
+      style={inputStyles.field}
       secureTextEntry={props.secureTextEntry}
       multiline={props.multiline}
     />

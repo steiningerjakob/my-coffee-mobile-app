@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { userContext } from '../App';
 import { grindersImages } from '../assets/grinders/grindersImages';
 import { machinesImages } from '../assets/machines/machinesImages';
+import coverImage from '../assets/setup-cover.jpg';
 import Button from '../components/Button';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
@@ -20,7 +21,7 @@ import {
   removeFromSetups,
 } from '../util/apiFunctions';
 
-const listItemStyles = StyleSheet.create({
+const setupStyles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderColor: '#BC6C25',
@@ -68,6 +69,11 @@ const listItemStyles = StyleSheet.create({
     marginRight: 12,
     height: 48,
     width: 48,
+  },
+  cover: {
+    height: 150,
+    width: '100%',
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 16,
@@ -125,6 +131,7 @@ export default function Setup() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
+      <Image source={coverImage} style={setupStyles.cover} />
       {userSetups.length === 0 ? (
         <Container fill>
           <Container>
@@ -137,20 +144,20 @@ export default function Setup() {
                   setMachinesSelectionIsActive(!machinesSelectionIsActive)
                 }
               >
-                <View style={listItemStyles.heading}>
+                <View style={setupStyles.heading}>
                   <Headline>Select machine</Headline>
                   <AntDesign
                     name="down"
                     size={24}
                     color="black"
-                    style={listItemStyles.icon}
+                    style={setupStyles.icon}
                   />
                 </View>
               </TouchableOpacity>
               {machinesSelectionIsActive === true &&
                 machines.map((machine) => (
                   <TouchableOpacity
-                    style={listItemStyles.selectionWrapper}
+                    style={setupStyles.selectionWrapper}
                     key={machine.id}
                     onPress={() => {
                       setUserMachine({
@@ -162,23 +169,21 @@ export default function Setup() {
                   >
                     <Image
                       resizeMode="contain"
-                      style={listItemStyles.image}
+                      style={setupStyles.image}
                       source={machinesImages[`image${machine.id}`]}
                     />
-                    <Text style={listItemStyles.title}>
-                      {machine.machineName}
-                    </Text>
+                    <Text style={setupStyles.title}>{machine.machineName}</Text>
                   </TouchableOpacity>
                 ))}
               {userMachine !== '' && (
-                <View style={listItemStyles.wrapper}>
-                  <View style={listItemStyles.item}>
+                <View style={setupStyles.wrapper}>
+                  <View style={setupStyles.item}>
                     <Image
                       resizeMode="contain"
-                      style={listItemStyles.image}
+                      style={setupStyles.image}
                       source={machinesImages[`image${userMachine.id}`]}
                     />
-                    <Text style={listItemStyles.title}>{userMachine.name}</Text>
+                    <Text style={setupStyles.title}>{userMachine.name}</Text>
                   </View>
                 </View>
               )}
@@ -189,20 +194,20 @@ export default function Setup() {
                   setGrindersSelectionIsActive(!grindersSelectionIsActive)
                 }
               >
-                <View style={listItemStyles.heading}>
+                <View style={setupStyles.heading}>
                   <Headline>Select grinder</Headline>
                   <AntDesign
                     name="down"
                     size={24}
                     color="black"
-                    style={listItemStyles.icon}
+                    style={setupStyles.icon}
                   />
                 </View>
               </TouchableOpacity>
               {grindersSelectionIsActive === true &&
                 grinders.map((grinder) => (
                   <TouchableOpacity
-                    style={listItemStyles.selectionWrapper}
+                    style={setupStyles.selectionWrapper}
                     key={grinder.id}
                     onPress={() => {
                       setUserGrinder({
@@ -214,23 +219,21 @@ export default function Setup() {
                   >
                     <Image
                       resizeMode="contain"
-                      style={listItemStyles.image}
+                      style={setupStyles.image}
                       source={grindersImages[`image${grinder.id}`]}
                     />
-                    <Text style={listItemStyles.title}>
-                      {grinder.grinderName}
-                    </Text>
+                    <Text style={setupStyles.title}>{grinder.grinderName}</Text>
                   </TouchableOpacity>
                 ))}
               {userGrinder !== '' && (
-                <View style={listItemStyles.wrapper}>
-                  <View style={listItemStyles.item}>
+                <View style={setupStyles.wrapper}>
+                  <View style={setupStyles.item}>
                     <Image
                       resizeMode="contain"
-                      style={listItemStyles.image}
+                      style={setupStyles.image}
                       source={grindersImages[`image${userGrinder.id}`]}
                     />
-                    <Text style={listItemStyles.title}>{userGrinder.name}</Text>
+                    <Text style={setupStyles.title}>{userGrinder.name}</Text>
                   </View>
                 </View>
               )}
@@ -249,37 +252,33 @@ export default function Setup() {
           <ScrollView style={{ flex: 1 }}>
             <Container>
               {userSetups.map((setup) => (
-                <View style={listItemStyles.container} key={setup.id}>
-                  <View style={listItemStyles.heading}>
+                <View style={setupStyles.container} key={setup.id}>
+                  <View style={setupStyles.heading}>
                     <Headline>{firstName}'s setup</Headline>
                   </View>
-                  <View style={listItemStyles.wrapper}>
-                    <View style={listItemStyles.item}>
+                  <View style={setupStyles.wrapper}>
+                    <View style={setupStyles.item}>
                       <Image
                         resizeMode="contain"
-                        style={listItemStyles.image}
+                        style={setupStyles.image}
                         source={machinesImages[`image${setup.machineId}`]}
                       />
-                      <Text style={listItemStyles.title}>
-                        {setup.machineName}
-                      </Text>
+                      <Text style={setupStyles.title}>{setup.machineName}</Text>
                     </View>
-                    <TouchableOpacity style={listItemStyles.icon}>
+                    <TouchableOpacity style={setupStyles.icon}>
                       <AntDesign name="edit" size={24} color="black" />
                     </TouchableOpacity>
                   </View>
-                  <View style={listItemStyles.wrapper}>
-                    <View style={listItemStyles.item}>
+                  <View style={setupStyles.wrapper}>
+                    <View style={setupStyles.item}>
                       <Image
                         resizeMode="contain"
-                        style={listItemStyles.image}
+                        style={setupStyles.image}
                         source={grindersImages[`image${setup.grinderId}`]}
                       />
-                      <Text style={listItemStyles.title}>
-                        {setup.grinderName}
-                      </Text>
+                      <Text style={setupStyles.title}>{setup.grinderName}</Text>
                     </View>
-                    <TouchableOpacity style={listItemStyles.icon}>
+                    <TouchableOpacity style={setupStyles.icon}>
                       <AntDesign name="edit" size={24} color="black" />
                     </TouchableOpacity>
                   </View>

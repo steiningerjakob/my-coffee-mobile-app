@@ -10,6 +10,21 @@ export async function getBeans() {
   return beans;
 }
 
+export async function getFilteredBeans(query) {
+  const response = await fetch(`${apiBaseUrl}/products/query`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: query,
+    }),
+  });
+  const data = await response.json();
+  return data;
+}
+
 export async function getMachines() {
   const response = await fetch(`${apiBaseUrl}/products/machines`);
   const machines = await response.json();
