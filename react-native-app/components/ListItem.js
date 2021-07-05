@@ -24,7 +24,7 @@ const listItemStyles = StyleSheet.create({
 
 export default function ListItem(props) {
   return (
-    <TouchableOpacity onPress={() => props.onPress()}>
+    <TouchableOpacity onPress={() => props.onPress()} disabled={props.disabled}>
       <View style={listItemStyles.wrapper}>
         {props.item && (
           <Image

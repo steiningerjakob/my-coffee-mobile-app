@@ -17,6 +17,7 @@ export default function App() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [profileImage, setProfileImage] = useState('');
   const [isLoading, setLoading] = useState(true);
 
   const refreshUserContext =
@@ -58,6 +59,7 @@ export default function App() {
         setFirstName('');
         setLastName('');
         setEmail('');
+        setProfileImage('');
         setLoading(false);
       }
       // otherwise set user details to info from API call
@@ -66,6 +68,7 @@ export default function App() {
         setFirstName(json.user.firstName);
         setLastName(json.user.lastName);
         setEmail(json.user.email);
+        setProfileImage(json.user.profileImage);
         setLoading(false);
       }
     }, []);
@@ -81,6 +84,7 @@ export default function App() {
     firstName: firstName,
     lastName: lastName,
     email: email,
+    profileImage: profileImage,
     isLoading: isLoading,
     refreshUserContext: refreshUserContext,
   };

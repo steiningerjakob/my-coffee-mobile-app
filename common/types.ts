@@ -3,6 +3,7 @@ export type User = {
   firstName: string;
   lastName: string;
   email: string;
+  profileImage: string;
 };
 
 export type AuthData = {
@@ -79,4 +80,11 @@ export type Rating = {
   beanId: number;
   rating: number;
   review: string;
+};
+
+export type Setup = {
+  id: number;
+  userId: number;
+  machineId: number;
+  grinderId: number;
 };

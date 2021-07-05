@@ -8,7 +8,7 @@ import Header from '../components/Header';
 import ListItem from '../components/ListItem';
 import Screen from '../components/Screen';
 import { Headline } from '../components/Text';
-import { apiBaseUrl } from '../util/apiBaseUrl';
+import { getUserFavourites } from '../util/apiFunctions';
 
 const redirectStyles = StyleSheet.create({
   redirect: {
@@ -25,25 +25,9 @@ export default function Favourites() {
   const { firstName, id, refreshUserContext } = useContext(userContext);
   const [userFavourites, setUserFavourites] = useState([]);
 
-  async function getUserFavourites() {
-    const response = await fetch(`${apiBaseUrl}/actions/get_favourites`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: id,
-      }),
-    });
-
-    const favourites = await response.json();
-    return favourites;
-  }
-
   useFocusEffect(
     useCallback(() => {
-      getUserFavourites().then((data) => {
+      getUserFavourites(id).then((data) => {
         if (data) {
           setUserFavourites(data.userFavourites);
         }

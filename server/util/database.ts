@@ -10,6 +10,7 @@ import {
   Machine,
   Rating,
   Session,
+  Setup,
   User,
   UserWithPasswordHash,
 } from '../../common/types';
@@ -57,7 +58,8 @@ export async function getAllUsers() {
       id,
       first_name,
       last_name,
-      email
+      email,
+      profile_image
     FROM
       users
   `;
@@ -91,7 +93,8 @@ export async function getUsersIfValidSessionToken(token?: string) {
       id,
       first_name,
       last_name,
-      email
+      email,
+      profile_image
     FROM
       users
   `;
@@ -123,7 +126,8 @@ export async function getUserByEmailAndToken(email?: string, token?: string) {
       id,
       first_name,
       last_name,
-      email
+      email,
+      profile_image
     FROM
       users
     WHERE
@@ -154,7 +158,8 @@ export async function getUserById(id?: number) {
       id,
       first_name,
       last_name,
-      email
+      email,
+      profile_image
     FROM
       users
     WHERE
@@ -193,7 +198,8 @@ export async function insertUser(
       id,
       first_name,
       last_name,
-      email
+      email,
+      profile_image
   `;
   return users.map((user) => camelcaseKeys(user))[0];
 }
@@ -477,4 +483,91 @@ export async function updateReview(
       user_review
   `;
   return updatedReview.map((update) => camelcaseKeys(update))[0];
+}
+
+export async function updateProfileImage(id: number, profileImage: string) {
+  console.log('database id', id);
+  console.log('database profile image', profileImage);
+  const updatedProfileImage = await sql`
+    UPDATE
+      users
+    SET
+      profile_image = ${profileImage}
+    WHERE
+      id = ${id}
+    RETURNING
+      id,
+      profile_image
+  `;
+  return updatedProfileImage.map((img) => camelcaseKeys(img))[0];
+}
+
+export async function checkProfileImageStatus(id: number) {
+  const profileImage = await sql<string>`
+    SELECT
+      profile_image
+    FROM
+      users
+    WHERE
+      id = ${id}
+  `;
+  if (profileImage) {
+    return profileImage.map((r) => camelcaseKeys(r))[0];
+  } else {
+    return undefined;
+  }
+}
+
+export async function insertSetup(
+  userId: number,
+  machineId: number,
+  grinderId: number,
+) {
+  const newSetup = await sql<Setup>`
+    INSERT INTO setups
+      (user_id, machine_id, grinder_id)
+    VALUES
+      (${userId}, ${machineId}, ${grinderId})
+    RETURNING
+      id,
+      user_id,
+      machine_id
+  `;
+  return newSetup.map((setup) => camelcaseKeys(setup))[0];
+}
+
+export async function removeSetup(setupId: number) {
+  const removedSetup = await sql<Setup>`
+    DELETE FROM
+      setups
+    WHERE
+      id = ${setupId}
+    RETURNING *
+  `;
+  return removedSetup.map((setup) => camelcaseKeys(setup))[0];
+}
+
+export async function getUserSetups(userId?: number) {
+  const userSetups = await sql<Setup[]>`
+    SELECT
+      setups.id as id,
+      users.id as user_id,
+      machines.id as machine_id,
+      machines.machine_name as machine_name,
+      machines.img as machine_img,
+      grinders.id as grinder_id,
+      grinders.grinder_name as grinder_name,
+      grinders.img as grinder_img
+    FROM
+      users,
+      setups,
+      machines,
+      grinders
+    WHERE
+      users.id = ${userId} AND
+      users.id = setups.user_id AND
+      setups.machine_id = machines.id AND
+      setups.grinder_id = grinders.id
+  `;
+  return userSetups.map((setup) => camelcaseKeys(setup));
 }

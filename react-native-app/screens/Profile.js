@@ -10,6 +10,10 @@ import Header from '../components/Header';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
 import { Headline } from '../components/Text';
+import {
+  checkProfileImageStatus,
+  updateProfileImage,
+} from '../util/apiFunctions';
 
 const linkStyles = StyleSheet.create({
   wrapper: {
@@ -56,11 +60,12 @@ export default function Profile() {
     'https://api.cloudinary.com/v1_1/my-coffee-mobile-app/upload';
   const UPLOAD_PRESET = 'jvjj9h8z';
 
-  const { firstName, refreshUserContext } = useContext(userContext);
-  const [selectedImage, setSelectedImage] = useState('');
+  const { id, firstName, refreshUserContext } = useContext(userContext);
+  // const [selectedImage, setSelectedImage] = useState('');
   const [profileImage, setProfileImage] = useState(null);
   console.log('profile image', profileImage);
 
+  // Source: https://dev.to/joypalumbo/uploading-images-to-cloudinary-in-react-native-using-cloudinary-s-api-37mo
   async function selectProfileImage() {
     // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     // console.log(status);
@@ -97,30 +102,22 @@ export default function Profile() {
       .then(async (r) => {
         const image = await r.json();
         setProfileImage(image.url);
+        updateProfileImage(id, profileImage);
       })
       .catch((err) => console.log(err));
   }
 
-  // await addData(result);
-  // console.log('object to be added to async', result);
-
-  // async function checkExistingImage() {
-  //   const result = await getData();
-  //   console.log('retrieved from async', result);
-  //   return result;
-  // }
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log('use call back is running');
-  //     checkExistingImage().then((result) => {
-  //       console.log('useCallBack result', result);
-  //       if (result) {
-  //         setProfileImage(result.uri);
-  //       }
-  //     });
-  //   }, []),
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      console.log('use call back is running');
+      checkProfileImageStatus(id).then((result) => {
+        console.log('useCallBack result', result);
+        if (result) {
+          setProfileImage(result.profileImage);
+        }
+      });
+    }, []),
+  );
 
   return (
     <Screen>

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { removeFavourite } from '../../../util/database';
+import { removeSetup } from '../../../util/database';
 
 export default async function removeFavouriteHandler(
   req: NextApiRequest,
@@ -7,17 +7,14 @@ export default async function removeFavouriteHandler(
 ) {
   if (req.method === 'POST') {
     // Destructure relevant information from the request body
-    const { userId, beanId } = req.body;
+    const { setupId } = req.body;
 
     // Remove from database
-    const removedFavourite = await removeFavourite(userId, beanId);
+    const removedSetup = await removeSetup(setupId);
 
     return res
       .status(200)
-      .json({
-        message: 'Removed from favourites',
-        removedFavourite: removedFavourite,
-      });
+      .json({ message: 'Removed from setups', removeSetup: removedSetup });
   }
   res.status(400).json(null);
 }

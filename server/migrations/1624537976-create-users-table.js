@@ -5,7 +5,8 @@ exports.up = async function up(sql) {
       first_name varchar(40) NOT NULL,
       last_name varchar(40) NOT NULL,
 			email varchar(40) NOT NULL,
-			password_hash varchar(100) NOT NULL
+			password_hash varchar(100) NOT NULL,
+			profile_image varchar(100)
 		)
 	`;
 };
