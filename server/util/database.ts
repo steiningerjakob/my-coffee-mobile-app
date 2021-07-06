@@ -504,8 +504,6 @@ export async function updateReview(
 }
 
 export async function updateProfileImage(id: number, profileImage: string) {
-  console.log('database id', id);
-  console.log('database profile image', profileImage);
   const updatedProfileImage = await sql`
     UPDATE
       users

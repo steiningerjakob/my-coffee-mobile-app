@@ -29,8 +29,9 @@ const headerStyles = StyleSheet.create({
 export default function Header(props) {
   const navigation = useNavigation();
 
-  function logoutButtonHandler() {
-    logoutUser();
+  async function logoutButtonHandler() {
+    await logoutUser();
+
     // pass in true as an argument to clear cookie
     props.refreshUserContext(true);
     navigation.navigate('SignIn');

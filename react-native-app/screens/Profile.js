@@ -63,7 +63,6 @@ export default function Profile() {
   const { id, firstName, refreshUserContext } = useContext(userContext);
   // const [selectedImage, setSelectedImage] = useState('');
   const [profileImage, setProfileImage] = useState(null);
-  console.log('profile image', profileImage);
 
   // Source: https://dev.to/joypalumbo/uploading-images-to-cloudinary-in-react-native-using-cloudinary-s-api-37mo
   async function selectProfileImage() {
@@ -102,16 +101,14 @@ export default function Profile() {
       .then(async (r) => {
         const image = await r.json();
         setProfileImage(image.url);
-        updateProfileImage(id, profileImage);
+        updateProfileImage(id, image.url);
       })
       .catch((err) => console.log(err));
   }
 
   useFocusEffect(
     useCallback(() => {
-      console.log('use call back is running');
       checkProfileImageStatus(id).then((result) => {
-        console.log('useCallBack result', result);
         if (result) {
           setProfileImage(result.profileImage);
         }

@@ -9,7 +9,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import ListItem from '../components/ListItem';
 import Screen from '../components/Screen';
-import { getBeans, getFilteredBeans } from '../util/apiFunctions';
+import { getFilteredBeans } from '../util/apiFunctions';
 
 const searchFieldStyles = StyleSheet.create({
   wrapper: {
@@ -34,21 +34,12 @@ export default function Home() {
   const { firstName, refreshUserContext } = useContext(userContext);
   const [beans, setBeans] = useState([]);
   const [query, setQuery] = useState();
-  console.log('query', query);
 
   useFocusEffect(
     useCallback(() => {
-      if (!query) {
-        getBeans().then((data) => {
-          console.log('getBeans is running');
-          if (data) setBeans(data.beans);
-        });
-      } else {
-        getFilteredBeans(query).then((data) => {
-          console.log('getFilteredBeans is running');
-          if (data) setBeans(data.filteredBeans);
-        });
-      }
+      getFilteredBeans(query).then((data) => {
+        if (data) setBeans(data.filteredBeans);
+      });
     }, [query]),
   );
 

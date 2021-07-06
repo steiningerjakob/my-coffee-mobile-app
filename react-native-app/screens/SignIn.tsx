@@ -56,7 +56,7 @@ export default function SignIn() {
 
     refreshUserContext();
 
-    navigation.navigate('Profile');
+    navigation.navigate('Home');
     return response;
   }
 

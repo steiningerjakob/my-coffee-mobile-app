@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler';
-import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import React, {
   createContext,
@@ -9,6 +8,7 @@ import React, {
   useState,
 } from 'react';
 import Router from './routes/Router';
+import { getUserProfile } from './util/apiFunctions';
 
 export const userContext = createContext(null);
 
@@ -18,7 +18,6 @@ export default function App() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [profileImage, setProfileImage] = useState('');
-  const [isLoading, setLoading] = useState(true);
 
   const refreshUserContext =
     // useCallback: Prevent this function from getting
@@ -26,58 +25,28 @@ export default function App() {
     // clearCookie with default value of false,
     // becomes true upon logout function call
     useCallback(async (clearCookie = false) => {
-      const { manifest } = Constants;
-
-      const apiBaseUrlDraft =
-        typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-          ? manifest.debuggerHost.split(`:`).shift().concat(`:3000/api`)
-          : `jakobs-mobile-coffee-app.herokuapp.com`;
-
-      const apiBaseUrl = `http:${apiBaseUrlDraft}`;
-
-      // if clearCookie is true, set cookie value to empty
-      const options = clearCookie
-        ? {
-            headers: {
-              cookie: '',
-            },
-          }
-        : {};
-
-      // Call the API ("GET") to retrieve the user information
-      // by automatically passing along the sessionToken cookie
-      const response = await fetch(`${apiBaseUrl}/users/profile`, options);
-      const json = await response.json();
-
-      if (!json.user) {
-        setLoading(false);
-        return;
-      }
-      // if cookie is cleared, also set state to empty
-      else if (clearCookie) {
+      if (clearCookie) {
         setId();
         setFirstName('');
         setLastName('');
         setEmail('');
         setProfileImage('');
-        setLoading(false);
+        return;
       }
-      // otherwise set user details to info from API call
-      else {
-        setId(json.user.id);
-        setFirstName(json.user.firstName);
-        setLastName(json.user.lastName);
-        setEmail(json.user.email);
-        setProfileImage(json.user.profileImage);
-        setLoading(false);
-      }
+
+      const json = await getUserProfile(clearCookie);
+
+      json.user && setId(json.user.id);
+      setFirstName(json.user.firstName);
+      setLastName(json.user.lastName);
+      setEmail(json.user.email);
+      setProfileImage(json.user.profileImage);
     }, []);
 
   // Retrieve user when this function is called
   useEffect(() => {
     refreshUserContext();
-    setLoading(false);
-  }, []);
+  }, [refreshUserContext]);
 
   const userContextValue = {
     id: id,
@@ -85,7 +54,6 @@ export default function App() {
     lastName: lastName,
     email: email,
     profileImage: profileImage,
-    isLoading: isLoading,
     refreshUserContext: refreshUserContext,
   };
 

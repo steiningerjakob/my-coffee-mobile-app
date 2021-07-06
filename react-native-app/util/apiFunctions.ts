@@ -1,7 +1,24 @@
 import { apiBaseUrl } from './apiBaseUrl';
 
 export async function logoutUser() {
-  await fetch(`${apiBaseUrl}/users/logout`);
+  return await fetch(`${apiBaseUrl}/users/logout`);
+}
+
+export async function getUserProfile(clearCookie) {
+  // if clearCookie is true, set cookie value to empty
+  const options = clearCookie
+    ? {
+        headers: {
+          cookie: '',
+        },
+      }
+    : {};
+
+  // Call the API ("GET") to retrieve the user information
+  // by automatically passing along the sessionToken cookie
+  const response = await fetch(`${apiBaseUrl}/users/profile`, options);
+  const json = await response.json();
+  return json;
 }
 
 export async function getBeans() {
@@ -204,7 +221,6 @@ export async function updateReview(userId, beanId, rating, review) {
 }
 
 export async function updateProfileImage(id, profileImage) {
-  console.log('frontend function id', id);
   const response = await fetch(`${apiBaseUrl}/actions/update_profile_image`, {
     method: 'PUT',
     headers: {

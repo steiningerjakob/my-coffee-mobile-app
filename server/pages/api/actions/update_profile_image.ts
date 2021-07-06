@@ -8,8 +8,6 @@ export default async function updateProfileImageHandler(
   if (req.method === 'PUT') {
     // Destructure relevant information from the request body
     const { id, profileImage } = req.body;
-    console.log('api route id', id);
-    console.log('api route profile image', id);
 
     // Update database entries
     const updatedProfileImage = await updateProfileImage(id, profileImage);
