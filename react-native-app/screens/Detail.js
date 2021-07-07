@@ -10,12 +10,14 @@ import {
 import { Rating } from 'react-native-ratings';
 import { userContext } from '../App';
 import { beanImages } from '../assets/beans/beansImages';
+import ratingImage from '../assets/coffeebean_outline.png';
 import Button from '../components/Button';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import ImagePreview from '../components/ImagePreview';
 import Input from '../components/Input';
+import RatingElement from '../components/RatingElement';
 import Screen from '../components/Screen';
 import Separator from '../components/Separator';
 import Spacer from '../components/Spacer';
@@ -30,7 +32,7 @@ import {
   updateReview,
 } from '../util/apiFunctions';
 
-const buttonStyles = StyleSheet.create({
+const detailStyles = StyleSheet.create({
   favourite: {
     position: 'absolute',
     top: 20,
@@ -107,7 +109,7 @@ export default function Detail(props) {
         style={{ flex: 1, alignItems: 'center' }}
       >
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-          <View style={buttonStyles.favourite}>
+          <View style={detailStyles.favourite}>
             {isFavourite ? (
               <TouchableOpacity onPress={removeButtonHandler}>
                 <AntDesign name="star" size={40} color="#BC6C25" />
@@ -130,9 +132,27 @@ export default function Detail(props) {
           </Container>
           <Container>
             <Headline>Flavour profile:</Headline>
-            <Paragraph>Body: {flavourProfile.body}/5</Paragraph>
-            <Paragraph>Acidity: {flavourProfile.acidity}/5</Paragraph>
-            <Paragraph>Fruit: {flavourProfile.fruit}/5</Paragraph>
+            <RatingElement
+              startingValue={flavourProfile.body}
+              ratingImage={ratingImage}
+              readonly
+              onFinishRating={() => {}}
+              label="Body"
+            />
+            <RatingElement
+              startingValue={flavourProfile.acidity}
+              ratingImage={ratingImage}
+              readonly
+              onFinishRating={() => {}}
+              label="Acidity"
+            />
+            <RatingElement
+              startingValue={flavourProfile.fruit}
+              ratingImage={ratingImage}
+              readonly
+              onFinishRating={() => {}}
+              label="Fruit"
+            />
           </Container>
           {isFavourite &&
             (isReviewed === false ? (

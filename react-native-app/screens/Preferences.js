@@ -79,6 +79,7 @@ export default function Preferences() {
   const [beanTypeSelectionIsActive, setBeanTypeSelectionIsActive] =
     useState(false);
   const [existingPreference, setExistingPreference] = useState(false);
+  const [clearIsConfirmed, setClearConfirmed] = useState(false);
   const [beanTypes, setBeanTypes] = useState([]);
   const [userBeanType, setUserBeanType] = useState('');
   const [userBody, setUserBody] = useState();
@@ -126,7 +127,26 @@ export default function Preferences() {
     setExistingPreference(true);
   }
 
-  async function clearPreferencesButtonHandler() {
+  function clearPreferencesButtonHandler() {
+    Alert.alert(
+      'Clear preferences',
+      'Are you sure you want to clear your preferences?',
+      [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            setClearConfirmed(true);
+          },
+        },
+      ],
+    );
+  }
+
+  async function clearPreferences() {
+    console.log('clear preferences');
     clearPreference(id);
     setExistingPreference(false);
     setUserBeanType('');
@@ -136,26 +156,29 @@ export default function Preferences() {
   }
 
   useEffect(() => {
-    getBeanTypes().then((data) => {
-      if (data) {
-        const unSortedBeanTypes = data.beanTypes;
-        const sortedBeanTypes = unSortedBeanTypes.sort(beanTypesSorter);
-        setBeanTypes(sortedBeanTypes);
-      }
-    });
-    getPreference(id).then((data) => {
-      console.log('existing preferences', data);
-      if (data) {
-        setUserBeanType(data.beanType);
-        setUserBody(data.body);
-        setUserFruit(data.fruit);
-        setUserAcidity(data.acidity);
-        setExistingPreference(true);
-      } else {
-        setExistingPreference(false);
-      }
-    });
-  }, []);
+    if (clearIsConfirmed === true) {
+      clearPreferences();
+    } else {
+      getBeanTypes().then((data) => {
+        if (data) {
+          const unSortedBeanTypes = data.beanTypes;
+          const sortedBeanTypes = unSortedBeanTypes.sort(beanTypesSorter);
+          setBeanTypes(sortedBeanTypes);
+        }
+      });
+      getPreference(id).then((data) => {
+        if (data) {
+          setUserBeanType(data.beanType);
+          setUserBody(data.body);
+          setUserFruit(data.fruit);
+          setUserAcidity(data.acidity);
+          setExistingPreference(true);
+        } else {
+          setExistingPreference(false);
+        }
+      });
+    }
+  }, [clearIsConfirmed]);
 
   return (
     <Screen>
@@ -215,7 +238,11 @@ export default function Preferences() {
                   }
                 >
                   <View style={preferencesStyles.heading}>
-                    <Headline>Select bean type</Headline>
+                    {userBeanType ? (
+                      <Headline>{userBeanType}</Headline>
+                    ) : (
+                      <Headline>Select bean type</Headline>
+                    )}
                     <AntDesign
                       name="down"
                       size={24}

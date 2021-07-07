@@ -282,6 +282,8 @@ export async function getAllBeans() {
       seller
     FROM
       beans
+    ORDER by
+      product_name
   `;
   return beans.map((bean) => camelcaseKeys(bean));
 }
@@ -304,6 +306,8 @@ export async function getFilteredBeans(query?: string) {
       *
     FROM
       beans
+    ORDER by
+      product_name
   `;
   if (!query) {
     return beans.map((bean) => camelcaseKeys(bean));
