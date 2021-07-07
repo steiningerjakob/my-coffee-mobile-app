@@ -38,8 +38,6 @@ export default function SignUp() {
 
     refreshUserContext();
 
-    // Navigate to the profile page when the user has been created
-    navigation.navigate('Home');
     return response;
   }
 

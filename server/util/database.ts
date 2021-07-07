@@ -4,10 +4,12 @@ import postgres from 'postgres';
 import {
   ApplicationError,
   Bean,
+  BeanType,
   Favourite,
   FlavourProfile,
   Grinder,
   Machine,
+  Preference,
   Rating,
   Session,
   Setup,
@@ -314,6 +316,16 @@ export async function getFilteredBeans(query?: string) {
   }
 }
 
+export async function getBeanTypes() {
+  const beanTypes = await sql<BeanType[]>`
+    SELECT
+      DISTINCT bean_type
+    FROM
+      beans
+  `;
+  return beanTypes.map((types) => camelcaseKeys(types));
+}
+
 export async function getUserFavourites(userId?: number) {
   const userFavourites = await sql<Bean[]>`
     SELECT
@@ -586,4 +598,72 @@ export async function getUserSetups(userId?: number) {
       setups.grinder_id = grinders.id
   `;
   return userSetups.map((setup) => camelcaseKeys(setup));
+}
+
+export async function insertPreference(
+  userId: number,
+  beanType: string,
+  body: number,
+  fruit: number,
+  acidity: number,
+) {
+  const newPreference = await sql<Preference>`
+    INSERT INTO preferences
+      (user_id, bean_type, body, fruit, acidity)
+    VALUES
+      (${userId}, ${beanType}, ${body}, ${fruit}, ${acidity})
+    RETURNING
+      *
+  `;
+  return newPreference.map((preference) => camelcaseKeys(preference))[0];
+}
+
+export async function checkPreferences(userId: number) {
+  const existingPreference = await sql<Preference>`
+    SELECT
+      *
+    FROM
+      preferences
+    WHERE
+      user_id = ${userId}
+  `;
+  if (existingPreference) {
+    return existingPreference.map((preference) => camelcaseKeys(preference))[0];
+  } else {
+    return undefined;
+  }
+}
+
+export async function clearPreferences(userId: number) {
+  const clearedPreference = await sql<Preference>`
+    DELETE FROM
+      preferences
+    WHERE
+      user_id = ${userId}
+    RETURNING
+      *
+  `;
+  return clearedPreference.map((preference) => camelcaseKeys(preference))[0];
+}
+
+export async function updatePreference(
+  userId: number,
+  beanType: string,
+  body: number,
+  fruit: number,
+  acidity: number,
+) {
+  const updatedPreference = await sql<Preference>`
+    UPDATE preferences
+    SET
+      bean_type = ${beanType},
+      body = ${body},
+      fruit = ${fruit},
+      acidity = ${acidity}
+    WHERE
+      user_id = ${userId}
+    RETURNING
+      *
+  `;
+  return updatedPreference.map((preference) => camelcaseKeys(preference))[0];
 }

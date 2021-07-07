@@ -45,6 +45,11 @@ export type Bean = {
   seller: string;
 };
 
+export type BeanType = {
+  id: number;
+  beanType: string;
+};
+
 export type Machine = {
   id: number;
   machineName: string;
@@ -87,4 +92,13 @@ export type Setup = {
   userId: number;
   machineId: number;
   grinderId: number;
+};
+
+export type Preference = {
+  id: number;
+  userId: number;
+  beanType: string;
+  body: number;
+  fruit: number;
+  acidity: number;
 };

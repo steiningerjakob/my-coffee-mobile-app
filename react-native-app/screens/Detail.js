@@ -48,28 +48,6 @@ export default function Detail(props) {
   const [review, setReview] = useState('');
   const [isReviewed, setReviewed] = useState(false);
 
-  useEffect(() => {
-    getFlavourProfile(params.bean.flavourProfile).then((data) => {
-      if (data) setFlavourProfile(data.flavour);
-    });
-    checkFavouriteStatus(id, params.bean.id).then((data) => {
-      if (data) {
-        setFavourite(true);
-      } else {
-        setFavourite(false);
-      }
-    });
-    checkReviewStatus(id, params.bean.id).then((data) => {
-      if (data) {
-        setReviewed(true);
-        setRating(data.userRating);
-        setReview(data.userReview);
-      } else {
-        setReviewed(false);
-      }
-    });
-  }, []);
-
   function addButtonHandler() {
     addBeansToFavourites(firstName, id, params.bean.id);
     setFavourite(true);
@@ -94,6 +72,28 @@ export default function Detail(props) {
     updateReview(id, params.bean.id, rating, review);
     setReviewed(true);
   }
+
+  useEffect(() => {
+    getFlavourProfile(params.bean.flavourProfile).then((data) => {
+      if (data) setFlavourProfile(data.flavour);
+    });
+    checkFavouriteStatus(id, params.bean.id).then((data) => {
+      if (data) {
+        setFavourite(true);
+      } else {
+        setFavourite(false);
+      }
+    });
+    checkReviewStatus(id, params.bean.id).then((data) => {
+      if (data) {
+        setReviewed(true);
+        setRating(data.userRating);
+        setReview(data.userReview);
+      } else {
+        setReviewed(false);
+      }
+    });
+  }, []);
 
   return (
     <Screen>

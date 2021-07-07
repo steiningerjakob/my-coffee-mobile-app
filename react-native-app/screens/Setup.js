@@ -12,6 +12,7 @@ import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Screen from '../components/Screen';
+import Spacer from '../components/Spacer';
 import { Headline } from '../components/Text';
 import {
   getGrinders,
@@ -32,6 +33,7 @@ const setupStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
     borderBottomColor: '#F9DFC2',
     borderBottomWidth: 1,
@@ -132,6 +134,7 @@ export default function Setup() {
         refreshUserContext={refreshUserContext}
       />
       <Image source={coverImage} style={setupStyles.cover} />
+      <Spacer />
       {userSetups.length === 0 ? (
         <Container fill>
           <Container>
@@ -283,6 +286,7 @@ export default function Setup() {
                     </TouchableOpacity>
                   </View>
                   <Container>
+                    <Spacer />
                     <Button
                       label="remove setup"
                       onPress={() => removeSetupButtonHandler(setup.id)}

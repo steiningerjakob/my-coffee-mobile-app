@@ -6,7 +6,8 @@ const screenStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
   },
   screenFill: {
     flex: 1,

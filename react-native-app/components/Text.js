@@ -6,12 +6,17 @@ const textStyles = StyleSheet.create({
     color: 'black',
     fontSize: 24,
     textAlign: 'center',
-    marginBottom: 8,
+    marginVertical: 12,
   },
   paragraph: {
     color: 'black',
     fontSize: 16,
     marginBottom: 4,
+  },
+  label: {
+    color: 'black',
+    fontSize: 16,
+    textAlign: 'left',
   },
 });
 
@@ -21,4 +26,8 @@ export function Headline(props) {
 
 export function Paragraph(props) {
   return <Text style={textStyles.paragraph}>{props.children}</Text>;
+}
+
+export function Label(props) {
+  return <Text style={textStyles.label}>{props.children}</Text>;
 }

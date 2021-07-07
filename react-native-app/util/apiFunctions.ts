@@ -54,6 +54,12 @@ export async function getGrinders() {
   return grinders;
 }
 
+export async function getBeanTypes() {
+  const response = await fetch(`${apiBaseUrl}/products/beantypes`);
+  const beanTypes = await response.json();
+  return beanTypes;
+}
+
 export async function getFlavourProfile(beanId) {
   const response = await fetch(`${apiBaseUrl}/products/flavour`, {
     method: 'POST',
@@ -317,4 +323,98 @@ export async function getUserSetups(id) {
 
   const setups = await response.json();
   return setups;
+}
+
+export async function insertPreference(
+  userId: number,
+  beanType: string,
+  body: number,
+  fruit: number,
+  acidity: number,
+) {
+  const response = await fetch(`${apiBaseUrl}/actions/insert_preference`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: userId,
+      beanType: beanType,
+      body: body,
+      fruit: fruit,
+      acidity: acidity,
+    }),
+  });
+
+  const data = await response.json();
+  if (data.message) {
+    alert(data.message);
+  } else {
+    alert('Oops.. something went wrong');
+  }
+}
+
+export async function getPreference(userId: number) {
+  const response = await fetch(`${apiBaseUrl}/actions/get_preference`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: userId,
+    }),
+  });
+
+  const data = await response.json();
+  if (data.existingPreference) {
+    return data.existingPreference;
+  } else {
+    return false;
+  }
+}
+
+export async function clearPreference(userId: number) {
+  const response = await fetch(`${apiBaseUrl}/actions/remove_preference`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: userId,
+    }),
+  });
+
+  const data = await response.json();
+  if (data.message) {
+    alert(data.message);
+  } else {
+    alert('Oops.. something went wrong');
+  }
+}
+
+export async function updatePreference(userId, beanType, body, fruit, acidity) {
+  const response = await fetch(`${apiBaseUrl}/actions/update_preference`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: userId,
+      beanType: beanType,
+      body: body,
+      fruit: fruit,
+      acidity: acidity,
+    }),
+  });
+
+  const data = await response.json();
+  if (data.message) {
+    alert(data.message);
+  } else {
+    alert('Oops.. something went wrong');
+  }
 }
