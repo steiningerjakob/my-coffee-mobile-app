@@ -12,7 +12,8 @@ import coverImage from '../assets/favourites-cover.jpg';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import ListItem from '../components/ListItem';
+import ListItemFav from '../components/ListItemFav';
+import Loading from '../components/Loading';
 import Screen from '../components/Screen';
 import { getUserFavourites } from '../util/apiFunctions';
 
@@ -34,6 +35,8 @@ const favouritesStyles = StyleSheet.create({
 export default function Favourites() {
   const navigation = useNavigation();
   const { firstName, id, refreshUserContext } = useContext(userContext);
+
+  const [isLoading, setLoading] = useState(true);
   const [userFavourites, setUserFavourites] = useState([]);
 
   useFocusEffect(
@@ -43,6 +46,7 @@ export default function Favourites() {
           setUserFavourites(data.userFavourites);
         }
       });
+      setLoading(false);
     }, []),
   );
 
@@ -57,29 +61,35 @@ export default function Favourites() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      <Image source={coverImage} style={favouritesStyles.image} />
-      <Container fill>
-        {userFavourites.length > 0 ? (
-          <ScrollView style={{ flex: 1 }}>
-            <Container>
-              {userFavourites.map((bean) => (
-                <ListItem
-                  key={bean.id}
-                  item={bean}
-                  onPress={() => navigation.navigate('Detail', { bean })}
-                />
-              ))}
-            </Container>
-          </ScrollView>
-        ) : (
-          <TouchableOpacity onPress={redirectHandler}>
-            <Text style={favouritesStyles.redirect}>
-              Nothing here yet... browse through our world of coffee and select
-              your favourites!
-            </Text>
-          </TouchableOpacity>
-        )}
-      </Container>
+      {isLoading === true ? (
+        <Loading />
+      ) : (
+        <>
+          <Image source={coverImage} style={favouritesStyles.image} />
+          <Container fill>
+            {userFavourites.length > 0 ? (
+              <ScrollView style={{ flex: 1 }}>
+                <Container>
+                  {userFavourites.map((bean) => (
+                    <ListItemFav
+                      key={bean.id}
+                      item={bean}
+                      onPress={() => navigation.navigate('Detail', { bean })}
+                    />
+                  ))}
+                </Container>
+              </ScrollView>
+            ) : (
+              <TouchableOpacity onPress={redirectHandler}>
+                <Text style={favouritesStyles.redirect}>
+                  Nothing here yet... browse through our world of coffee and
+                  select your favourites!
+                </Text>
+              </TouchableOpacity>
+            )}
+          </Container>
+        </>
+      )}
       <Footer />
     </Screen>
   );

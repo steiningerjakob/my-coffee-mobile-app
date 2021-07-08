@@ -8,6 +8,7 @@ import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import ListItem from '../components/ListItem';
+import Loading from '../components/Loading';
 import Screen from '../components/Screen';
 import { getFilteredBeans } from '../util/apiFunctions';
 
@@ -67,6 +68,7 @@ const productListStyles = StyleSheet.create({
 export default function Home() {
   const navigation = useNavigation();
   const { firstName, refreshUserContext } = useContext(userContext);
+  const [isLoading, setLoading] = useState(true);
   const [beans, setBeans] = useState([]);
   const [query, setQuery] = useState();
   const [roasterFilter, setRoasterFilter] = useState(false);
@@ -111,6 +113,7 @@ export default function Home() {
           }
         }
       });
+      setLoading(false);
     }, [query, roasterFilter, typeFilter]),
   );
 
@@ -121,77 +124,83 @@ export default function Home() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      <Container>
-        <View style={productListStyles.searchWrapper}>
-          <AntDesign name="search1" size={32} color="#BC6C25" />
-          <TextInput
-            placeholder="Browse our world of coffee..."
-            value={query}
-            onChangeText={(text) => setQuery(text)}
-            clearButtonMode="while-editing"
-            style={productListStyles.inputField}
-          />
-        </View>
-        <View style={productListStyles.sortWrapper}>
-          <TouchableOpacity
-            style={
-              roasterFilter | typeFilter
-                ? productListStyles.sortButton
-                : productListStyles.sortButtonActive
-            }
-            onPress={() => {
-              setRoasterFilter(false);
-              setTypeFilter(false);
-            }}
-          >
-            <Text style={productListStyles.sortLabel}>Name</Text>
-            <FontAwesome name="sort" size={16} color="#BC6C25" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={
-              typeFilter
-                ? productListStyles.sortButtonActive
-                : productListStyles.sortButton
-            }
-            onPress={() => {
-              setTypeFilter(!typeFilter);
-              setRoasterFilter(false);
-            }}
-          >
-            <Text style={productListStyles.sortLabel}>Bean type</Text>
-            <FontAwesome name="sort" size={16} color="#BC6C25" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={
-              roasterFilter
-                ? productListStyles.sortButtonActive
-                : productListStyles.sortButton
-            }
-            onPress={() => {
-              setRoasterFilter(!roasterFilter);
-              setTypeFilter(false);
-            }}
-          >
-            <Text style={productListStyles.sortLabel}>Roaster</Text>
-            <FontAwesome name="sort" size={16} color="#BC6C25" />
-          </TouchableOpacity>
-        </View>
-      </Container>
-      <Container fill>
-        {beans.length > 0 && (
-          <ScrollView style={{ flex: 1 }}>
-            <Container>
-              {beans.map((bean) => (
-                <ListItem
-                  key={bean.id}
-                  item={bean}
-                  onPress={() => navigation.navigate('Detail', { bean })}
-                />
-              ))}
-            </Container>
-          </ScrollView>
-        )}
-      </Container>
+      {isLoading === true ? (
+        <Loading />
+      ) : (
+        <>
+          <Container>
+            <View style={productListStyles.searchWrapper}>
+              <AntDesign name="search1" size={32} color="#BC6C25" />
+              <TextInput
+                placeholder="Browse our world of coffee..."
+                value={query}
+                onChangeText={(text) => setQuery(text)}
+                clearButtonMode="while-editing"
+                style={productListStyles.inputField}
+              />
+            </View>
+            <View style={productListStyles.sortWrapper}>
+              <TouchableOpacity
+                style={
+                  roasterFilter | typeFilter
+                    ? productListStyles.sortButton
+                    : productListStyles.sortButtonActive
+                }
+                onPress={() => {
+                  setRoasterFilter(false);
+                  setTypeFilter(false);
+                }}
+              >
+                <Text style={productListStyles.sortLabel}>Name</Text>
+                <FontAwesome name="sort" size={16} color="#BC6C25" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  typeFilter
+                    ? productListStyles.sortButtonActive
+                    : productListStyles.sortButton
+                }
+                onPress={() => {
+                  setTypeFilter(!typeFilter);
+                  setRoasterFilter(false);
+                }}
+              >
+                <Text style={productListStyles.sortLabel}>Bean type</Text>
+                <FontAwesome name="sort" size={16} color="#BC6C25" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  roasterFilter
+                    ? productListStyles.sortButtonActive
+                    : productListStyles.sortButton
+                }
+                onPress={() => {
+                  setRoasterFilter(!roasterFilter);
+                  setTypeFilter(false);
+                }}
+              >
+                <Text style={productListStyles.sortLabel}>Roaster</Text>
+                <FontAwesome name="sort" size={16} color="#BC6C25" />
+              </TouchableOpacity>
+            </View>
+          </Container>
+          <Container fill>
+            {beans.length > 0 && (
+              <ScrollView style={{ flex: 1 }}>
+                <Container>
+                  {beans.map((bean) => (
+                    <ListItem
+                      key={bean.id}
+                      item={bean}
+                      onPress={() => navigation.navigate('Detail', { bean })}
+                    />
+                  ))}
+                </Container>
+              </ScrollView>
+            )}
+          </Container>
+        </>
+      )}
       <Footer />
     </Screen>
   );

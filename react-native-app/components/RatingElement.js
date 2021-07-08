@@ -12,23 +12,39 @@ const ratingStyles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     marginBottom: 4,
+    marginTop: 8,
   },
 });
 
 export default function RatingElement(props) {
   return (
     <View style={ratingStyles.wrapper}>
-      <Label>{props.label}</Label>
-      <Rating
-        startingValue={props.startingValue}
-        imageSize={24}
-        type="custom"
-        ratingImage={props.ratingImage}
-        ratingColor="#F9DFC2"
-        tintColor="#BC6C25"
-        readonly={props.readonly}
-        onFinishRating={props.onFinishRating() | ''}
-      />
+      {props.label ? (
+        <>
+          <Label>{props.label}</Label>
+          <Rating
+            startingValue={props.startingValue}
+            imageSize={24}
+            type="custom"
+            ratingImage={props.ratingImage}
+            ratingColor="#F9DFC2"
+            tintColor="#BC6C25"
+            readonly={props.readonly}
+            onFinishRating={props.onFinishRating() | ''}
+          />
+        </>
+      ) : (
+        <Rating
+          startingValue={props.startingValue}
+          imageSize={24}
+          type="custom"
+          ratingImage={props.ratingImage}
+          ratingColor="#F9DFC2"
+          tintColor="#BC6C25"
+          readonly={props.readonly}
+          onFinishRating={props.onFinishRating() | ''}
+        />
+      )}
     </View>
   );
 }

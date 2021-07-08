@@ -2,8 +2,6 @@ import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { beanImages } from '../assets/beans/beansImages';
-import ratingImage from '../assets/coffeebean_outline.png';
-import RatingElement from './RatingElement';
 
 const listItemStyles = StyleSheet.create({
   wrapper: {
@@ -51,43 +49,6 @@ export default function ListItem(props) {
           <Text style={listItemStyles.title}>{props.item.productName}</Text>
           <Text style={listItemStyles.subTitle}>{props.item.beanType}</Text>
           <Text style={listItemStyles.subTitle}>{props.item.roaster}</Text>
-          {props.item.rating && (
-            <RatingElement
-              startingValue={props.item.rating}
-              ratingImage={ratingImage}
-              readonly
-              onFinishRating={() => {}}
-              label=""
-            />
-          )}
-          {props.item.review && (
-            <Text style={listItemStyles.review}>{props.item.review}</Text>
-          )}
-          {props.item.body && (
-            <>
-              <RatingElement
-                startingValue={props.item.body}
-                ratingImage={ratingImage}
-                readonly
-                onFinishRating={() => {}}
-                label="Body"
-              />
-              <RatingElement
-                startingValue={props.item.acidity}
-                ratingImage={ratingImage}
-                readonly
-                onFinishRating={() => {}}
-                label="Acidity"
-              />
-              <RatingElement
-                startingValue={props.item.fruit}
-                ratingImage={ratingImage}
-                readonly
-                onFinishRating={() => {}}
-                label="Fruit"
-              />
-            </>
-          )}
         </View>
         <AntDesign
           name="right"

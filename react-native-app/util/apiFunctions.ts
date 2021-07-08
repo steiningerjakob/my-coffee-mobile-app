@@ -42,6 +42,23 @@ export async function getFilteredBeans(query) {
   return data;
 }
 
+export async function getRecommendations(body, acidity, fruit) {
+  const response = await fetch(`${apiBaseUrl}/actions/get_recommendations`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      body: body,
+      acidity: acidity,
+      fruit: fruit,
+    }),
+  });
+  const data = await response.json();
+  return data;
+}
+
 export async function getMachines() {
   const response = await fetch(`${apiBaseUrl}/products/machines`);
   const machines = await response.json();

@@ -17,6 +17,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import ImagePreview from '../components/ImagePreview';
 import Input from '../components/Input';
+import Loading from '../components/Loading';
 import RatingElement from '../components/RatingElement';
 import Screen from '../components/Screen';
 import Separator from '../components/Separator';
@@ -42,8 +43,10 @@ const detailStyles = StyleSheet.create({
 });
 
 export default function Detail(props) {
-  const { firstName, id, refreshUserContext } = useContext(userContext);
   const { params } = props.route;
+  const { firstName, id, refreshUserContext } = useContext(userContext);
+
+  const [isLoading, setLoading] = useState(true);
   const [flavourProfile, setFlavourProfile] = useState({});
   const [isFavourite, setFavourite] = useState();
   const [rating, setRating] = useState();
@@ -95,6 +98,7 @@ export default function Detail(props) {
         setReviewed(false);
       }
     });
+    setLoading(false);
   }, []);
 
   return (
@@ -104,105 +108,112 @@ export default function Detail(props) {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      <KeyboardAvoidingView
-        behavior="padding"
-        style={{ flex: 1, alignItems: 'center' }}
-      >
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-          <View style={detailStyles.favourite}>
-            {isFavourite ? (
-              <TouchableOpacity onPress={removeButtonHandler}>
-                <AntDesign name="star" size={40} color="#BC6C25" />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={addButtonHandler}>
-                <AntDesign name="staro" size={40} color="#BC6C25" />
-              </TouchableOpacity>
-            )}
-          </View>
-          <Container>
-            {params.bean.img && (
-              <ImagePreview source={beanImages[`image${params.bean.id}`]} />
-            )}
-            <Headline>{params.bean.productName}</Headline>
-            <Paragraph>
-              Roaster: {params.bean.roaster}, {params.bean.roasterCountry}
-            </Paragraph>
-            <Paragraph>Bean type: {params.bean.beanType}</Paragraph>
-          </Container>
-          <Container>
-            <Headline>Flavour profile:</Headline>
-            <RatingElement
-              startingValue={flavourProfile.body}
-              ratingImage={ratingImage}
-              readonly
-              onFinishRating={() => {}}
-              label="Body"
-            />
-            <RatingElement
-              startingValue={flavourProfile.acidity}
-              ratingImage={ratingImage}
-              readonly
-              onFinishRating={() => {}}
-              label="Acidity"
-            />
-            <RatingElement
-              startingValue={flavourProfile.fruit}
-              ratingImage={ratingImage}
-              readonly
-              onFinishRating={() => {}}
-              label="Fruit"
-            />
-          </Container>
-          {isFavourite &&
-            (isReviewed === false ? (
-              <>
-                <Separator />
-                <Container>
-                  <Headline>Rate these beans...</Headline>
-                  <Rating
-                    startingValue={0}
-                    onFinishRating={ratingStateHandler}
-                  />
-                </Container>
-                <Container>
-                  <Headline>... and let us know your thoughts:</Headline>
-                  <Input
-                    value={review}
-                    onChangeText={(text) => setReview(text)}
-                    placeholder="Hmmm... beautiful coffeeeee"
-                    multiline
-                  />
-                  <Spacer />
-                  <Button label="save review" onPress={saveReviewHandler} />
-                </Container>
-              </>
-            ) : (
-              <>
-                <Separator />
-                <Container>
-                  <Headline>Your rating</Headline>
-                  <Rating
-                    startingValue={rating}
-                    onFinishRating={ratingStateHandler}
-                  />
-                </Container>
-                <Container>
-                  <Headline>Your review:</Headline>
-                  <Input
-                    value={review}
-                    onChangeText={(text) => setReview(text)}
-                    placeholder={review}
-                    multiline
-                    clearButtonMode="while-editing"
-                  />
-                  <Spacer />
-                  <Button label="update review" onPress={updateReviewHandler} />
-                </Container>
-              </>
-            ))}
-        </ScrollView>
-      </KeyboardAvoidingView>
+      {isLoading === true ? (
+        <Loading />
+      ) : (
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={{ flex: 1, alignItems: 'center' }}
+        >
+          <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+            <View style={detailStyles.favourite}>
+              {isFavourite ? (
+                <TouchableOpacity onPress={removeButtonHandler}>
+                  <AntDesign name="star" size={40} color="#BC6C25" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={addButtonHandler}>
+                  <AntDesign name="staro" size={40} color="#BC6C25" />
+                </TouchableOpacity>
+              )}
+            </View>
+            <Container>
+              {params.bean.img && (
+                <ImagePreview source={beanImages[`image${params.bean.id}`]} />
+              )}
+              <Headline>{params.bean.productName}</Headline>
+              <Paragraph>
+                Roaster: {params.bean.roaster}, {params.bean.roasterCountry}
+              </Paragraph>
+              <Paragraph>Bean type: {params.bean.beanType}</Paragraph>
+            </Container>
+            <Container>
+              <Headline>Flavour profile:</Headline>
+              <RatingElement
+                startingValue={flavourProfile.body}
+                ratingImage={ratingImage}
+                readonly
+                onFinishRating={() => {}}
+                label="Body"
+              />
+              <RatingElement
+                startingValue={flavourProfile.acidity}
+                ratingImage={ratingImage}
+                readonly
+                onFinishRating={() => {}}
+                label="Acidity"
+              />
+              <RatingElement
+                startingValue={flavourProfile.fruit}
+                ratingImage={ratingImage}
+                readonly
+                onFinishRating={() => {}}
+                label="Fruit"
+              />
+            </Container>
+            {isFavourite &&
+              (isReviewed === false ? (
+                <>
+                  <Separator />
+                  <Container>
+                    <Headline>Rate these beans...</Headline>
+                    <Rating
+                      startingValue={0}
+                      onFinishRating={ratingStateHandler}
+                    />
+                  </Container>
+                  <Container>
+                    <Headline>... and let us know your thoughts:</Headline>
+                    <Input
+                      value={review}
+                      onChangeText={(text) => setReview(text)}
+                      placeholder="Hmmm... beautiful coffeeeee"
+                      multiline
+                    />
+                    <Spacer />
+                    <Button label="save review" onPress={saveReviewHandler} />
+                  </Container>
+                </>
+              ) : (
+                <>
+                  <Separator />
+                  <Container>
+                    <Headline>Your rating</Headline>
+                    <Rating
+                      startingValue={rating}
+                      onFinishRating={ratingStateHandler}
+                    />
+                  </Container>
+                  <Container>
+                    <Headline>Your review:</Headline>
+                    <Input
+                      value={review}
+                      onChangeText={(text) => setReview(text)}
+                      placeholder={review}
+                      multiline
+                      clearButtonMode="while-editing"
+                    />
+                    <Spacer />
+                    <Button
+                      label="update review"
+                      onPress={updateReviewHandler}
+                    />
+                  </Container>
+                </>
+              ))}
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
       <Footer />
     </Screen>
   );

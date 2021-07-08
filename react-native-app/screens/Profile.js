@@ -7,6 +7,7 @@ import { userContext } from '../App';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
 import { Headline } from '../components/Text';
@@ -61,6 +62,7 @@ export default function Profile() {
   const UPLOAD_PRESET = 'jvjj9h8z';
 
   const { id, firstName, refreshUserContext } = useContext(userContext);
+  const [isLoading, setLoading] = useState(true);
   // const [selectedImage, setSelectedImage] = useState('');
   const [profileImage, setProfileImage] = useState(null);
 
@@ -113,6 +115,7 @@ export default function Profile() {
           setProfileImage(result.profileImage);
         }
       });
+      setLoading(false);
     }, []),
   );
 
@@ -123,69 +126,73 @@ export default function Profile() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      <Container fill>
-        <Container>
-          <Headline>Welcome back, {firstName}!</Headline>
-          <Spacer />
-          {profileImage === null ? (
+      {isLoading === true ? (
+        <Loading />
+      ) : (
+        <Container fill>
+          <Container>
+            <Headline>Welcome back, {firstName}!</Headline>
+            <Spacer />
+            {profileImage === null ? (
+              <TouchableOpacity
+                onPress={selectProfileImage}
+                style={profileImageStyles.wrapper}
+              >
+                <AntDesign name="camerao" size={32} color="lightgray" />
+                <Text style={profileImageStyles.text}>Upload image</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={selectProfileImage}
+                style={profileImageStyles.wrapper}
+              >
+                <Image
+                  source={{ uri: profileImage }}
+                  style={profileImageStyles.image}
+                />
+              </TouchableOpacity>
+            )}
+          </Container>
+          <Container>
             <TouchableOpacity
-              onPress={selectProfileImage}
-              style={profileImageStyles.wrapper}
+              style={linkStyles.wrapper}
+              onPress={() => navigation.navigate('Favourites')}
             >
-              <AntDesign name="camerao" size={32} color="lightgray" />
-              <Text style={profileImageStyles.text}>Upload image</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={selectProfileImage}
-              style={profileImageStyles.wrapper}
-            >
-              <Image
-                source={{ uri: profileImage }}
-                style={profileImageStyles.image}
+              <Text style={linkStyles.title}>My favourites</Text>
+              <AntDesign
+                name="right"
+                size={24}
+                color="black"
+                style={linkStyles.icon}
               />
             </TouchableOpacity>
-          )}
+            <TouchableOpacity
+              style={linkStyles.wrapper}
+              onPress={() => navigation.navigate('Preferences')}
+            >
+              <Text style={linkStyles.title}>My preferences</Text>
+              <AntDesign
+                name="right"
+                size={24}
+                color="black"
+                style={linkStyles.icon}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={linkStyles.wrapper}
+              onPress={() => navigation.navigate('Setup')}
+            >
+              <Text style={linkStyles.title}>My setup</Text>
+              <AntDesign
+                name="right"
+                size={24}
+                color="black"
+                style={linkStyles.icon}
+              />
+            </TouchableOpacity>
+          </Container>
         </Container>
-        <Container>
-          <TouchableOpacity
-            style={linkStyles.wrapper}
-            onPress={() => navigation.navigate('Favourites')}
-          >
-            <Text style={linkStyles.title}>My favourites</Text>
-            <AntDesign
-              name="right"
-              size={24}
-              color="black"
-              style={linkStyles.icon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={linkStyles.wrapper}
-            onPress={() => navigation.navigate('Preferences')}
-          >
-            <Text style={linkStyles.title}>My preferences</Text>
-            <AntDesign
-              name="right"
-              size={24}
-              color="black"
-              style={linkStyles.icon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={linkStyles.wrapper}
-            onPress={() => navigation.navigate('Setup')}
-          >
-            <Text style={linkStyles.title}>My setup</Text>
-            <AntDesign
-              name="right"
-              size={24}
-              color="black"
-              style={linkStyles.icon}
-            />
-          </TouchableOpacity>
-        </Container>
-      </Container>
+      )}
       <Footer />
     </Screen>
   );

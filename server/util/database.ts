@@ -343,19 +343,61 @@ export async function getUserFavourites(userId?: number) {
       beans.flavour_profile as flavour_profile,
       flavour_profiles.body as body,
       flavour_profiles.fruit as fruit,
+      flavour_profiles.acidity as acidity,
+      ratings.user_rating as rating,
+      ratings.user_review as review
+    FROM
+      users,
+      beans,
+      favourites,
+      flavour_profiles,
+      ratings
+    WHERE
+      users.id = ${userId} AND
+      users.id = ratings.user_id AND
+      ratings.bean_id = beans.id AND
+      users.id = favourites.user_id AND
+      favourites.bean_id = beans.id AND
+      flavour_profiles.id = beans.flavour_profile
+    ORDER BY
+      ratings.user_rating DESC
+  `;
+  return userFavourites.map((favourite) => camelcaseKeys(favourite));
+}
+
+export async function getRecommendations(
+  body?: number,
+  acidity?: number,
+  fruit?: number,
+) {
+  const recommendations = await sql<Bean[]>`
+    SELECT
+      DISTINCT beans.id as id,
+      beans.product_name as product_name,
+      beans.img as img,
+      beans.roaster as roaster,
+      beans.roaster_country as roaster_country,
+      beans.bean_type as bean_type,
+      beans.origin as origin,
+      beans.flavour_profile as flavour_profile,
+      flavour_profiles.body as body,
+      flavour_profiles.fruit as fruit,
       flavour_profiles.acidity as acidity
     FROM
       users,
       beans,
       favourites,
-      flavour_profiles
+      flavour_profiles,
+      ratings
     WHERE
-      users.id = ${userId} AND
-      users.id = favourites.user_id AND
-      favourites.bean_id = beans.id AND
-      flavour_profiles.id = beans.flavour_profile
+      flavour_profiles.id = beans.flavour_profile AND
+      flavour_profiles.body BETWEEN ${body - 1} AND ${body + 1} AND
+      flavour_profiles.acidity BETWEEN ${acidity - 1} AND ${acidity + 1} AND
+      flavour_profiles.fruit BETWEEN ${fruit - 1} AND ${fruit + 1}
+    ORDER BY
+      beans.product_name
   `;
-  return userFavourites.map((favourite) => camelcaseKeys(favourite));
+  return recommendations.map((r) => camelcaseKeys(r));
 }
 
 export async function getAllMachines() {
@@ -368,6 +410,8 @@ export async function getAllMachines() {
       img
     FROM
       machines
+    ORDER by
+      machine_name
   `;
   return machines.map((machine) => camelcaseKeys(machine));
 }
@@ -382,6 +426,8 @@ export async function getAllGrinders() {
       img
     FROM
       grinders
+    ORDER by
+      grinder_name
   `;
   return grinders.map((grinder) => camelcaseKeys(grinder));
 }

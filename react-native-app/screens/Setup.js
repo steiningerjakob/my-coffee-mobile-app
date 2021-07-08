@@ -11,6 +11,7 @@ import Button from '../components/Button';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
 import { Headline } from '../components/Text';
@@ -89,6 +90,7 @@ const setupStyles = StyleSheet.create({
 export default function Setup() {
   const navigation = useNavigation();
   const { id, firstName, refreshUserContext } = useContext(userContext);
+  const [isLoading, setLoading] = useState(true);
 
   const [machines, setMachines] = useState([]);
   const [grinders, setGrinders] = useState([]);
@@ -113,6 +115,7 @@ export default function Setup() {
           setUserSetups(data.userSetups);
         }
       });
+      setLoading(false);
     }, []),
   );
 
@@ -133,170 +136,192 @@ export default function Setup() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      <Image source={coverImage} style={setupStyles.cover} />
-      <Spacer />
-      {userSetups.length === 0 ? (
-        <Container fill>
-          <Container>
-            <Headline>Select your setup:</Headline>
-          </Container>
-          <ScrollView style={{ flex: 1 }}>
-            <Container>
-              <TouchableOpacity
-                onPress={() =>
-                  setMachinesSelectionIsActive(!machinesSelectionIsActive)
-                }
-              >
-                <View style={setupStyles.heading}>
-                  <Headline>Select machine</Headline>
-                  <AntDesign
-                    name="down"
-                    size={24}
-                    color="black"
-                    style={setupStyles.icon}
-                  />
-                </View>
-              </TouchableOpacity>
-              {machinesSelectionIsActive === true &&
-                machines.map((machine) => (
-                  <TouchableOpacity
-                    style={setupStyles.selectionWrapper}
-                    key={machine.id}
-                    onPress={() => {
-                      setUserMachine({
-                        id: machine.id,
-                        name: machine.machineName,
-                      });
-                      setMachinesSelectionIsActive(!machinesSelectionIsActive);
-                    }}
-                  >
-                    <Image
-                      resizeMode="contain"
-                      style={setupStyles.image}
-                      source={machinesImages[`image${machine.id}`]}
-                    />
-                    <Text style={setupStyles.title}>{machine.machineName}</Text>
-                  </TouchableOpacity>
-                ))}
-              {userMachine !== '' && (
-                <View style={setupStyles.wrapper}>
-                  <View style={setupStyles.item}>
-                    <Image
-                      resizeMode="contain"
-                      style={setupStyles.image}
-                      source={machinesImages[`image${userMachine.id}`]}
-                    />
-                    <Text style={setupStyles.title}>{userMachine.name}</Text>
-                  </View>
-                </View>
-              )}
-            </Container>
-            <Container>
-              <TouchableOpacity
-                onPress={() =>
-                  setGrindersSelectionIsActive(!grindersSelectionIsActive)
-                }
-              >
-                <View style={setupStyles.heading}>
-                  <Headline>Select grinder</Headline>
-                  <AntDesign
-                    name="down"
-                    size={24}
-                    color="black"
-                    style={setupStyles.icon}
-                  />
-                </View>
-              </TouchableOpacity>
-              {grindersSelectionIsActive === true &&
-                grinders.map((grinder) => (
-                  <TouchableOpacity
-                    style={setupStyles.selectionWrapper}
-                    key={grinder.id}
-                    onPress={() => {
-                      setUserGrinder({
-                        id: grinder.id,
-                        name: grinder.grinderName,
-                      });
-                      setGrindersSelectionIsActive(!grindersSelectionIsActive);
-                    }}
-                  >
-                    <Image
-                      resizeMode="contain"
-                      style={setupStyles.image}
-                      source={grindersImages[`image${grinder.id}`]}
-                    />
-                    <Text style={setupStyles.title}>{grinder.grinderName}</Text>
-                  </TouchableOpacity>
-                ))}
-              {userGrinder !== '' && (
-                <View style={setupStyles.wrapper}>
-                  <View style={setupStyles.item}>
-                    <Image
-                      resizeMode="contain"
-                      style={setupStyles.image}
-                      source={grindersImages[`image${userGrinder.id}`]}
-                    />
-                    <Text style={setupStyles.title}>{userGrinder.name}</Text>
-                  </View>
-                </View>
-              )}
-            </Container>
-            <Container>
-              <Button
-                label="Save setup"
-                disabled={!userGrinder || !userMachine}
-                onPress={saveSetupButtonHandler}
-              />
-            </Container>
-          </ScrollView>
-        </Container>
+      {isLoading === true ? (
+        <Loading />
       ) : (
-        <Container fill>
-          <ScrollView style={{ flex: 1 }}>
-            <Container>
-              {userSetups.map((setup) => (
-                <View style={setupStyles.container} key={setup.id}>
-                  <View style={setupStyles.heading}>
-                    <Headline>{firstName}'s setup</Headline>
-                  </View>
-                  <View style={setupStyles.wrapper}>
-                    <View style={setupStyles.item}>
-                      <Image
-                        resizeMode="contain"
-                        style={setupStyles.image}
-                        source={machinesImages[`image${setup.machineId}`]}
+        <>
+          <Image source={coverImage} style={setupStyles.cover} />
+          <Spacer />
+          {userSetups.length === 0 ? (
+            <Container fill>
+              <Container>
+                <Headline>Select your setup:</Headline>
+              </Container>
+              <ScrollView style={{ flex: 1 }}>
+                <Container>
+                  <TouchableOpacity
+                    onPress={() =>
+                      setMachinesSelectionIsActive(!machinesSelectionIsActive)
+                    }
+                  >
+                    <View style={setupStyles.heading}>
+                      <Headline>Select machine</Headline>
+                      <AntDesign
+                        name="down"
+                        size={24}
+                        color="black"
+                        style={setupStyles.icon}
                       />
-                      <Text style={setupStyles.title}>{setup.machineName}</Text>
                     </View>
-                    <TouchableOpacity style={setupStyles.icon}>
-                      <AntDesign name="edit" size={24} color="black" />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={setupStyles.wrapper}>
-                    <View style={setupStyles.item}>
-                      <Image
-                        resizeMode="contain"
-                        style={setupStyles.image}
-                        source={grindersImages[`image${setup.grinderId}`]}
+                  </TouchableOpacity>
+                  {machinesSelectionIsActive === true &&
+                    machines.map((machine) => (
+                      <TouchableOpacity
+                        style={setupStyles.selectionWrapper}
+                        key={machine.id}
+                        onPress={() => {
+                          setUserMachine({
+                            id: machine.id,
+                            name: machine.machineName,
+                          });
+                          setMachinesSelectionIsActive(
+                            !machinesSelectionIsActive,
+                          );
+                        }}
+                      >
+                        <Image
+                          resizeMode="contain"
+                          style={setupStyles.image}
+                          source={machinesImages[`image${machine.id}`]}
+                        />
+                        <Text style={setupStyles.title}>
+                          {machine.machineName}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  {userMachine !== '' && (
+                    <View style={setupStyles.wrapper}>
+                      <View style={setupStyles.item}>
+                        <Image
+                          resizeMode="contain"
+                          style={setupStyles.image}
+                          source={machinesImages[`image${userMachine.id}`]}
+                        />
+                        <Text style={setupStyles.title}>
+                          {userMachine.name}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                </Container>
+                <Container>
+                  <TouchableOpacity
+                    onPress={() =>
+                      setGrindersSelectionIsActive(!grindersSelectionIsActive)
+                    }
+                  >
+                    <View style={setupStyles.heading}>
+                      <Headline>Select grinder</Headline>
+                      <AntDesign
+                        name="down"
+                        size={24}
+                        color="black"
+                        style={setupStyles.icon}
                       />
-                      <Text style={setupStyles.title}>{setup.grinderName}</Text>
                     </View>
-                    <TouchableOpacity style={setupStyles.icon}>
-                      <AntDesign name="edit" size={24} color="black" />
-                    </TouchableOpacity>
-                  </View>
-                  <Container>
-                    <Spacer />
-                    <Button
-                      label="remove setup"
-                      onPress={() => removeSetupButtonHandler(setup.id)}
-                    />
-                  </Container>
-                </View>
-              ))}
+                  </TouchableOpacity>
+                  {grindersSelectionIsActive === true &&
+                    grinders.map((grinder) => (
+                      <TouchableOpacity
+                        style={setupStyles.selectionWrapper}
+                        key={grinder.id}
+                        onPress={() => {
+                          setUserGrinder({
+                            id: grinder.id,
+                            name: grinder.grinderName,
+                          });
+                          setGrindersSelectionIsActive(
+                            !grindersSelectionIsActive,
+                          );
+                        }}
+                      >
+                        <Image
+                          resizeMode="contain"
+                          style={setupStyles.image}
+                          source={grindersImages[`image${grinder.id}`]}
+                        />
+                        <Text style={setupStyles.title}>
+                          {grinder.grinderName}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  {userGrinder !== '' && (
+                    <View style={setupStyles.wrapper}>
+                      <View style={setupStyles.item}>
+                        <Image
+                          resizeMode="contain"
+                          style={setupStyles.image}
+                          source={grindersImages[`image${userGrinder.id}`]}
+                        />
+                        <Text style={setupStyles.title}>
+                          {userGrinder.name}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                </Container>
+                <Container>
+                  <Button
+                    label="Save setup"
+                    disabled={!userGrinder || !userMachine}
+                    onPress={saveSetupButtonHandler}
+                  />
+                </Container>
+              </ScrollView>
             </Container>
-          </ScrollView>
-        </Container>
+          ) : (
+            <Container fill>
+              <ScrollView style={{ flex: 1 }}>
+                <Container>
+                  {userSetups.map((setup) => (
+                    <View style={setupStyles.container} key={setup.id}>
+                      <View style={setupStyles.heading}>
+                        <Headline>{firstName}'s setup</Headline>
+                      </View>
+                      <View style={setupStyles.wrapper}>
+                        <View style={setupStyles.item}>
+                          <Image
+                            resizeMode="contain"
+                            style={setupStyles.image}
+                            source={machinesImages[`image${setup.machineId}`]}
+                          />
+                          <Text style={setupStyles.title}>
+                            {setup.machineName}
+                          </Text>
+                        </View>
+                        <TouchableOpacity style={setupStyles.icon}>
+                          <AntDesign name="edit" size={24} color="black" />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={setupStyles.wrapper}>
+                        <View style={setupStyles.item}>
+                          <Image
+                            resizeMode="contain"
+                            style={setupStyles.image}
+                            source={grindersImages[`image${setup.grinderId}`]}
+                          />
+                          <Text style={setupStyles.title}>
+                            {setup.grinderName}
+                          </Text>
+                        </View>
+                        <TouchableOpacity style={setupStyles.icon}>
+                          <AntDesign name="edit" size={24} color="black" />
+                        </TouchableOpacity>
+                      </View>
+                      <Container>
+                        <Spacer />
+                        <Button
+                          label="remove setup"
+                          onPress={() => removeSetupButtonHandler(setup.id)}
+                        />
+                      </Container>
+                    </View>
+                  ))}
+                </Container>
+              </ScrollView>
+            </Container>
+          )}
+        </>
       )}
       <Footer />
     </Screen>
