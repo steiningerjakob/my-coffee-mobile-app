@@ -2,6 +2,8 @@ import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { beanImages } from '../assets/beans/beansImages';
+import ratingImage from '../assets/coffeebean_outline.png';
+import RatingElement from './RatingElement';
 
 const listItemStyles = StyleSheet.create({
   wrapper: {
@@ -49,6 +51,14 @@ export default function ListItem(props) {
           <Text style={listItemStyles.title}>{props.item.productName}</Text>
           <Text style={listItemStyles.subTitle}>{props.item.beanType}</Text>
           <Text style={listItemStyles.subTitle}>{props.item.roaster}</Text>
+          <RatingElement
+            startingValue={props.item.rating}
+            ratingImage={ratingImage}
+            readonly
+            onFinishRating={() => {}}
+            label=""
+          />
+          <Text style={listItemStyles.review}>{props.item.review}</Text>
         </View>
         <AntDesign
           name="right"

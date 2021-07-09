@@ -74,6 +74,7 @@ export default function Profile() {
     //   alert('Permission to access camera roll is required!');
     //   return;
     // } else {
+    setLoading(true);
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -92,7 +93,7 @@ export default function Profile() {
       upload_preset: UPLOAD_PRESET,
     };
 
-    // send image to cloudinary
+    // send image to cloudinary and fetch url
     fetch(CLOUDINARY_URL, {
       body: JSON.stringify(data),
       headers: {
@@ -105,7 +106,8 @@ export default function Profile() {
         setProfileImage(image.url);
         updateProfileImage(id, image.url);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .then(setLoading(false));
   }
 
   useFocusEffect(
@@ -116,7 +118,7 @@ export default function Profile() {
         }
       });
       setLoading(false);
-    }, []),
+    }, [id]),
   );
 
   return (

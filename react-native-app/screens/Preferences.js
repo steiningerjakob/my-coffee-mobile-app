@@ -1,9 +1,10 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Image,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -79,22 +80,27 @@ const preferencesStyles = StyleSheet.create({
   },
 });
 
+const wait = (timeout) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 export default function Preferences() {
   const navigation = useNavigation();
   const { id, firstName, refreshUserContext } = useContext(userContext);
   const [isLoading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [beanTypeSelectionIsActive, setBeanTypeSelectionIsActive] =
     useState(false);
   const [existingPreference, setExistingPreference] = useState(false);
-  const [clearIsConfirmed, setClearConfirmed] = useState(false);
   const [beanTypes, setBeanTypes] = useState([]);
   const [userBeanType, setUserBeanType] = useState('');
   const [userBody, setUserBody] = useState();
   const [userFruit, setUserFruit] = useState();
   const [userAcidity, setUserAcidity] = useState();
   const [recommendations, setRecommendations] = useState([]);
-  console.log('recommendations', recommendations);
 
   function beanTypeSelectionHandler(userInput) {
     setUserBeanType(userInput);
@@ -137,6 +143,16 @@ export default function Preferences() {
     setExistingPreference(true);
   }
 
+  async function clearPreferences() {
+    console.log('clear preferences');
+    clearPreference(id);
+    setExistingPreference(false);
+    setUserBeanType('');
+    setUserBody();
+    setUserFruit();
+    setUserAcidity();
+  }
+
   function clearPreferencesButtonHandler() {
     Alert.alert(
       'Clear preferences',
@@ -148,54 +164,48 @@ export default function Preferences() {
         {
           text: 'OK',
           onPress: () => {
-            setClearConfirmed(true);
+            clearPreferences();
           },
         },
       ],
     );
   }
 
-  async function clearPreferences() {
-    console.log('clear preferences');
-    clearPreference(id);
-    setExistingPreference(false);
-    setUserBeanType('');
-    setUserBody();
-    setUserFruit();
-    setUserAcidity();
-  }
-
-  // TODO: dynamically update recommendations on preference update
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => {
+      getRecommendations(userBody, userAcidity, userFruit).then((d) =>
+        setRecommendations(d.recommendations),
+      );
+      setRefreshing(false);
+    });
+  }, [userBody, userAcidity, userFruit]);
 
   useEffect(() => {
-    if (clearIsConfirmed === true) {
-      clearPreferences();
-    } else {
-      getBeanTypes().then((data) => {
-        if (data) {
-          const unSortedBeanTypes = data.beanTypes;
-          const sortedBeanTypes = unSortedBeanTypes.sort(beanTypesSorter);
-          setBeanTypes(sortedBeanTypes);
-        }
-      });
-      getPreference(id).then((data) => {
-        if (data) {
-          setUserBeanType(data.beanType);
-          setUserBody(data.body);
-          setUserFruit(data.fruit);
-          setUserAcidity(data.acidity);
-          setExistingPreference(true);
+    getBeanTypes().then((data) => {
+      if (data) {
+        const unSortedBeanTypes = data.beanTypes;
+        const sortedBeanTypes = unSortedBeanTypes.sort(beanTypesSorter);
+        setBeanTypes(sortedBeanTypes);
+      }
+    });
+    getPreference(id).then((data) => {
+      if (data) {
+        setUserBeanType(data.beanType);
+        setUserBody(data.body);
+        setUserFruit(data.fruit);
+        setUserAcidity(data.acidity);
+        setExistingPreference(true);
 
-          getRecommendations(data.body, data.acidity, data.fruit).then((d) => {
-            setRecommendations(d.recommendations);
-          });
-        } else {
-          setExistingPreference(false);
-        }
-      });
-      setLoading(false);
-    }
-  }, [clearIsConfirmed]);
+        getRecommendations(data.body, data.acidity, data.fruit).then((d) => {
+          setRecommendations(d.recommendations);
+        });
+      } else {
+        setExistingPreference(false);
+      }
+    });
+    setLoading(false);
+  }, [id]);
 
   return (
     <Screen>
@@ -213,6 +223,9 @@ export default function Preferences() {
             <ScrollView
               style={{ flex: 1 }}
               showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             >
               {existingPreference === false ? (
                 <>

@@ -297,6 +297,21 @@ export async function insertSetup(userId, machineId, grinderId) {
       grinderId: grinderId,
     }),
   });
+}
+
+export async function updateSetup(userId, machineId, grinderId) {
+  const response = await fetch(`${apiBaseUrl}/actions/update_setup`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: userId,
+      machineId: machineId,
+      grinderId: grinderId,
+    }),
+  });
 
   const data = await response.json();
   if (data.message) {

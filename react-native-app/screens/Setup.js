@@ -21,6 +21,7 @@ import {
   getUserSetups,
   insertSetup,
   removeFromSetups,
+  updateSetup,
 } from '../util/apiFunctions';
 
 const setupStyles = StyleSheet.create({
@@ -28,14 +29,14 @@ const setupStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#BC6C25',
     borderRadius: 4,
-    padding: 20,
+    padding: 12,
   },
   heading: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 12,
     borderBottomColor: '#F9DFC2',
     borderBottomWidth: 1,
     width: '90%',
@@ -84,6 +85,12 @@ const setupStyles = StyleSheet.create({
     textAlign: 'left',
     maxWidth: 160,
   },
+  clear: {
+    color: '#BC6C25',
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 8,
+  },
   icon: { marginLeft: 'auto' },
 });
 
@@ -91,6 +98,8 @@ export default function Setup() {
   const navigation = useNavigation();
   const { id, firstName, refreshUserContext } = useContext(userContext);
   const [isLoading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  console.log('editing', editing);
 
   const [machines, setMachines] = useState([]);
   const [grinders, setGrinders] = useState([]);
@@ -98,9 +107,30 @@ export default function Setup() {
     useState(false);
   const [grindersSelectionIsActive, setGrindersSelectionIsActive] =
     useState(false);
-  const [userMachine, setUserMachine] = useState('');
-  const [userGrinder, setUserGrinder] = useState('');
-  const [userSetups, setUserSetups] = useState([]);
+  const [userMachine, setUserMachine] = useState({});
+  const [userGrinder, setUserGrinder] = useState({});
+  const [userSetup, setUserSetup] = useState([]);
+
+  function saveSetupButtonHandler() {
+    insertSetup(id, userMachine.id, userGrinder.id);
+    navigation.navigate('Profile');
+  }
+
+  function editSetupButtonHandler() {
+    setUserSetup([]);
+    setEditing(!editing);
+  }
+
+  function updateSetupButtonHandler() {
+    updateSetup(id, userMachine.id, userGrinder.id);
+    setEditing(!editing);
+    navigation.navigate('Profile');
+  }
+
+  function removeSetupButtonHandler(setupId) {
+    removeFromSetups(setupId);
+    setUserSetup([]);
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -112,22 +142,12 @@ export default function Setup() {
       });
       getUserSetups(id).then((data) => {
         if (data) {
-          setUserSetups(data.userSetups);
+          setUserSetup(data.userSetups);
         }
       });
       setLoading(false);
     }, []),
   );
-
-  function saveSetupButtonHandler() {
-    insertSetup(id, userMachine.id, userGrinder.id);
-    navigation.navigate('Profile');
-  }
-
-  function removeSetupButtonHandler(setupId) {
-    removeFromSetups(setupId);
-    setUserSetups([]);
-  }
 
   return (
     <Screen>
@@ -142,7 +162,7 @@ export default function Setup() {
         <>
           <Image source={coverImage} style={setupStyles.cover} />
           <Spacer />
-          {userSetups.length === 0 ? (
+          {userSetup.length === 0 ? (
             <Container fill>
               <Container>
                 <Headline>Select your setup:</Headline>
@@ -260,20 +280,30 @@ export default function Setup() {
                     </View>
                   )}
                 </Container>
-                <Container>
-                  <Button
-                    label="Save setup"
-                    disabled={!userGrinder || !userMachine}
-                    onPress={saveSetupButtonHandler}
-                  />
-                </Container>
+                {editing === false ? (
+                  <Container>
+                    <Button
+                      label="Save setup"
+                      disabled={!userGrinder || !userMachine}
+                      onPress={saveSetupButtonHandler}
+                    />
+                  </Container>
+                ) : (
+                  <Container>
+                    <Button
+                      label="Save setup"
+                      disabled={!userGrinder || !userMachine}
+                      onPress={updateSetupButtonHandler}
+                    />
+                  </Container>
+                )}
               </ScrollView>
             </Container>
           ) : (
             <Container fill>
               <ScrollView style={{ flex: 1 }}>
                 <Container>
-                  {userSetups.map((setup) => (
+                  {userSetup.map((setup) => (
                     <View style={setupStyles.container} key={setup.id}>
                       <View style={setupStyles.heading}>
                         <Headline>{firstName}'s setup</Headline>
@@ -289,9 +319,6 @@ export default function Setup() {
                             {setup.machineName}
                           </Text>
                         </View>
-                        <TouchableOpacity style={setupStyles.icon}>
-                          <AntDesign name="edit" size={24} color="black" />
-                        </TouchableOpacity>
                       </View>
                       <View style={setupStyles.wrapper}>
                         <View style={setupStyles.item}>
@@ -304,16 +331,16 @@ export default function Setup() {
                             {setup.grinderName}
                           </Text>
                         </View>
-                        <TouchableOpacity style={setupStyles.icon}>
-                          <AntDesign name="edit" size={24} color="black" />
-                        </TouchableOpacity>
                       </View>
                       <Container>
                         <Spacer />
                         <Button
-                          label="remove setup"
-                          onPress={() => removeSetupButtonHandler(setup.id)}
+                          label="edit setup"
+                          onPress={editSetupButtonHandler}
                         />
+                        <TouchableOpacity onPress={removeSetupButtonHandler}>
+                          <Text style={setupStyles.clear}>Remove setup</Text>
+                        </TouchableOpacity>
                       </Container>
                     </View>
                   ))}
