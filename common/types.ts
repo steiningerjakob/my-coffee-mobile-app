@@ -43,6 +43,8 @@ export type Bean = {
   kg: number;
   img: string;
   seller: string;
+  barcodeEan13: string;
+  uri: string;
 };
 
 export type BeanType = {
@@ -56,6 +58,7 @@ export type Machine = {
   manufacturer: string;
   price: number;
   img: string;
+  uri: string;
 };
 
 export type Grinder = {
@@ -64,6 +67,7 @@ export type Grinder = {
   manufacturer: string;
   price: number;
   img: string;
+  uri: string;
 };
 
 export type FlavourProfile = {
@@ -91,7 +95,11 @@ export type Setup = {
   id: number;
   userId: number;
   machineId: number;
+  machineName: string;
+  machineUri: string;
   grinderId: number;
+  grinderName: string;
+  grinderUri: string;
 };
 
 export type Preference = {

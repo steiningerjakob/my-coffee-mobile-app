@@ -5,7 +5,8 @@ exports.up = async function up(sql) {
 			machine_name varchar(40) NOT NULL,
 			manufacturer varchar(40) NOT NULL,
 			price numeric NOT NULL,
-			img varchar(100) NOT NULL
+			img varchar(100),
+			uri varchar(255) NOT NULL
 		)
 	`;
 };

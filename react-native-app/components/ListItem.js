@@ -1,7 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { beanImages } from '../assets/beans/beansImages';
 import ratingImage from '../assets/custom_bean.png';
 import RatingElement from './RatingElement';
 
@@ -43,7 +42,7 @@ export default function ListItem(props) {
         {props.item && (
           <Image
             resizeMode="contain"
-            source={beanImages[`image${props.item.id}`]}
+            source={{ uri: props.item.uri }}
             style={listItemStyles.image}
           />
         )}

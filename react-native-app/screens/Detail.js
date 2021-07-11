@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { userContext } from '../App';
-import { beanImages } from '../assets/beans/beansImages';
 import ratingImage from '../assets/custom_bean.png';
 import Button from '../components/Button';
 import Container from '../components/Container';
@@ -128,8 +127,8 @@ export default function Detail(props) {
               )}
             </View>
             <Container>
-              {params.bean.img && (
-                <ImagePreview source={beanImages[`image${params.bean.id}`]} />
+              {params.bean.uri && (
+                <ImagePreview source={{ uri: params.bean.uri }} />
               )}
               <Headline>{params.bean.productName}</Headline>
               <Paragraph>

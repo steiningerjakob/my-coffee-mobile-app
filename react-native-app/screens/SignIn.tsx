@@ -73,7 +73,9 @@ export default function SignIn() {
       <ScrollView style={{ flex: 1 }}>
         <Container>
           <Spacer />
+          <Spacer />
           <Paragraph>Email:</Paragraph>
+          <Spacer />
           <Input
             value={email}
             onChangeText={(text) => setEmail(text)}
@@ -82,7 +84,10 @@ export default function SignIn() {
             type="emailAddress"
           />
           <Spacer />
+          <Spacer />
+          <Spacer />
           <Paragraph>Password:</Paragraph>
+          <Spacer />
           <Input
             value={password}
             onChangeText={(text) => setPassword(text)}
@@ -90,6 +95,9 @@ export default function SignIn() {
             clearButtonMode="while-editing"
             secureTextEntry={true}
           />
+          <Spacer />
+          <Spacer />
+          <Spacer />
           <Spacer />
           <Spacer />
           <Spacer />

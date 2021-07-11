@@ -13,7 +13,8 @@ exports.up = async function up(sql) {
 			price_per_kg numeric,
 			img varchar(100) NOT NULL,
 			seller varchar(40),
-			theme varchar(40)
+			barcode_ean13 varchar(15) NOT NULL,
+			uri varchar(255) NOT NULL
 		)
 	`;
 };

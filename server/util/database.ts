@@ -269,17 +269,7 @@ export async function getUserByValidSessionToken(token: string) {
 export async function getAllBeans() {
   const beans = await sql<Bean[]>`
     SELECT
-      id,
-      product_name,
-      roaster,
-      roaster_country,
-      origin,
-      bean_type,
-      flavour_profile,
-      price,
-      kg,
-      img,
-      seller
+      *
     FROM
       beans
     ORDER by
@@ -335,7 +325,7 @@ export async function getUserFavourites(userId?: number) {
     SELECT
       beans.id as id,
       beans.product_name as product_name,
-      beans.img as img,
+      beans.uri as uri,
       beans.roaster as roaster,
       beans.roaster_country as roaster_country,
       beans.bean_type as bean_type,
@@ -374,7 +364,7 @@ export async function getRecommendations(
     SELECT
       DISTINCT beans.id as id,
       beans.product_name as product_name,
-      beans.img as img,
+      beans.uri as uri,
       beans.roaster as roaster,
       beans.roaster_country as roaster_country,
       beans.bean_type as bean_type,
@@ -403,11 +393,7 @@ export async function getRecommendations(
 export async function getAllMachines() {
   const machines = await sql<Machine[]>`
     SELECT
-      id,
-      machine_name,
-      manufacturer,
-      price,
-      img
+      *
     FROM
       machines
     ORDER by
@@ -419,11 +405,7 @@ export async function getAllMachines() {
 export async function getAllGrinders() {
   const grinders = await sql<Grinder[]>`
     SELECT
-      id,
-      grinder_name,
-      manufacturer,
-      price,
-      img
+      *
     FROM
       grinders
     ORDER by
@@ -650,10 +632,10 @@ export async function getUserSetups(userId?: number) {
       users.id as user_id,
       machines.id as machine_id,
       machines.machine_name as machine_name,
-      machines.img as machine_img,
+      machines.uri as machine_uri,
       grinders.id as grinder_id,
       grinders.grinder_name as grinder_name,
-      grinders.img as grinder_img
+      grinders.uri as grinder_uri
     FROM
       users,
       setups,

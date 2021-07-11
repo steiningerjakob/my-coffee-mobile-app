@@ -11,6 +11,8 @@ const beans = [
     price_per_kg: '28.90',
     img: 'produktbild-2-1603444385-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8004413000697',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477559/beans/produktbild-2-1603444385-bild-450_elybxy.png',
   },
   {
     product_name: 'Roen Malabar Monsun',
@@ -24,6 +26,8 @@ const beans = [
     price_per_kg: '24.00',
     img: 'produktbild-9-1620041377-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: '8006629002076',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477559/beans/produktbild-9-1620041377-bild-450_jrfzbu.jpg',
   },
   {
     product_name: 'Omkafe Perla',
@@ -37,9 +41,11 @@ const beans = [
     price_per_kg: '21.00',
     img: 'produktbild-22-1582101396-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8004091006318',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477559/beans/produktbild-22-1582101396-bild-450_venunb.png',
   },
   {
-    product_name: 'Roen Gran',
+    product_name: 'Roen Gran Bar',
     roaster: 'Caffe Roen',
     roaster_country: 'Italy',
     origin: 'Blend',
@@ -50,6 +56,8 @@ const beans = [
     price_per_kg: '18.90',
     img: 'produktbild-27-1623061362-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8006629001239',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477560/beans/produktbild-27-1623061362-bild-450_pt29oi.png',
   },
   {
     product_name: 'Cagliari GranCaffe',
@@ -63,6 +71,8 @@ const beans = [
     price_per_kg: '19.50',
     img: 'produktbild-29-1620995363-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8004413000673',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477559/beans/produktbild-29-1620995363-bild-450_yiv1jl.png',
   },
   {
     product_name: 'Cagliari CremEspresso',
@@ -76,6 +86,8 @@ const beans = [
     price_per_kg: '15.90',
     img: 'produktbild-31-1582180658-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8004411300706',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477560/beans/produktbild-31-1582180658-bild-450_skiojo.png',
   },
   {
     product_name: 'Mokito Verde',
@@ -89,6 +101,8 @@ const beans = [
     price_per_kg: '25.80',
     img: 'produktbild-40-1582322923-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8057680896302',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477560/beans/produktbild-42-1582322892-bild-450_mars63.png',
   },
   {
     product_name: 'Mokito Bianco',
@@ -102,6 +116,8 @@ const beans = [
     price_per_kg: '28.00',
     img: 'produktbild-42-1582322892-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8057680897200',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477560/beans/produktbild-40-1582322923-bild-450_pymomc.png',
   },
   {
     product_name: 'LaCafferia Milano',
@@ -115,6 +131,8 @@ const beans = [
     price_per_kg: '21.00',
     img: 'produktbild-45-1582547840-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8054701060018',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477560/beans/produktbild-45-1582547840-bild-450_ivbeek.png',
   },
   {
     product_name: 'LaCafferia Portofino',
@@ -128,6 +146,8 @@ const beans = [
     price_per_kg: '24.00',
     img: 'produktbild-46-1582543673-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8054701060001',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477560/beans/produktbild-46-1582543673-bild-450_vsqz08.png',
   },
   {
     product_name: 'Omkafe Oro',
@@ -141,6 +161,8 @@ const beans = [
     price_per_kg: '21.00',
     img: 'produktbild-53-1620124370-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8004091001511',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477560/beans/produktbild-53-1620124370-bild-450_rl2d2t.png',
   },
   {
     product_name: 'Mokito Armonia',
@@ -154,6 +176,8 @@ const beans = [
     price_per_kg: '28.80',
     img: 'produktbild-57-1613995948-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8057680893257',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477560/beans/produktbild-57-1613995948-bild-450_prwopa.png',
   },
   {
     product_name: 'Molinari Oro',
@@ -167,6 +191,8 @@ const beans = [
     price_per_kg: '25.00',
     img: 'produktbild-65-1582544547-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8001688060210',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477560/beans/produktbild-65-1582544547-bild-450_wxbw40.png',
   },
   {
     product_name: 'Molinari Arabica',
@@ -180,6 +206,8 @@ const beans = [
     price_per_kg: '29.70',
     img: 'produktbild-77-1582545454-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-77-1582545454-bild-450_wdyz1d.png',
   },
   {
     product_name: 'Passalacqua Harem',
@@ -193,6 +221,8 @@ const beans = [
     price_per_kg: '33.00',
     img: 'produktbild-85-1612877145-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: '8003303042113',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-85-1612877145-bild-450_wu5gj1.jpg',
   },
   {
     product_name: 'Passalacqua Vesuvio',
@@ -206,6 +236,8 @@ const beans = [
     price_per_kg: '24.00',
     img: 'produktbild-86-1612877561-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: '8003303033111',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-86-1612877561-bild-450_xyktgn.jpg',
   },
   {
     product_name: 'Passalacqua Mexico+',
@@ -219,6 +251,8 @@ const beans = [
     price_per_kg: '26.00',
     img: 'produktbild-87-1612877326-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: '8003303037119',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-87-1612877326-bild-450_yc4hxa.jpg',
   },
   {
     product_name: 'Passalacqua Cremador',
@@ -232,6 +266,8 @@ const beans = [
     price_per_kg: '21.00',
     img: 'produktbild-88-1612877806-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: '8003303058114',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-88-1612877806-bild-450_ibrlcc.jpg',
   },
   {
     product_name: 'Passalacqua Mehari',
@@ -245,6 +281,8 @@ const beans = [
     price_per_kg: '19.90',
     img: 'produktbild-89-1612878550-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: '8003303007112',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-89-1612878550-bild-450_uc2bul.jpg',
   },
   {
     product_name: 'Salimbene Caffetteria',
@@ -258,6 +296,8 @@ const beans = [
     price_per_kg: '28.00',
     img: 'produktbild-101-1591347586-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-347-1591347570-bild-450_jwu46j.png',
   },
   {
     product_name: 'Compagnia Purissimi',
@@ -271,6 +311,8 @@ const beans = [
     price_per_kg: '19.00',
     img: 'produktbild-225-1591350468-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8001684100262',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-225-1591350468-bild-450_qoidhc.png',
   },
   {
     product_name: 'Mokarico Columbia',
@@ -284,6 +326,8 @@ const beans = [
     price_per_kg: '28.00',
     img: 'produktbild-232-1500888752-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-232-1500888752-bild-450_vqyzko.jpg',
   },
   {
     product_name: 'Passalacqua Moana',
@@ -297,6 +341,8 @@ const beans = [
     price_per_kg: '30.00',
     img: 'produktbild-346-1612877702-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: '8003303041116',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-346-1612877702-bild-450_glst4g.jpg',
   },
   {
     product_name: 'Salimbene Superbar',
@@ -310,6 +356,8 @@ const beans = [
     price_per_kg: '25.00',
     img: 'produktbild-347-1591347570-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477562/beans/produktbild-101-1591347586-bild-450_odjliz.png',
   },
   {
     product_name: 'Mokarico Malabar',
@@ -323,6 +371,8 @@ const beans = [
     price_per_kg: '24.00',
     img: 'produktbild-361-1582546220-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477561/beans/produktbild-361-1582546220-bild-450_xzpyli.png',
   },
   {
     product_name: 'Battista Extra 1kg',
@@ -336,6 +386,8 @@ const beans = [
     price_per_kg: '23.00',
     img: 'produktbild-363-1591347382-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477562/beans/produktbild-363-1591347382-bild-450_unutae.png',
   },
   {
     product_name: 'Battistino',
@@ -349,6 +401,8 @@ const beans = [
     price_per_kg: '27.00',
     img: 'produktbild-365-1582549348-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477562/beans/produktbild-365-1582549348-bild-450_z2tefa.png',
   },
   {
     product_name: 'Battistino Vida BIO',
@@ -362,6 +416,8 @@ const beans = [
     price_per_kg: '24.00',
     img: 'produktbild-426-1591703213-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477562/beans/produktbild-426-1591703213-bild-450_cmq7nc.png',
   },
   {
     product_name: 'Mokito Rosso',
@@ -375,6 +431,8 @@ const beans = [
     price_per_kg: '21.90',
     img: 'produktbild-433-1582322857-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8057680896401',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477562/beans/produktbild-433-1582322857-bild-450_nmdgbj.png',
   },
   {
     product_name: 'Omkafe Platino',
@@ -388,6 +446,8 @@ const beans = [
     price_per_kg: '24.00',
     img: 'produktbild-444-1620124331-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8004091001313',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477562/beans/produktbild-444-1620124331-bild-450_vgyykr.png',
   },
   {
     product_name: 'Goriziana Extra',
@@ -401,6 +461,8 @@ const beans = [
     price_per_kg: '23.40',
     img: 'produktbild-448-1591349837-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8003286000100',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477562/beans/produktbild-448-1591349837-bild-450_xbxncf.png',
   },
   {
     product_name: 'Ruffinelli 090',
@@ -414,6 +476,8 @@ const beans = [
     price_per_kg: '21.00',
     img: 'produktbild-452-1591350847-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477562/beans/produktbild-452-1591350847-bild-450_s0rizj.png',
   },
   {
     product_name: 'Ruffinelli 075',
@@ -427,6 +491,8 @@ const beans = [
     price_per_kg: '19.00',
     img: 'produktbild-453-1591351197-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477562/beans/produktbild-453-1591351197-bild-450_xl6ykm.png',
   },
   {
     product_name: 'Cagliari Espressobar',
@@ -440,9 +506,11 @@ const beans = [
     price_per_kg: '27.90',
     img: 'produktbild-456-1603444050-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8004413000680',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-456-1603444050-bild-450_xwvtme.png',
   },
   {
-    product_name: 'Cagliari Gran Rossa',
+    product_name: 'Cagliari Gran Rosso',
     roaster: 'Caffe Cagliari',
     roaster_country: 'Italy',
     origin: 'Blend',
@@ -453,9 +521,11 @@ const beans = [
     price_per_kg: '16.90',
     img: 'produktbild-470-1591347654-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8004413000437',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-470-1591347654-bild-450_ucsz6t.png',
   },
   {
-    product_name: 'Mokarico Rossa',
+    product_name: 'Mokarico Rosso',
     roaster: 'Mokarico',
     roaster_country: 'Italy',
     origin: 'Blend',
@@ -466,6 +536,8 @@ const beans = [
     price_per_kg: '23.60',
     img: 'produktbild-475-1500887084-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: '8057680896401',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-475-1500887084-bild-450_s6skzh.jpg',
   },
   {
     product_name: 'Omkafe Diamante',
@@ -479,6 +551,8 @@ const beans = [
     price_per_kg: '25.40',
     img: 'produktbild-609-1620995012-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8004091001115',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-609-1620995012-bild-450_u1h3kc.png',
   },
   {
     product_name: 'Molinari Platino',
@@ -492,6 +566,8 @@ const beans = [
     price_per_kg: '24.00',
     img: 'produktbild-613-1582544570-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-613-1582544570-bild-450_qzsjjv.png',
   },
   {
     product_name: 'Goriziana Rossa',
@@ -505,6 +581,8 @@ const beans = [
     price_per_kg: '15.90',
     img: 'produktbild-636-1591349463-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8003286000032',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-636-1591349463-bild-450_hwnpep.png',
   },
   {
     product_name: 'Miguel Reserva',
@@ -518,6 +596,8 @@ const beans = [
     price_per_kg: '24.00',
     img: 'produktbild-768-1582101151-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8054701060230',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-768-1582101151-bild-450_ugu9zx.png',
   },
   {
     product_name: 'Miguel Precioso',
@@ -531,6 +611,8 @@ const beans = [
     price_per_kg: '21.60',
     img: 'produktbild-770-1582101119-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8054701060223',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-770-1582101119-bild-450_dtaoue.png',
   },
   {
     product_name: 'Miguel Profundo',
@@ -544,6 +626,8 @@ const beans = [
     price_per_kg: '20.60',
     img: 'produktbild-772-1582101090-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8054701060216',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-772-1582101090-bild-450_k4nc83.png',
   },
   {
     product_name: 'Goriziana Blue/Piu',
@@ -557,6 +641,8 @@ const beans = [
     price_per_kg: '17.40',
     img: 'produktbild-853-1591349023-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8003286000117',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-853-1591349023-bild-450_w6phte.png',
   },
   {
     product_name: 'Roen Extra Bar',
@@ -570,6 +656,8 @@ const beans = [
     price_per_kg: '22.80',
     img: 'produktbild-860-1620319630-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8006629001215',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477563/beans/produktbild-860-1620319630-bild-450_hqt0ro.png',
   },
   {
     product_name: 'Roen 100% Arabica',
@@ -583,6 +671,8 @@ const beans = [
     price_per_kg: '26.10',
     img: 'produktbild-861-1620995699-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8006629001253',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477564/beans/produktbild-861-1620995699-bild-450_ee4yu9.png',
   },
   {
     product_name: 'Roen CostaDelSol',
@@ -596,6 +686,8 @@ const beans = [
     price_per_kg: '20.70',
     img: 'produktbild-862-1620041344-bild-450.jpg',
     seller: 'TasteIt',
+    barcode_ean13: '8006629001222',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477564/beans/produktbild-862-1620041344-bild-450_w2dodz.jpg',
   },
   {
     product_name: 'Gli Ormesini Settanta Trenta',
@@ -609,6 +701,8 @@ const beans = [
     price_per_kg: '25.50',
     img: 'produktbild-930-1616499675-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '0806891809803',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477564/beans/produktbild-930-1616499675-bild-450_ifyxuk.png',
   },
   {
     product_name: 'Gli Ormesini Ottanta Venti',
@@ -622,6 +716,8 @@ const beans = [
     price_per_kg: '28.00',
     img: 'produktbild-931-1616499950-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '0806891809810',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477564/beans/produktbild-931-1616499950-bild-450_i8okpm.png',
   },
   {
     product_name: 'Gli Ormesini Cento',
@@ -635,6 +731,8 @@ const beans = [
     price_per_kg: '29.90',
     img: 'produktbild-932-1616499041-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '0806891809827',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477564/beans/produktbild-932-1616499041-bild-450_qqs1ts.png',
   },
   {
     product_name: 'Passalacqua Ibis Redibis',
@@ -648,6 +746,8 @@ const beans = [
     price_per_kg: '19.00',
     img: 'produktbild-993-1613996739-bild-450.png',
     seller: 'TasteIt',
+    barcode_ean13: '8003303042113',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477564/beans/produktbild-993-1613996739-bild-450_g7paij.png',
   },
   {
     product_name: 'Arsosala',
@@ -660,6 +760,8 @@ const beans = [
     kg: '1.00',
     img: 'Arsosala_1056x1408.jpg',
     seller: 'Süssmund',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477558/beans/Arsosala_1056x1408_tskswq.jpg',
   },
   {
     product_name: 'Yirgacheffe',
@@ -672,6 +774,8 @@ const beans = [
     kg: '1.00',
     img: 'Yirgacheffe_1056x1408.jpg',
     seller: 'Süssmund',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477564/beans/Yirgacheffe_1056x1408_iy6jqz.jpg',
   },
   {
     product_name: 'Mantiquera de Minas',
@@ -684,6 +788,8 @@ const beans = [
     kg: '1.00',
     img: 'BrasilienEspresso_450x.jpg',
     seller: 'Süssmund',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477559/beans/BrasilienEspresso_450x_siyhuj.jpg',
   },
   {
     product_name: 'El Capitan',
@@ -696,6 +802,8 @@ const beans = [
     kg: '1.00',
     img: 'ElCapitan_450x.jpg',
     seller: 'Süssmund',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477558/beans/ElCapitan_450x_g8d9cr.jpg',
   },
   {
     product_name: 'Esquipulas',
@@ -708,6 +816,8 @@ const beans = [
     kg: '1.00',
     img: 'Esquipulas_450x.jpg',
     seller: 'Süssmund',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477558/beans/Esquipulas_450x_l1hrhg.jpg',
   },
   {
     product_name: 'Oaxaga',
@@ -720,6 +830,8 @@ const beans = [
     kg: '1.00',
     img: 'Mexiko_450x.jpg',
     seller: 'Süssmund',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477559/beans/Mexiko_450x_i8ecsa.jpg',
   },
   {
     product_name: 'Nocciola',
@@ -732,6 +844,8 @@ const beans = [
     kg: '1.00',
     img: 'Nocciola_450x.jpg',
     seller: 'Süssmund',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477559/beans/Nocciola_450x_anh5ce.jpg',
   },
   {
     product_name: 'Montecristo',
@@ -744,6 +858,8 @@ const beans = [
     kg: '1.00',
     img: 'Montecristo_450x.jpg',
     seller: 'Süssmund',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477559/beans/Montecristo_450x_pr2t0k.jpg',
   },
   {
     product_name: 'Arhuaco',
@@ -756,6 +872,8 @@ const beans = [
     kg: '1.00',
     img: 'Arhuaco_450x.jpg',
     seller: 'Süssmund',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477558/beans/Arhuaco_450x_nlolns.jpg',
   },
   {
     product_name: 'Harry & Phil´s Edition Trieste',
@@ -768,6 +886,8 @@ const beans = [
     kg: '1.00',
     img: 'Harry_and_Phils_Edition_Trieste.jpg',
     seller: 'Caffe Vettore',
+    barcode_ean13: 'unknown',
+    uri: 'https://res.cloudinary.com/my-coffee-mobile-app/image/upload/v1625477558/beans/Harry_and_Phils_Edition_Trieste_kmebxm.jpg',
   },
 ];
 
@@ -785,6 +905,8 @@ exports.up = async function up(sql) {
       'kg',
       'img',
       'seller',
+      'barcode_ean13',
+      'uri',
     )}
 	`;
 };

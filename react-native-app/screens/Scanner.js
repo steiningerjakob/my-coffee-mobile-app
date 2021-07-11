@@ -1,6 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text } from 'react-native';
 import { userContext } from '../App';
 import Button from '../components/Button';
 import Container from '../components/Container';
@@ -10,25 +11,13 @@ import Screen from '../components/Screen';
 import { Headline } from '../components/Text';
 import { getBeans } from '../util/apiFunctions';
 
-const scannerStyles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    position: 'relative',
-  },
-});
-
 export default function Scanner() {
+  const navigation = useNavigation();
   const { firstName, refreshUserContext } = useContext(userContext);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [barCode, setBarCode] = useState();
-  const [beans, setBeans] = useState();
-
-  console.log('barCode', barCode);
-  console.log('type', typeof barCode);
+  const [beans, setBeans] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -42,12 +31,42 @@ export default function Scanner() {
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ data }) => {
-    setScanned(true);
-    setBarCode(data);
+  function navigationHandler(bean) {
+    Alert.alert(
+      'Success!',
+      'We have found your favourite coffee! Do you want to proceed to the selected coffee beans?',
+      [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            navigation.navigate('Detail', { bean });
+          },
+        },
+      ],
+    );
+  }
 
-    alert(`Voilà, found your coffee!`);
-  };
+  function findBeansByBarCode(barCodeInput) {
+    const selectedBean = beans.find(
+      (bean) => bean.barcodeEan13 === barCodeInput,
+    );
+    if (selectedBean) {
+      // alert(`Voilà, found your coffee!`);
+      navigationHandler(selectedBean);
+    } else {
+      alert(
+        'No matching beans found, please try another barcode or browse our selection.',
+      );
+    }
+  }
+
+  function handleBarCodeScanned({ data }) {
+    setScanned(true);
+    findBeansByBarCode(data);
+  }
 
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
@@ -67,7 +86,6 @@ export default function Scanner() {
         <Headline>Scan the barcode of your favourite coffee:</Headline>
       </Container>
       <Container fill>
-        {/* <View style={scannerStyles.container}> */}
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={StyleSheet.absoluteFillObject}
@@ -76,7 +94,6 @@ export default function Scanner() {
         {scanned && (
           <Button label="Tap to scan again" onPress={() => setScanned(false)} />
         )}
-        {/* </View> */}
       </Container>
       <Footer />
     </Screen>

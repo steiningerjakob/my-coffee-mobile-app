@@ -9,9 +9,9 @@ export default async function getFavouriteHandler(
     // Destructure relevant information from the request body
     const { userId } = req.body;
 
-    const userSetups = await getUserSetups(userId);
+    const userSetup = await getUserSetups(userId);
 
-    return res.status(200).json({ userSetups: userSetups });
+    return res.status(200).json({ userSetup: userSetup });
   }
   res.status(400).json(null);
 }

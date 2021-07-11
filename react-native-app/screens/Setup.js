@@ -4,8 +4,6 @@ import React, { useCallback, useContext, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { userContext } from '../App';
-import { grindersImages } from '../assets/grinders/grindersImages';
-import { machinesImages } from '../assets/machines/machinesImages';
 import coverImage from '../assets/setup-cover.jpg';
 import Button from '../components/Button';
 import Container from '../components/Container';
@@ -18,7 +16,7 @@ import { Headline } from '../components/Text';
 import {
   getGrinders,
   getMachines,
-  getUserSetups,
+  getUserSetups as getUserSetup,
   insertSetup,
   removeFromSetups,
   updateSetup,
@@ -139,9 +137,9 @@ export default function Setup() {
       getGrinders().then((data) => {
         if (data) setGrinders(data.grinders);
       });
-      getUserSetups(id).then((data) => {
+      getUserSetup(id).then((data) => {
         if (data) {
-          setUserSetup(data.userSetups);
+          setUserSetup(data.userSetup);
         }
       });
       setLoading(false);
@@ -192,6 +190,7 @@ export default function Setup() {
                           setUserMachine({
                             id: machine.id,
                             name: machine.machineName,
+                            uri: machine.uri,
                           });
                           setMachinesSelectionIsActive(
                             !machinesSelectionIsActive,
@@ -201,7 +200,7 @@ export default function Setup() {
                         <Image
                           resizeMode="contain"
                           style={setupStyles.image}
-                          source={machinesImages[`image${machine.id}`]}
+                          source={{ uri: machine.uri }}
                         />
                         <Text style={setupStyles.title}>
                           {machine.machineName}
@@ -214,7 +213,7 @@ export default function Setup() {
                         <Image
                           resizeMode="contain"
                           style={setupStyles.image}
-                          source={machinesImages[`image${userMachine.id}`]}
+                          source={{ uri: userMachine.uri }}
                         />
                         <Text style={setupStyles.title}>
                           {userMachine.name}
@@ -248,6 +247,7 @@ export default function Setup() {
                           setUserGrinder({
                             id: grinder.id,
                             name: grinder.grinderName,
+                            uri: grinder.uri,
                           });
                           setGrindersSelectionIsActive(
                             !grindersSelectionIsActive,
@@ -257,7 +257,7 @@ export default function Setup() {
                         <Image
                           resizeMode="contain"
                           style={setupStyles.image}
-                          source={grindersImages[`image${grinder.id}`]}
+                          source={{ uri: grinder.uri }}
                         />
                         <Text style={setupStyles.title}>
                           {grinder.grinderName}
@@ -270,7 +270,7 @@ export default function Setup() {
                         <Image
                           resizeMode="contain"
                           style={setupStyles.image}
-                          source={grindersImages[`image${userGrinder.id}`]}
+                          source={{ uri: userGrinder.uri }}
                         />
                         <Text style={setupStyles.title}>
                           {userGrinder.name}
@@ -312,7 +312,7 @@ export default function Setup() {
                           <Image
                             resizeMode="contain"
                             style={setupStyles.image}
-                            source={machinesImages[`image${setup.machineId}`]}
+                            source={{ uri: setup.machineUri }}
                           />
                           <Text style={setupStyles.title}>
                             {setup.machineName}
@@ -324,7 +324,7 @@ export default function Setup() {
                           <Image
                             resizeMode="contain"
                             style={setupStyles.image}
-                            source={grindersImages[`image${setup.grinderId}`]}
+                            source={{ uri: setup.grinderUri }}
                           />
                           <Text style={setupStyles.title}>
                             {setup.grinderName}
