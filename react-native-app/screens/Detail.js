@@ -10,7 +10,7 @@ import {
 import { Rating } from 'react-native-ratings';
 import { userContext } from '../App';
 import { beanImages } from '../assets/beans/beansImages';
-import ratingImage from '../assets/coffeebean_outline.png';
+import ratingImage from '../assets/custom_bean.png';
 import Button from '../components/Button';
 import Container from '../components/Container';
 import Footer from '../components/Footer';

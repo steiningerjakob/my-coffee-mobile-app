@@ -64,12 +64,11 @@ export default function Profile() {
   const { id, firstName, refreshUserContext } = useContext(userContext);
   const [isLoading, setLoading] = useState(true);
   // const [selectedImage, setSelectedImage] = useState('');
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState();
 
   // Source: https://dev.to/joypalumbo/uploading-images-to-cloudinary-in-react-native-using-cloudinary-s-api-37mo
   async function selectProfileImage() {
     // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    // console.log(status);
     // if (status !== 'granted') {
     //   alert('Permission to access camera roll is required!');
     //   return;
@@ -112,6 +111,7 @@ export default function Profile() {
 
   useFocusEffect(
     useCallback(() => {
+      setLoading(true);
       checkProfileImageStatus(id).then((result) => {
         if (result) {
           setProfileImage(result.profileImage);
@@ -135,7 +135,7 @@ export default function Profile() {
           <Container>
             <Headline>Welcome back, {firstName}!</Headline>
             <Spacer />
-            {profileImage === null ? (
+            {!profileImage ? (
               <TouchableOpacity
                 onPress={selectProfileImage}
                 style={profileImageStyles.wrapper}

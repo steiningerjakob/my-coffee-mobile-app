@@ -92,7 +92,9 @@ export default function SignIn() {
           />
           <Spacer />
           <Spacer />
+          <Spacer />
           <Button label="sign in" onPress={verifyUser} />
+          <Spacer />
           <Spacer />
           <TouchableOpacity onPress={signUpButtonHandler}>
             <Text style={signInStyles.signUp}>

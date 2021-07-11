@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { userContext } from '../App';
-import ratingImage from '../assets/coffeebean_outline.png';
+import ratingImage from '../assets/custom_bean.png';
 import coverImage from '../assets/preferences-cover.jpeg';
 import Button from '../components/Button';
 import Container from '../components/Container';
@@ -89,6 +89,7 @@ const wait = (timeout) => {
 export default function Preferences() {
   const navigation = useNavigation();
   const { id, firstName, refreshUserContext } = useContext(userContext);
+
   const [isLoading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -144,7 +145,6 @@ export default function Preferences() {
   }
 
   async function clearPreferences() {
-    console.log('clear preferences');
     clearPreference(id);
     setExistingPreference(false);
     setUserBeanType('');
@@ -238,8 +238,7 @@ export default function Preferences() {
                         imageSize={24}
                         type="custom"
                         ratingImage={ratingImage}
-                        ratingColor="#F9DFC2"
-                        tintColor="#BC6C25"
+                        ratingColor="#F7D6B1"
                         onFinishRating={bodyStateHandler}
                       />
                     </View>
@@ -250,8 +249,7 @@ export default function Preferences() {
                         imageSize={24}
                         type="custom"
                         ratingImage={ratingImage}
-                        ratingColor="#F9DFC2"
-                        tintColor="#BC6C25"
+                        ratingColor="#F7D6B1"
                         onFinishRating={acidityStateHandler}
                       />
                     </View>
@@ -262,8 +260,7 @@ export default function Preferences() {
                         imageSize={24}
                         type="custom"
                         ratingImage={ratingImage}
-                        ratingColor="#F9DFC2"
-                        tintColor="#BC6C25"
+                        ratingColor="#F7D6B1"
                         onFinishRating={fruitStateHandler}
                       />
                     </View>
@@ -320,8 +317,7 @@ export default function Preferences() {
                         imageSize={24}
                         type="custom"
                         ratingImage={ratingImage}
-                        ratingColor="#F9DFC2"
-                        tintColor="#BC6C25"
+                        ratingColor="#F7D6B1"
                         onFinishRating={bodyStateHandler}
                       />
                     </View>
@@ -332,8 +328,7 @@ export default function Preferences() {
                         imageSize={24}
                         type="custom"
                         ratingImage={ratingImage}
-                        ratingColor="#F9DFC2"
-                        tintColor="#BC6C25"
+                        ratingColor="#F7D6B1"
                         onFinishRating={acidityStateHandler}
                       />
                     </View>
@@ -344,8 +339,7 @@ export default function Preferences() {
                         imageSize={24}
                         type="custom"
                         ratingImage={ratingImage}
-                        ratingColor="#F9DFC2"
-                        tintColor="#BC6C25"
+                        ratingColor="#F7D6B1"
                         onFinishRating={fruitStateHandler}
                       />
                     </View>

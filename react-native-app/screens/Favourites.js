@@ -2,6 +2,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useContext, useState } from 'react';
 import {
   Image,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -32,12 +33,30 @@ const favouritesStyles = StyleSheet.create({
   },
 });
 
+const wait = (timeout) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 export default function Favourites() {
   const navigation = useNavigation();
   const { firstName, id, refreshUserContext } = useContext(userContext);
 
   const [isLoading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
   const [userFavourites, setUserFavourites] = useState([]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => {
+      getUserFavourites(id).then((data) => {
+        setUserFavourites(data.userFavourites);
+      });
+      setRefreshing(false);
+    });
+  }, [id]);
 
   useFocusEffect(
     useCallback(() => {
@@ -51,7 +70,7 @@ export default function Favourites() {
   );
 
   function redirectHandler() {
-    navigation.navigate('Home');
+    navigation.navigate('Browse');
   }
 
   return (
@@ -67,8 +86,13 @@ export default function Favourites() {
         <>
           <Image source={coverImage} style={favouritesStyles.image} />
           <Container fill>
-            {userFavourites.length > 0 ? (
-              <ScrollView style={{ flex: 1 }}>
+            <ScrollView
+              style={{ flex: 1 }}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
+              {userFavourites.length > 0 ? (
                 <Container>
                   {userFavourites.map((bean) => (
                     <ListItemFav
@@ -78,15 +102,15 @@ export default function Favourites() {
                     />
                   ))}
                 </Container>
-              </ScrollView>
-            ) : (
-              <TouchableOpacity onPress={redirectHandler}>
-                <Text style={favouritesStyles.redirect}>
-                  Nothing here yet... browse through our world of coffee and
-                  select your favourites!
-                </Text>
-              </TouchableOpacity>
-            )}
+              ) : (
+                <TouchableOpacity onPress={redirectHandler}>
+                  <Text style={favouritesStyles.redirect}>
+                    Nothing here yet... browse through our world of coffee and
+                    select your favourites!
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </ScrollView>
           </Container>
         </>
       )}

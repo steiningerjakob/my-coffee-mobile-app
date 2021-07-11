@@ -65,7 +65,7 @@ const productListStyles = StyleSheet.create({
   },
 });
 
-export default function Home() {
+export default function Browse() {
   const navigation = useNavigation();
   const { firstName, refreshUserContext } = useContext(userContext);
   const [isLoading, setLoading] = useState(true);
@@ -98,6 +98,7 @@ export default function Home() {
 
   useFocusEffect(
     useCallback(() => {
+      setLoading(true);
       getFilteredBeans(query).then((data) => {
         if (data) {
           const unsortedBeans = data.filteredBeans;
@@ -120,7 +121,7 @@ export default function Home() {
   return (
     <Screen>
       <Header
-        label="Home"
+        label="Browse"
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />

@@ -99,7 +99,6 @@ export default function Setup() {
   const { id, firstName, refreshUserContext } = useContext(userContext);
   const [isLoading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  console.log('editing', editing);
 
   const [machines, setMachines] = useState([]);
   const [grinders, setGrinders] = useState([]);
@@ -146,7 +145,7 @@ export default function Setup() {
         }
       });
       setLoading(false);
-    }, []),
+    }, [id]),
   );
 
   return (

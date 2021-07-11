@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { beanImages } from '../assets/beans/beansImages';
-import ratingImage from '../assets/coffeebean_outline.png';
+import ratingImage from '../assets/custom_bean.png';
 import RatingElement from './RatingElement';
 
 const listItemStyles = StyleSheet.create({

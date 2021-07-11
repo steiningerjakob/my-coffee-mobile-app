@@ -614,6 +614,24 @@ export async function insertSetup(
   return newSetup.map((setup) => camelcaseKeys(setup))[0];
 }
 
+export async function updateSetup(
+  userId: number,
+  machineId: number,
+  grinderId: number,
+) {
+  const updatedSetup = await sql<Rating>`
+    UPDATE setups
+    SET
+      machine_id = ${machineId},
+      grinder_id = ${grinderId}
+    WHERE
+      user_id = ${userId}
+    RETURNING
+      *
+  `;
+  return updatedSetup.map((update) => camelcaseKeys(update))[0];
+}
+
 export async function removeSetup(setupId: number) {
   const removedSetup = await sql<Setup>`
     DELETE FROM

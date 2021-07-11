@@ -27,8 +27,7 @@ export default function RatingElement(props) {
             imageSize={24}
             type="custom"
             ratingImage={props.ratingImage}
-            ratingColor="#F9DFC2"
-            tintColor="#BC6C25"
+            ratingColor="#F7D6B1"
             readonly={props.readonly}
             onFinishRating={props.onFinishRating() | ''}
           />
@@ -39,8 +38,7 @@ export default function RatingElement(props) {
           imageSize={24}
           type="custom"
           ratingImage={props.ratingImage}
-          ratingColor="#F9DFC2"
-          tintColor="#BC6C25"
+          ratingColor="#F7D6B1"
           readonly={props.readonly}
           onFinishRating={props.onFinishRating() | ''}
         />

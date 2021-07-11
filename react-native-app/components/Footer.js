@@ -1,4 +1,4 @@
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
@@ -31,8 +31,11 @@ export default function Footer() {
         <TouchableOpacity onPress={() => navigation.navigate('Favourites')}>
           <AntDesign name="staro" size={32} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <AntDesign name="home" size={32} color="white" />
+        <TouchableOpacity onPress={() => navigation.navigate('Browse')}>
+          <AntDesign name="search1" size={32} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Scanner')}>
+          <MaterialCommunityIcons name="barcode-scan" size={32} color="white" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <AntDesign name="user" size={32} color="white" />
