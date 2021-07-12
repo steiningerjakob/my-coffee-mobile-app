@@ -320,6 +320,32 @@ export async function getBeanTypes() {
   return beanTypes.map((types) => camelcaseKeys(types));
 }
 
+export async function insertBean(
+  productName: string,
+  roaster: string,
+  roasterCountry: string,
+  origin: string,
+  beanType: string,
+  flavourProfile: string,
+  price: number,
+  amount: number,
+  barcodeEan13: string,
+  uri: string,
+  pricePerKg?: number,
+  img?: string,
+  seller?: string,
+) {
+  const newBean = await sql<[Bean]>`
+    INSERT INTO beans
+      (product_name, roaster, roaster_country, origin, bean_type, flavour_profile, price, kg, barcode_ean13, uri, price_per_kg, img, seller)
+    VALUES
+      (${productName}, ${roaster}, ${roasterCountry}, ${origin}, ${beanType}, ${flavourProfile}, ${price}, ${amount}, ${barcodeEan13}, ${uri}, ${pricePerKg}, ${img}, ${seller})
+    RETURNING
+      *
+  `;
+  return newBean.map((bean) => camelcaseKeys(bean))[0];
+}
+
 export async function getUserFavourites(userId?: number) {
   const userFavourites = await sql<Bean[]>`
     SELECT

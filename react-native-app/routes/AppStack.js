@@ -3,6 +3,7 @@ import React from 'react';
 import Browse from '../screens/Browse';
 import Detail from '../screens/Detail';
 import Favourites from '../screens/Favourites';
+import MapView from '../screens/Map';
 import Preferences from '../screens/Preferences';
 import Profile from '../screens/Profile';
 import Scanner from '../screens/Scanner';
@@ -23,6 +24,7 @@ export default function AppStack() {
       <Stack.Screen name="Preferences" component={Preferences} />
       <Stack.Screen name="Setup" component={Setup} />
       <Stack.Screen name="Scanner" component={Scanner} />
+      <Stack.Screen name="Map" component={MapView} />
     </Stack.Navigator>
   );
 }

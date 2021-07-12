@@ -95,7 +95,6 @@ const setupStyles = StyleSheet.create({
 export default function Setup() {
   const navigation = useNavigation();
   const { id, firstName, refreshUserContext } = useContext(userContext);
-  const [isLoading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
 
   const [machines, setMachines] = useState([]);
@@ -142,7 +141,6 @@ export default function Setup() {
           setUserSetup(data.userSetup);
         }
       });
-      setLoading(false);
     }, [id]),
   );
 
@@ -153,7 +151,7 @@ export default function Setup() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      {isLoading === true ? (
+      {!machines.length || !grinders.length || !userSetup.length ? (
         <Loading />
       ) : (
         <>

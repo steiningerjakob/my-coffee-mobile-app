@@ -17,6 +17,7 @@ import ListItemFav from '../components/ListItemFav';
 import Loading from '../components/Loading';
 import Screen from '../components/Screen';
 import { getUserFavourites } from '../util/apiFunctions';
+import { wait } from '../util/utilFunctions';
 
 const favouritesStyles = StyleSheet.create({
   redirect: {
@@ -33,17 +34,10 @@ const favouritesStyles = StyleSheet.create({
   },
 });
 
-const wait = (timeout) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, timeout);
-  });
-};
-
 export default function Favourites() {
   const navigation = useNavigation();
   const { firstName, id, refreshUserContext } = useContext(userContext);
 
-  const [isLoading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const [userFavourites, setUserFavourites] = useState([]);
@@ -65,8 +59,7 @@ export default function Favourites() {
           setUserFavourites(data.userFavourites);
         }
       });
-      setLoading(false);
-    }, []),
+    }, [id]),
   );
 
   function redirectHandler() {
@@ -80,7 +73,7 @@ export default function Favourites() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      {isLoading === true ? (
+      {!userFavourites.length ? (
         <Loading />
       ) : (
         <>

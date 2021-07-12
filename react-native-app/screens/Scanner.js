@@ -8,7 +8,8 @@ import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Screen from '../components/Screen';
-import { Headline } from '../components/Text';
+import Spacer from '../components/Spacer';
+import { Paragraph } from '../components/Text';
 import { getBeans } from '../util/apiFunctions';
 
 export default function Scanner() {
@@ -82,19 +83,25 @@ export default function Scanner() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
+      <Spacer />
       <Container>
-        <Headline>Scan the barcode of your favourite coffee:</Headline>
+        <Paragraph>Scan the barcode of your favourite coffee:</Paragraph>
       </Container>
+      <Spacer />
       <Container fill>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={StyleSheet.absoluteFillObject}
           barCodeTypes={[BarCodeScanner.Constants.BarCodeType.ean13]}
         />
-        {scanned && (
-          <Button label="Tap to scan again" onPress={() => setScanned(false)} />
-        )}
       </Container>
+      {scanned && (
+        <Container>
+          <Spacer />
+          <Button label="Tap to scan again" onPress={() => setScanned(false)} />
+          <Spacer />
+        </Container>
+      )}
       <Footer />
     </Screen>
   );

@@ -11,7 +11,7 @@ exports.up = async function up(sql) {
 			price numeric NOT NULL,
 			kg numeric NOT NULL,
 			price_per_kg numeric,
-			img varchar(100) NOT NULL,
+			img varchar(100),
 			seller varchar(40),
 			barcode_ean13 varchar(15) NOT NULL,
 			uri varchar(255) NOT NULL

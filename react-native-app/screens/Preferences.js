@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import React, { useCallback, useContext, useState } from 'react';
 import {
   Alert,
   Image,
@@ -33,6 +33,7 @@ import {
   insertPreference,
   updatePreference,
 } from '../util/apiFunctions';
+import { wait } from '../util/utilFunctions';
 
 const preferencesStyles = StyleSheet.create({
   cover: {
@@ -80,17 +81,10 @@ const preferencesStyles = StyleSheet.create({
   },
 });
 
-const wait = (timeout) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, timeout);
-  });
-};
-
 export default function Preferences() {
   const navigation = useNavigation();
   const { id, firstName, refreshUserContext } = useContext(userContext);
 
-  const [isLoading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const [beanTypeSelectionIsActive, setBeanTypeSelectionIsActive] =
@@ -181,31 +175,32 @@ export default function Preferences() {
     });
   }, [userBody, userAcidity, userFruit]);
 
-  useEffect(() => {
-    getBeanTypes().then((data) => {
-      if (data) {
-        const unSortedBeanTypes = data.beanTypes;
-        const sortedBeanTypes = unSortedBeanTypes.sort(beanTypesSorter);
-        setBeanTypes(sortedBeanTypes);
-      }
-    });
-    getPreference(id).then((data) => {
-      if (data) {
-        setUserBeanType(data.beanType);
-        setUserBody(data.body);
-        setUserFruit(data.fruit);
-        setUserAcidity(data.acidity);
-        setExistingPreference(true);
+  useFocusEffect(
+    useCallback(() => {
+      getBeanTypes().then((data) => {
+        if (data) {
+          const unSortedBeanTypes = data.beanTypes;
+          const sortedBeanTypes = unSortedBeanTypes.sort(beanTypesSorter);
+          setBeanTypes(sortedBeanTypes);
+        }
+      });
+      getPreference(id).then((data) => {
+        if (data) {
+          setUserBeanType(data.beanType);
+          setUserBody(data.body);
+          setUserFruit(data.fruit);
+          setUserAcidity(data.acidity);
+          setExistingPreference(true);
 
-        getRecommendations(data.body, data.acidity, data.fruit).then((d) => {
-          setRecommendations(d.recommendations);
-        });
-      } else {
-        setExistingPreference(false);
-      }
-    });
-    setLoading(false);
-  }, [id]);
+          getRecommendations(data.body, data.acidity, data.fruit).then((d) => {
+            setRecommendations(d.recommendations);
+          });
+        } else {
+          setExistingPreference(false);
+        }
+      });
+    }, [id]),
+  );
 
   return (
     <Screen>
@@ -214,7 +209,7 @@ export default function Preferences() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      {isLoading === true ? (
+      {!beanTypes.length ? (
         <Loading />
       ) : (
         <>

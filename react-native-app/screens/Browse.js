@@ -68,7 +68,6 @@ const productListStyles = StyleSheet.create({
 export default function Browse() {
   const navigation = useNavigation();
   const { firstName, refreshUserContext } = useContext(userContext);
-  const [isLoading, setLoading] = useState(true);
   const [beans, setBeans] = useState([]);
   const [query, setQuery] = useState();
   const [roasterFilter, setRoasterFilter] = useState(false);
@@ -98,7 +97,6 @@ export default function Browse() {
 
   useFocusEffect(
     useCallback(() => {
-      setLoading(true);
       getFilteredBeans(query).then((data) => {
         if (data) {
           const unsortedBeans = data.filteredBeans;
@@ -114,7 +112,6 @@ export default function Browse() {
           }
         }
       });
-      setLoading(false);
     }, [query, roasterFilter, typeFilter]),
   );
 
@@ -125,7 +122,7 @@ export default function Browse() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      {isLoading === true ? (
+      {!beans.length ? (
         <Loading />
       ) : (
         <>

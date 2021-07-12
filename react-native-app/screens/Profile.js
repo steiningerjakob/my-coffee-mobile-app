@@ -62,18 +62,18 @@ export default function Profile() {
   const UPLOAD_PRESET = 'jvjj9h8z';
 
   const { id, firstName, refreshUserContext } = useContext(userContext);
+
   const [isLoading, setLoading] = useState(true);
-  // const [selectedImage, setSelectedImage] = useState('');
   const [profileImage, setProfileImage] = useState();
 
   // Source: https://dev.to/joypalumbo/uploading-images-to-cloudinary-in-react-native-using-cloudinary-s-api-37mo
   async function selectProfileImage() {
     // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    // console.log(status);
     // if (status !== 'granted') {
     //   alert('Permission to access camera roll is required!');
     //   return;
     // } else {
-    setLoading(true);
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
