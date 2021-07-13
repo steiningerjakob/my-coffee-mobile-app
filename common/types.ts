@@ -38,9 +38,9 @@ export type Bean = {
   roasterCountry: string;
   origin: string;
   beanType: string;
-  flavourProfile: number;
-  price: number;
-  kg: number;
+  flavourProfile: string;
+  price: string;
+  kg: string;
   img: string;
   seller: string;
   barcodeEan13: string;
@@ -109,4 +109,17 @@ export type Preference = {
   body: number;
   fruit: number;
   acidity: number;
+};
+
+export type Seller = {
+  id: number;
+  sellerName: string;
+  sellerDescription: string;
+  sellerAddress: string;
+  latitude: number;
+  longitude: number;
+  website: string;
+  uri: string;
+  rating: number;
+  reviews: number;
 };

@@ -8,6 +8,7 @@ exports.up = async function up(sql) {
 			latitude numeric NOT NULL,
 			longitude numeric NOT NULL,
 			website varchar(100) NOT NULL,
+			uri varchar(255) NOT NULL,
 			rating numeric,
 			reviews integer
 		)

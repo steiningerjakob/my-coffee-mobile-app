@@ -11,6 +11,7 @@ import {
   Machine,
   Preference,
   Rating,
+  Seller,
   Session,
   Setup,
   User,
@@ -438,6 +439,48 @@ export async function getAllGrinders() {
       grinder_name
   `;
   return grinders.map((grinder) => camelcaseKeys(grinder));
+}
+
+export async function getAllSellers() {
+  const sellers = await sql<Seller[]>`
+    SELECT
+      *
+    FROM
+      sellers
+    ORDER by
+      seller_name
+  `;
+  return sellers.map((seller) => camelcaseKeys(seller));
+}
+
+export async function getBeansBySeller(sellerName) {
+  const beans = await sql<Bean[]>`
+    SELECT
+      DISTINCT beans.id as id,
+      beans.product_name as product_name,
+      beans.roaster as roaster,
+      beans.bean_type as bean_type,
+      beans.roaster_country as roaster_country,
+      beans.origin as origin,
+      beans.seller as seller,
+      beans.flavour_profile as flavour_profile,
+      beans.price as price,
+      beans.kg as amount,
+      beans.uri as uri,
+      flavour_profiles.body as body,
+      flavour_profiles.fruit as fruit,
+      flavour_profiles.acidity as acidity
+    FROM
+      sellers,
+      flavour_profiles,
+      beans
+    WHERE
+      beans.seller = ${sellerName} AND
+      flavour_profiles.id = beans.flavour_profile
+    ORDER by
+      product_name
+  `;
+  return beans.map((bean) => camelcaseKeys(bean));
 }
 
 export async function getFlavourProfileById(id?: number) {

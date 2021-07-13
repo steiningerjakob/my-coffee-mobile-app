@@ -14,16 +14,25 @@ const footerStyles = StyleSheet.create({
   },
   wrapper: {
     paddingHorizontal: 24,
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: 10,
+    paddingBottom: 10,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  element: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 48,
+  },
   label: {
-    fontSize: 16,
+    fontSize: 8,
     color: 'white',
-    fontWeight: '600',
+    fontWeight: '500',
+    alignSelf: 'flex-end',
+    marginTop: 4,
   },
 });
 

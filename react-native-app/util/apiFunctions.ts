@@ -71,6 +71,27 @@ export async function getGrinders() {
   return grinders;
 }
 
+export async function getSellers() {
+  const response = await fetch(`${apiBaseUrl}/products/sellers`);
+  const sellers = await response.json();
+  return sellers;
+}
+
+export async function getBeansBySeller(sellerName) {
+  const response = await fetch(`${apiBaseUrl}/actions/get_sellerbeans`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sellerName: sellerName,
+    }),
+  });
+  const beans = await response.json();
+  return beans;
+}
+
 export async function getBeanTypes() {
   const response = await fetch(`${apiBaseUrl}/products/beantypes`);
   const beanTypes = await response.json();

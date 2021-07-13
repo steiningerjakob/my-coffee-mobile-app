@@ -1,5 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -10,17 +12,22 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapView, { Callout, Marker } from 'react-native-maps';
+import { Rating } from 'react-native-ratings';
 import { userContext } from '../App';
+// Icon by <a href='https://iconpacks.net/?utm_source=link-attribution&utm_content=2955'>Iconpacks</a>
 import locationIcon from '../assets/location-icon.png';
-import image from '../assets/tasteit.jpeg';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import RatingElement from '../components/RatingElement';
+import Loading from '../components/Loading';
 import Screen from '../components/Screen';
+import { getBeansBySeller, getSellers } from '../util/apiFunctions';
+
+// adapted from: https://www.youtube.com/watch?v=2vILzRmEqGI
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-const CARD_HEIGHT = 220;
+const ASPECT_RATIO = width / height;
+const CARD_HEIGHT = 200;
 const CARD_WIDTH = width * 0.8;
 
 const mapStyles = StyleSheet.create({
@@ -37,7 +44,7 @@ const mapStyles = StyleSheet.create({
   },
   bubble: {
     flexDirection: 'column',
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
     backgroundColor: 'white',
     borderRadius: 8,
     borderColor: '#ccc',
@@ -62,8 +69,8 @@ const mapStyles = StyleSheet.create({
     marginTop: -0.5,
   },
   name: {
-    fontSize: 16,
-    marginBottom: 5,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   image: {
     width: 120,
@@ -75,9 +82,6 @@ const mapStyles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingVertical: 10,
-  },
-  endPadding: {
-    paddingRight: width - CARD_WIDTH,
   },
   card: {
     elevation: 2,
@@ -92,41 +96,68 @@ const mapStyles = StyleSheet.create({
     height: CARD_HEIGHT,
     width: CARD_WIDTH,
     overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  cardEmpty: {
+    elevation: 2,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    shadowOffset: { x: 2, y: -2 },
+    height: CARD_HEIGHT,
+    width: CARD_WIDTH,
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
   },
   cardImage: {
-    flex: 3,
-    width: '100%',
-    height: '100%',
+    flex: 2.5,
+    width: '80%',
+    height: '80%',
     alignSelf: 'center',
   },
-  textContent: {
+  cardTextWrapper: {
     flex: 2,
     padding: 10,
+    marginTop: 4,
   },
   cardTitle: {
-    fontSize: 12,
+    fontSize: 16,
     fontWeight: 'bold',
+    marginBottom: 16,
   },
-  markerWrap: {
+  cardText: {
+    fontSize: 12,
+  },
+  cardIcon: {
+    marginRight: 8,
+  },
+  cardLineItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: 50,
-    height: 50,
-  },
-  marker: {
-    width: 30,
-    height: 30,
+    marginVertical: 12,
   },
   button: {
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: 'auto',
+    marginBottom: 12,
   },
   buttonWrapper: {
-    padding: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 15,
+    marginRight: 5,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    width: 260,
     borderColor: '#BC6C25',
     borderWidth: 1,
   },
@@ -137,73 +168,17 @@ const mapStyles = StyleSheet.create({
   },
 });
 
-// to be replaced with seller data from database
-const markers = [
-  {
-    coordinate: {
-      latitude: 48.21814697919488,
-      longitude: 16.387685918728474,
-    },
-    title: 'Amazing Food Place',
-    description: 'This is the best food place',
-    image: { image },
-    rating: 4,
-    reviews: 99,
-  },
-  {
-    coordinate: {
-      latitude: 48.23814697919488,
-      longitude: 16.367685918728474,
-    },
-    title: 'Second Amazing Food Place',
-    description: 'This is the second best food place',
-    image: { image },
-    rating: 5,
-    reviews: 102,
-  },
-  {
-    coordinate: {
-      latitude: 48.23314697919488,
-      longitude: 16.3727685918728474,
-    },
-    title: 'Third Amazing Food Place',
-    description: 'This is the third best food place',
-    image: { image },
-    rating: 3,
-    reviews: 220,
-  },
-  {
-    coordinate: {
-      latitude: 48.21314697919488,
-      longitude: 16.3827685918728474,
-    },
-    title: 'Fourth Amazing Food Place',
-    description: 'This is the fourth best food place',
-    image: { image },
-    rating: 4,
-    reviews: 48,
-  },
-  {
-    coordinate: {
-      latitude: 48.19814697919488,
-      longitude: 16.365685918728474,
-    },
-    title: 'Fifth Amazing Food Place',
-    description: 'This is the fifth best food place',
-    image: { image },
-    rating: 4,
-    reviews: 178,
-  },
-];
-
 export default function Map() {
+  const navigation = useNavigation();
   const { firstName, refreshUserContext } = useContext(userContext);
 
-  const ASPECT_RATIO = width / height;
-  console.log(ASPECT_RATIO);
+  const [sellers, setSellers] = useState([]);
+  const [sellerBeans, setSellerBeans] = useState([]);
+  const [selectedSeller, setSelectedSeller] = useState(null);
+
   const LATITUDE = 48.2082;
   const LONGITUDE = 16.3738;
-  const LATITUDE_DELTA = 0.0922;
+  const LATITUDE_DELTA = 0.2;
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
   const [region, setRegion] = useState({
@@ -213,6 +188,25 @@ export default function Map() {
     longitudeDelta: LONGITUDE_DELTA,
   });
 
+  function onMarkerPress(sellerName) {
+    setSelectedSeller(sellerName);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getSellers().then((result) => {
+        if (result) {
+          setSellers(result.sellers);
+        }
+      });
+      getBeansBySeller(selectedSeller).then((result) => {
+        if (result) {
+          setSellerBeans(result.beans);
+        }
+      });
+    }, [selectedSeller]),
+  );
+
   return (
     <Screen>
       <Header
@@ -220,70 +214,99 @@ export default function Map() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      <View style={mapStyles.container}>
-        <MapView
-          style={mapStyles.map}
-          initialRegion={region}
-          onRegionChange={(location) => setRegion(location)}
-        >
-          {markers.map((marker) => (
-            <Marker
-              key={marker.title}
-              coordinate={marker.coordinate}
-              image={locationIcon}
-              title={marker.title}
-              description={marker.description}
+      {sellers.length === 0 ? (
+        <Loading />
+      ) : (
+        <View style={mapStyles.container}>
+          <MapView style={mapStyles.map} initialRegion={region}>
+            {sellers.length > 0 &&
+              sellers.map((seller) => (
+                <Marker
+                  key={seller.id}
+                  coordinate={{
+                    latitude: Number(seller.latitude),
+                    longitude: Number(seller.longitude),
+                  }}
+                  image={locationIcon}
+                  title={seller.sellerName}
+                  description={seller.sellerDescription}
+                  onPress={() => onMarkerPress(seller.sellerName)}
+                >
+                  <Callout tooltip>
+                    <View style={mapStyles.bubble}>
+                      <Text style={mapStyles.name}>{seller.sellerName}</Text>
+                      <View style={mapStyles.cardLineItem}>
+                        <Rating
+                          startingValue={seller.rating}
+                          readonly
+                          imageSize={16}
+                        />
+                        <Text style={mapStyles.cardText}>
+                          ({seller.reviews})
+                        </Text>
+                      </View>
+                      <Image
+                        style={mapStyles.image}
+                        source={{ uri: seller.uri }}
+                      />
+                    </View>
+                    <View style={mapStyles.arrowBorder} />
+                    <View style={mapStyles.arrow} />
+                  </Callout>
+                </Marker>
+              ))}
+          </MapView>
+          {sellerBeans.length === 0 ? (
+            <Loading />
+          ) : (
+            <ScrollView
+              horizontal
+              pagingEnabled
+              scrollEventThrottle={1}
+              showsHorizontalScrollIndicator={false}
+              style={mapStyles.scrollView}
+              snapToInterval={CARD_WIDTH + 20}
+              snapToAlignment="center"
             >
-              <Callout tooltip>
-                <View style={mapStyles.bubble}>
-                  <Text style={mapStyles.name}>TasteIt Wollzeile</Text>
-                  <Image style={mapStyles.image} source={image} />
+              {sellerBeans.map((bean) => (
+                <View style={mapStyles.card} key={bean.id}>
+                  <Image
+                    source={{ uri: bean.uri }}
+                    style={mapStyles.cardImage}
+                    resizeMode="cover"
+                  />
+                  <View style={mapStyles.cardTextWrapper}>
+                    <Text style={mapStyles.cardTitle} numberOfLines={2}>
+                      {bean.productName}
+                    </Text>
+                    <Text>{bean.beanType}</Text>
+                    <View style={mapStyles.cardLineItem}>
+                      <Ionicons
+                        name="ios-pricetag-outline"
+                        size={24}
+                        color="black"
+                        style={mapStyles.cardIcon}
+                      />
+                      <Text>
+                        {(Number(bean.price) / Number(bean.amount)).toFixed(2)}{' '}
+                        €/kg
+                      </Text>
+                    </View>
+                    <View style={mapStyles.button}>
+                      <TouchableOpacity
+                        style={mapStyles.buttonWrapper}
+                        onPress={() => navigation.navigate('Detail', { bean })}
+                      >
+                        <Text style={mapStyles.buttonText}>Go to details</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
-                <View style={mapStyles.arrowBorder} />
-                <View style={mapStyles.arrow} />
-              </Callout>
-            </Marker>
-          ))}
-        </MapView>
-        <ScrollView
-          horizontal
-          scrollEventThrottle={1}
-          showsHorizontalScrollIndicator={false}
-          style={mapStyles.scrollView}
-          pagingEnabled
-          snapToInterval={CARD_WIDTH + 20}
-          snapToAlignment="center"
-        >
-          {markers.map((marker) => (
-            <View style={mapStyles.card} key={marker.title}>
-              <Image
-                source={image}
-                style={mapStyles.cardImage}
-                resizeMode="cover"
-              />
-              <View style={mapStyles.textContent}>
-                <Text numberOfLines={1} style={mapStyles.cardTitle}>
-                  {marker.title}
-                </Text>
-                <RatingElement
-                  startingValue={marker.rating}
-                  readonly
-                  onFinishRating={() => {}}
-                  reviews={marker.reviews}
-                />
-                <View style={mapStyles.button}>
-                  <TouchableOpacity
-                    style={mapStyles.buttonWrapper}
-                    onPress={() => {}}
-                  >
-                    <Text style={mapStyles.buttonText}>See details</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
+              ))}
+            </ScrollView>
+          )}
+        </View>
+      )}
       <Footer />
     </Screen>
   );
