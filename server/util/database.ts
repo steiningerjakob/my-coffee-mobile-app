@@ -573,6 +573,15 @@ export async function insertReview(
   return newReview.map((rating) => camelcaseKeys(rating))[0];
 }
 
+export async function getAllRatings() {
+  const ratings = await sql<Rating[]>`
+    SELECT
+      *
+    FROM ratings
+  `;
+  return ratings.map((rating) => camelcaseKeys(rating));
+}
+
 export async function checkReviewStatus(userId: number, beanId: number) {
   const userEntry = await sql<Rating>`
     SELECT
@@ -614,6 +623,32 @@ export async function updateReview(
       user_review
   `;
   return updatedReview.map((update) => camelcaseKeys(update))[0];
+}
+
+export async function getBeansWithRatings() {
+  const ratedBeans = await sql<Bean[]>`
+    SELECT
+      DISTINCT ratings.id as id,
+      ratings.bean_id as bean_id,
+      beans.product_name as product_name,
+      beans.uri as uri,
+      beans.roaster as roaster,
+      beans.roaster_country as roaster_country,
+      beans.bean_type as bean_type,
+      beans.origin as origin,
+      beans.flavour_profile as flavour_profile,
+      ratings.user_rating as rating,
+      ratings.user_review as review,
+      ratings.user_id as ratingUserId
+    FROM
+      beans,
+      ratings
+    WHERE
+      ratings.bean_id = beans.id
+    ORDER BY
+      ratings.bean_id
+  `;
+  return ratedBeans.map((bean) => camelcaseKeys(bean));
 }
 
 export async function updateProfileImage(id: number, profileImage: string) {

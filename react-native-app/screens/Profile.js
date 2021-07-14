@@ -124,73 +124,69 @@ export default function Profile() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      {!profileImage ? (
-        <Loading />
-      ) : (
-        <Container fill>
-          <Container>
-            <Headline>Welcome back, {firstName}!</Headline>
-            <Spacer />
-            {!profileImage ? (
-              <TouchableOpacity
-                onPress={selectProfileImage}
-                style={profileImageStyles.wrapper}
-              >
-                <AntDesign name="camerao" size={32} color="lightgray" />
-                <Text style={profileImageStyles.text}>Upload image</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={selectProfileImage}
-                style={profileImageStyles.wrapper}
-              >
-                <Image
-                  source={{ uri: profileImage }}
-                  style={profileImageStyles.image}
-                />
-              </TouchableOpacity>
-            )}
-          </Container>
-          <Container>
+      <Container fill>
+        <Container>
+          <Headline>Welcome back, {firstName}!</Headline>
+          <Spacer />
+          {!profileImage ? (
             <TouchableOpacity
-              style={linkStyles.wrapper}
-              onPress={() => navigation.navigate('Favourites')}
+              onPress={selectProfileImage}
+              style={profileImageStyles.wrapper}
             >
-              <Text style={linkStyles.title}>My favourites</Text>
-              <AntDesign
-                name="right"
-                size={24}
-                color="black"
-                style={linkStyles.icon}
+              <AntDesign name="camerao" size={32} color="lightgray" />
+              <Text style={profileImageStyles.text}>Upload image</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={selectProfileImage}
+              style={profileImageStyles.wrapper}
+            >
+              <Image
+                source={{ uri: profileImage }}
+                style={profileImageStyles.image}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={linkStyles.wrapper}
-              onPress={() => navigation.navigate('Preferences')}
-            >
-              <Text style={linkStyles.title}>My preferences</Text>
-              <AntDesign
-                name="right"
-                size={24}
-                color="black"
-                style={linkStyles.icon}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={linkStyles.wrapper}
-              onPress={() => navigation.navigate('Setup')}
-            >
-              <Text style={linkStyles.title}>My setup</Text>
-              <AntDesign
-                name="right"
-                size={24}
-                color="black"
-                style={linkStyles.icon}
-              />
-            </TouchableOpacity>
-          </Container>
+          )}
         </Container>
-      )}
+        <Container>
+          <TouchableOpacity
+            style={linkStyles.wrapper}
+            onPress={() => navigation.navigate('Favourites')}
+          >
+            <Text style={linkStyles.title}>My favourites</Text>
+            <AntDesign
+              name="right"
+              size={24}
+              color="black"
+              style={linkStyles.icon}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={linkStyles.wrapper}
+            onPress={() => navigation.navigate('Preferences')}
+          >
+            <Text style={linkStyles.title}>My preferences</Text>
+            <AntDesign
+              name="right"
+              size={24}
+              color="black"
+              style={linkStyles.icon}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={linkStyles.wrapper}
+            onPress={() => navigation.navigate('Setup')}
+          >
+            <Text style={linkStyles.title}>My setup</Text>
+            <AntDesign
+              name="right"
+              size={24}
+              color="black"
+              style={linkStyles.icon}
+            />
+          </TouchableOpacity>
+        </Container>
+      </Container>
       <Footer />
     </Screen>
   );

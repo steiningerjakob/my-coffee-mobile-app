@@ -98,6 +98,7 @@ export default function SignIn() {
           <Spacer />
           <Spacer />
           <Spacer />
+          <Text style={signInStyles.error}>{error}</Text>
           <Spacer />
           <Spacer />
           <Spacer />
@@ -111,7 +112,6 @@ export default function SignIn() {
           </TouchableOpacity>
         </Container>
       </ScrollView>
-      <Text style={signInStyles.error}>{error}</Text>
       <Footer />
     </Screen>
   );

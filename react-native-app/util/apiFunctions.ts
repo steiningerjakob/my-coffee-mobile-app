@@ -77,6 +77,18 @@ export async function getSellers() {
   return sellers;
 }
 
+export async function getRatings() {
+  const response = await fetch(`${apiBaseUrl}/products/ratings`);
+  const ratings = await response.json();
+  return ratings;
+}
+
+export async function getRatedBeans() {
+  const response = await fetch(`${apiBaseUrl}/products/rated_beans`);
+  const ratedBeans = await response.json();
+  return ratedBeans;
+}
+
 export async function getBeansBySeller(sellerName) {
   const response = await fetch(`${apiBaseUrl}/actions/get_sellerbeans`, {
     method: 'POST',

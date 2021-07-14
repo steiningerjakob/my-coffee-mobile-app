@@ -1,8 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import ratingImage from '../assets/custom_bean.png';
-import RatingElement from './RatingElement';
+import { Rating } from 'react-native-ratings';
 
 const listItemStyles = StyleSheet.create({
   wrapper: {
@@ -33,9 +32,15 @@ const listItemStyles = StyleSheet.create({
     fontStyle: 'italic',
   },
   icon: { marginLeft: 'auto' },
+  rating: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 4,
+  },
 });
 
-export default function ListItem(props) {
+export default function ListItemFav(props) {
   return (
     <TouchableOpacity onPress={() => props.onPress()} disabled={props.disabled}>
       <View style={listItemStyles.wrapper}>
@@ -50,19 +55,15 @@ export default function ListItem(props) {
           <Text style={listItemStyles.title}>{props.item.productName}</Text>
           <Text style={listItemStyles.subTitle}>{props.item.beanType}</Text>
           <Text style={listItemStyles.subTitle}>{props.item.roaster}</Text>
-          <RatingElement
-            startingValue={props.item.rating}
-            ratingImage={ratingImage}
-            readonly
-            onFinishRating={() => {}}
-            label=""
-          />
+          <View style={listItemStyles.rating}>
+            <Rating startingValue={props.item.rating} readonly imageSize={24} />
+          </View>
           <Text style={listItemStyles.review}>{props.item.review}</Text>
         </View>
         <AntDesign
           name="right"
           size={24}
-          color="black"
+          color="grey"
           style={listItemStyles.icon}
         />
       </View>

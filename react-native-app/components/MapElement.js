@@ -78,36 +78,38 @@ export default function MapElement(props) {
     <MapView style={mapStyles.map} initialRegion={region}>
       {props.sellers.length > 0 &&
         props.sellers.map((seller) => (
-          <Marker
-            key={seller.id}
-            coordinate={{
-              latitude: Number(seller.latitude),
-              longitude: Number(seller.longitude),
-            }}
-            image={locationIcon}
-            title={seller.sellerName}
-            description={seller.sellerDescription}
-            onPress={() => {
-              props.onPress(seller.sellerName);
-            }}
-          >
-            <Callout tooltip onPress={() => Linking.openURL(seller.website)}>
-              <View style={mapStyles.bubble}>
-                <Text style={mapStyles.name}>{seller.sellerName}</Text>
-                <View style={mapStyles.cardLineItem}>
-                  <Rating
-                    startingValue={seller.rating}
-                    readonly
-                    imageSize={16}
-                  />
-                  <Text style={mapStyles.cardText}>({seller.reviews})</Text>
+          <View key={seller.id}>
+            <Text>{seller.sellerName}</Text>
+            <Marker
+              coordinate={{
+                latitude: Number(seller.latitude),
+                longitude: Number(seller.longitude),
+              }}
+              image={locationIcon}
+              title={seller.sellerName}
+              description={seller.sellerDescription}
+              onPress={() => {
+                props.onPress(seller.sellerName);
+              }}
+            >
+              <Callout tooltip onPress={() => Linking.openURL(seller.website)}>
+                <View style={mapStyles.bubble}>
+                  <Text style={mapStyles.name}>{seller.sellerName}</Text>
+                  <View style={mapStyles.cardLineItem}>
+                    <Rating
+                      startingValue={seller.rating}
+                      readonly
+                      imageSize={16}
+                    />
+                    <Text style={mapStyles.cardText}>({seller.reviews})</Text>
+                  </View>
+                  <Image style={mapStyles.image} source={{ uri: seller.uri }} />
                 </View>
-                <Image style={mapStyles.image} source={{ uri: seller.uri }} />
-              </View>
-              <View style={mapStyles.arrowBorder} />
-              <View style={mapStyles.arrow} />
-            </Callout>
-          </Marker>
+                <View style={mapStyles.arrowBorder} />
+                <View style={mapStyles.arrow} />
+              </Callout>
+            </Marker>
+          </View>
         ))}
     </MapView>
   );

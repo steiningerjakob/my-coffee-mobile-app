@@ -3,11 +3,11 @@ import React, { useCallback, useContext, useState } from 'react';
 import {
   Image,
   RefreshControl,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
 } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { userContext } from '../App';
 import coverImage from '../assets/favourites-cover.jpg';
 import Container from '../components/Container';
@@ -79,31 +79,34 @@ export default function Favourites() {
         <>
           <Image source={coverImage} style={favouritesStyles.image} />
           <Container fill>
-            <ScrollView
-              style={{ flex: 1 }}
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-            >
-              {userFavourites.length > 0 ? (
-                <Container>
-                  {userFavourites.map((bean) => (
-                    <ListItemFav
-                      key={bean.id}
-                      item={bean}
-                      onPress={() => navigation.navigate('Detail', { bean })}
-                    />
-                  ))}
-                </Container>
-              ) : (
-                <TouchableOpacity onPress={redirectHandler}>
-                  <Text style={favouritesStyles.redirect}>
-                    Nothing here yet... browse through our world of coffee and
-                    select your favourites!
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </ScrollView>
+            {userFavourites.length > 0 ? (
+              <FlatList
+                data={userFavourites}
+                keyExtractor={(item) => item.id.toString()}
+                refreshControl={
+                  <RefreshControl
+                    onRefresh={onRefresh}
+                    refreshing={refreshing}
+                  />
+                }
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <ListItemFav
+                    item={item}
+                    onPress={() =>
+                      navigation.navigate('Detail', { bean: item })
+                    }
+                  />
+                )}
+              />
+            ) : (
+              <TouchableOpacity onPress={redirectHandler}>
+                <Text style={favouritesStyles.redirect}>
+                  Nothing here yet... browse through our world of coffee and
+                  select your favourites!
+                </Text>
+              </TouchableOpacity>
+            )}
           </Container>
         </>
       )}

@@ -1,8 +1,12 @@
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useContext, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import { userContext } from '../App';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
@@ -10,7 +14,7 @@ import Header from '../components/Header';
 import ListItem from '../components/ListItem';
 import Loading from '../components/Loading';
 import Screen from '../components/Screen';
-import { getFilteredBeans } from '../util/apiFunctions';
+import { getFilteredBeans, getRatedBeans } from '../util/apiFunctions';
 
 const productListStyles = StyleSheet.create({
   searchWrapper: {
@@ -69,6 +73,8 @@ export default function Browse() {
   const navigation = useNavigation();
   const { firstName, refreshUserContext } = useContext(userContext);
   const [beans, setBeans] = useState([]);
+  const [ratedBeans, setRatedBeans] = useState([]);
+  console.log('rated beans', ratedBeans);
   const [query, setQuery] = useState();
   const [roasterFilter, setRoasterFilter] = useState(false);
   const [typeFilter, setTypeFilter] = useState(false);
@@ -112,8 +118,56 @@ export default function Browse() {
           }
         }
       });
+      getRatedBeans().then((data) => {
+        if (data) {
+          setRatedBeans(data.ratedBeans);
+        }
+      });
     }, [query, roasterFilter, typeFilter]),
   );
+
+  // WORK IN PROGRESS
+  const beansWithoutRating = beans.filter(
+    (all) => !ratedBeans.find((rated) => all.id === rated.beanId),
+  );
+  // console.log('beans without rating', beansWithoutRating);
+
+  function removeDuplicates(array) {
+    const resultArray = [];
+    for (let i = 1; i < array.length; i++) {
+      const groupedBeans = ratedBeans.filter((bean) => bean.beanId === i);
+      console.log('grouped bean', groupedBeans);
+
+      if (groupedBeans.length === 0) {
+        resultArray.push(groupedBeans);
+      } else {
+        const groupedBeanRatings = groupedBeans.map((bean) =>
+          Number(bean.rating),
+        );
+        console.log('grouped bean ratings', groupedBeanRatings);
+        const ratingSum = groupedBeanRatings.reduce(
+          (accumulator, currentValue) => accumulator + currentValue,
+        );
+        const ratingAverage = ratingSum / groupedBeanRatings.length;
+        const groupedBeanReviews = groupedBeans.map((bean) => bean.review);
+
+        const collapsedBean = {
+          id: i,
+          rating: ratingAverage,
+          reviews: groupedBeanReviews,
+        };
+        console.log('collapsed bean', collapsedBean);
+        resultArray.push(collapsedBean);
+        console.log('result array', resultArray);
+        return resultArray;
+      }
+    }
+  }
+
+  const result = removeDuplicates(ratedBeans);
+  console.log('result of the function', result);
+
+  // WORK IN PROGRESS
 
   return (
     <Screen>
@@ -184,17 +238,18 @@ export default function Browse() {
           </Container>
           <Container fill>
             {beans.length > 0 && (
-              <ScrollView style={{ flex: 1 }}>
-                <Container>
-                  {beans.map((bean) => (
-                    <ListItem
-                      key={bean.id}
-                      item={bean}
-                      onPress={() => navigation.navigate('Detail', { bean })}
-                    />
-                  ))}
-                </Container>
-              </ScrollView>
+              <FlatList
+                data={beans}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <ListItem
+                    item={item}
+                    onPress={() =>
+                      navigation.navigate('Detail', { bean: item })
+                    }
+                  />
+                )}
+              />
             )}
           </Container>
         </>
