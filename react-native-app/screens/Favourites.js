@@ -73,7 +73,7 @@ export default function Favourites() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      {!userFavourites.length ? (
+      {!userFavourites ? (
         <Loading />
       ) : (
         <>

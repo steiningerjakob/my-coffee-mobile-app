@@ -41,7 +41,6 @@ export type Bean = {
   flavourProfile: string;
   price: string;
   kg: string;
-  img: string;
   seller: string;
   barcodeEan13: string;
   uri: string;

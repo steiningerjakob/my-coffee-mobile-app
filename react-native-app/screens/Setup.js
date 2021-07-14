@@ -151,7 +151,7 @@ export default function Setup() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      {!machines.length || !grinders.length || !userSetup.length ? (
+      {!machines.length || !grinders.length || !userSetup ? (
         <Loading />
       ) : (
         <>
