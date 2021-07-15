@@ -36,7 +36,11 @@ export default function App() {
 
       const json = await getUserProfile(clearCookie);
 
-      json.user && setId(json.user.id);
+      if (!json.user) {
+        return undefined;
+      }
+
+      setId(json.user.id);
       setFirstName(json.user.firstName);
       setLastName(json.user.lastName);
       setEmail(json.user.email);

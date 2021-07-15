@@ -7,14 +7,11 @@ import { userContext } from '../App';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import Loading from '../components/Loading';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
 import { Headline } from '../components/Text';
-import {
-  checkProfileImageStatus,
-  updateProfileImage,
-} from '../util/apiFunctions';
+import { apiBaseUrl } from '../util/apiBaseUrl';
+import { checkProfileImageStatus } from '../util/apiFunctions';
 
 const linkStyles = StyleSheet.create({
   wrapper: {
@@ -57,9 +54,6 @@ const profileImageStyles = StyleSheet.create({
 
 export default function Profile() {
   const navigation = useNavigation();
-  const CLOUDINARY_URL =
-    'https://api.cloudinary.com/v1_1/my-coffee-mobile-app/upload';
-  const UPLOAD_PRESET = 'jvjj9h8z';
 
   const { id, firstName, refreshUserContext } = useContext(userContext);
 
@@ -81,30 +75,29 @@ export default function Profile() {
     });
     if (result.cancelled === true) {
       return;
-      // }
     }
-    // setSelectedImage({localUri: result.uri});
 
     const base64Img = `data:image/jpg;base64,${result.base64}`;
-    const data = {
-      file: base64Img,
-      upload_preset: UPLOAD_PRESET,
-    };
 
-    // send image to cloudinary and fetch url
-    fetch(CLOUDINARY_URL, {
-      body: JSON.stringify(data),
-      headers: {
-        'content-type': 'application/json',
-      },
+    const response = await fetch(`${apiBaseUrl}/actions/upload_profile_image`, {
       method: 'POST',
-    })
-      .then(async (r) => {
-        const image = await r.json();
-        setProfileImage(image.url);
-        updateProfileImage(id, image.url);
-      })
-      .catch((err) => console.log(err));
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: id,
+        base64Img: base64Img,
+      }),
+    });
+
+    const data = await response.json();
+    if (data) {
+      alert(data.message);
+      setProfileImage(data.image);
+    } else {
+      alert('Oops.. something went wrong');
+    }
   }
 
   useFocusEffect(

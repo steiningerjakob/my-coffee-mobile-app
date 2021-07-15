@@ -290,6 +290,28 @@ export async function updateProfileImage(id, profileImage) {
   });
 
   const data = await response.json();
+  console.log('api function data', data);
+  if (data.message) {
+    alert(data.message);
+  } else {
+    alert('Oops.. something went wrong');
+  }
+}
+
+export async function uploadProfileImage(id, base64Img) {
+  const response = await fetch(`${apiBaseUrl}/actions/upload_profile_image`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: id,
+      base64Img: base64Img,
+    }),
+  });
+
+  const data = await response.json();
   if (data.message) {
     alert(data.message);
   } else {
