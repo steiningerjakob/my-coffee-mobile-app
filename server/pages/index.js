@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
 
@@ -24,7 +25,13 @@ export default function Home() {
       </header>
 
       <main className={styles.main}>
-        <img src="/cover.png" alt="" className={styles.logo} />
+        <Image
+          src="/cover.png"
+          alt=""
+          width={640}
+          height={320}
+          className={styles.logo}
+        />
         <h1 className={styles.title}>
           Welcome to beanify - your world of coffee!
         </h1>
