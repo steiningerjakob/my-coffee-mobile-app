@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { BeanType } from '../../../../common/types';
 import { getBeanTypes } from '../../../util/database';
+import { BeanType } from '../../../util/types';
 
 export default async function beanTypesHandler(
   req: NextApiRequest,

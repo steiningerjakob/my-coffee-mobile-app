@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Bean } from '../../../../common/types';
 import { getAllBeans } from '../../../util/database';
+import { Bean } from '../../../util/types';
 
 export default async function beansHandler(
   req: NextApiRequest,

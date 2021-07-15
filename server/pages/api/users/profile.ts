@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '../../../../common/types';
 import { getUserByValidSessionToken } from '../../../util/database';
+import { User } from '../../../util/types';
 
 export default async function profileHandler(
   req: NextApiRequest,

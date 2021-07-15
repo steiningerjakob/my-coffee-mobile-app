@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Machine } from '../../../../common/types';
 import { getAllMachines } from '../../../util/database';
+import { Machine } from '../../../util/types';
 
 export default async function machinesHandler(
   req: NextApiRequest,

@@ -1,6 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
+import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
 import {
   ApplicationError,
   Bean,
@@ -16,8 +17,7 @@ import {
   Setup,
   User,
   UserWithPasswordHash,
-} from '../../common/types';
-import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
+} from './types';
 
 setPostgresDefaultsOnHeroku();
 

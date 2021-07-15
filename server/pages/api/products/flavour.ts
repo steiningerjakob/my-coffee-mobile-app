@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { FlavourProfile } from '../../../../common/types';
 import { getFlavourProfileById } from '../../../util/database';
+import { FlavourProfile } from '../../../util/types';
 
 export default async function flavourProfileHandler(
   req: NextApiRequest,

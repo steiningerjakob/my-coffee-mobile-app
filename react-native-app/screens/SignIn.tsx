@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { LoginResponse } from '../../common/types';
+import { LoginResponse } from '../../server/util/types';
 import { userContext } from '../App';
 import Button from '../components/Button';
 import Container from '../components/Container';

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Rating } from '../../../../common/types';
 import { getBeansWithRatings } from '../../../util/database';
+import { Rating } from '../../../util/types';
 
 export default async function ratedBeansHandler(
   req: NextApiRequest,

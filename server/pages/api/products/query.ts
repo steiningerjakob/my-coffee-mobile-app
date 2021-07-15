@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Bean } from '../../../../common/types';
 import { getFilteredBeans } from '../../../util/database';
+import { Bean } from '../../../util/types';
 
 export default async function searchQueryHandler(
   req: NextApiRequest,

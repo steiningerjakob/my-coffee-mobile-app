@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Grinder } from '../../../../common/types';
 import { getAllGrinders } from '../../../util/database';
+import { Grinder } from '../../../util/types';
 
 export default async function grindersHandler(
   req: NextApiRequest,

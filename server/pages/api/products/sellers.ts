@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Seller } from '../../../../common/types';
 import { getAllSellers } from '../../../util/database';
+import { Seller } from '../../../util/types';
 
 export default async function sellersHandler(
   req: NextApiRequest,
