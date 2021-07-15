@@ -33,7 +33,7 @@ export default async function uploadProfileImageHandler(
 
     return res
       .status(200)
-      .json({ message: 'Uploaded profile picture', image: image.url });
+      .json({ message: 'Uploaded profile picture', imageURL: image.url });
   }
   res.status(400).json(null);
 }

@@ -67,6 +67,7 @@ export default function Profile() {
     //   alert('Permission to access camera roll is required!');
     //   return;
     // } else {
+
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -94,7 +95,7 @@ export default function Profile() {
     const data = await response.json();
     if (data) {
       alert(data.message);
-      setProfileImage(data.image);
+      setProfileImage(data.imageURL);
     } else {
       alert('Oops.. something went wrong');
     }
