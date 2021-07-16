@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "test": "jest"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.13.0",
@@ -36,9 +37,22 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@types/react-native": "~0.63.2"
+    "@types/react-native": "~0.63.2",
+    "cypress": "^7.7.0",
+    "jest": "^27.0.6",
+    "jest-expo": "^42.0.1",
+    "react-test-renderer": "^17.0.2"
   },
   "private": true,
   "name": "react-native-app",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/cypress"
+    ]
+  }
 }

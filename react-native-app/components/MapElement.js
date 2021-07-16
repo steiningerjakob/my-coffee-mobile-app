@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Rating } from 'react-native-ratings';
-// Icon by <a href='https://iconpacks.net/?utm_source=link-attribution&utm_content=2955'>Iconpacks</a>
-import locationIcon from '../assets/location-icon.png';
+// Coffee location by Hoeda from the Noun Project
+import coffeeLocation from '../assets/coffee-location.png';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -85,7 +85,7 @@ export default function MapElement(props) {
                 latitude: Number(seller.latitude),
                 longitude: Number(seller.longitude),
               }}
-              image={locationIcon}
+              image={coffeeLocation}
               title={seller.sellerName}
               description={seller.sellerDescription}
               onPress={() => {

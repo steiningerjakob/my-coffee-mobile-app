@@ -1,9 +1,14 @@
-import { AntDesign } from '@expo/vector-icons';
+import {
+  AntDesign,
+  Fontisto,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -21,7 +26,7 @@ import RatingElement from '../components/RatingElement';
 import Screen from '../components/Screen';
 import Separator from '../components/Separator';
 import Spacer from '../components/Spacer';
-import { Headline, Paragraph } from '../components/Text';
+import { Headline } from '../components/Text';
 import {
   addBeansToFavourites,
   checkFavouriteStatus,
@@ -38,6 +43,25 @@ const detailStyles = StyleSheet.create({
     top: 20,
     right: 20,
     zIndex: 999,
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: '90%',
+  },
+  description: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  iconWrapper: {
+    width: 64,
+  },
+  text: {
+    fontSize: 16,
   },
 });
 
@@ -131,10 +155,27 @@ export default function Detail(props) {
                 <ImagePreview source={{ uri: params.bean.uri }} />
               )}
               <Headline>{params.bean.productName}</Headline>
-              <Paragraph>
-                Roaster: {params.bean.roaster}, {params.bean.roasterCountry}
-              </Paragraph>
-              <Paragraph>Bean type: {params.bean.beanType}</Paragraph>
+              <View style={detailStyles.container}>
+                <View style={detailStyles.description}>
+                  <View style={detailStyles.iconWrapper}>
+                    <MaterialCommunityIcons
+                      name="storefront"
+                      size={44}
+                      color="#BC6C25"
+                    />
+                  </View>
+
+                  <Text style={detailStyles.text}>
+                    {params.bean.roaster}, {params.bean.roasterCountry}
+                  </Text>
+                </View>
+                <View style={detailStyles.description}>
+                  <View style={detailStyles.iconWrapper}>
+                    <Fontisto name="coffeescript" size={32} color="#BC6C25" />
+                  </View>
+                  <Text style={detailStyles.text}>{params.bean.beanType}</Text>
+                </View>
+              </View>
             </Container>
             <Container>
               <Headline>Flavour profile:</Headline>

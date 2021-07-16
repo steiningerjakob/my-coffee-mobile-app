@@ -28,13 +28,14 @@ export default function Home() {
         <Image
           src="/cover.png"
           alt=""
-          width={640}
+          width={800}
           height={320}
           className={styles.logo}
         />
         <h1 className={styles.title}>
           Welcome to beanify - your world of coffee!
         </h1>
+        <h2>App download link coming soon..</h2>
       </main>
 
       <footer className={styles.footer}>

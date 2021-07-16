@@ -47,9 +47,15 @@ export default function ListItem(props) {
           />
         )}
         <View style={listItemStyles.paragraph}>
-          <Text style={listItemStyles.title}>{props.item.productName}</Text>
-          <Text style={listItemStyles.subTitle}>{props.item.beanType}</Text>
-          <Text style={listItemStyles.subTitle}>{props.item.roaster}</Text>
+          <Text numberOfLines={1} style={listItemStyles.title}>
+            {props.item.productName}
+          </Text>
+          <Text numberOfLines={1} style={listItemStyles.subTitle}>
+            {props.item.beanType}
+          </Text>
+          <Text numberOfLines={1} style={listItemStyles.subTitle}>
+            {props.item.roaster}
+          </Text>
           {props.item.rating && (
             <RatingElement
               startingValue={props.item.rating}

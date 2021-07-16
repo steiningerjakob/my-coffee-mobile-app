@@ -7,6 +7,7 @@ const textStyles = StyleSheet.create({
     fontSize: 24,
     textAlign: 'center',
     marginVertical: 12,
+    fontWeight: '500',
   },
   paragraph: {
     color: 'black',

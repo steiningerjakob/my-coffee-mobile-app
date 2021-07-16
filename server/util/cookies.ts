@@ -5,7 +5,7 @@ export function createSerializedSessionTokenCookie(token: string) {
   // eg. Heroku
   const isProduction = process.env.NODE_ENV === 'production';
 
-  // Save the token in a cookie on the user's machine
+  // Save the token in a cookie on the user's device
   // (cookies get sent automatically to the server every time
   // a user makes a request)
   const maxAge = 60 * 60 * 24; // 24 hours

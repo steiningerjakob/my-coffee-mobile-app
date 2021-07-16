@@ -8,10 +8,12 @@
     "start": "next start -p ${PORT:-\"3000\"}",
     "lint": "next lint",
     "migrate": "dotenv ley",
-    "heroku-postbuild": "yarn migrate up && yarn build"
+    "heroku-postbuild": "yarn migrate up && yarn build",
+    "test": "jest"
   },
   "dependencies": {
     "argon2": "^0.28.2",
+    "babel-jest": "^27.0.6",
     "camelcase-keys": "^6.2.2",
     "cookie": "^0.4.1",
     "dotenv-cli": "^4.0.0",
@@ -21,7 +23,8 @@
     "pg-connection-string": "^2.5.0",
     "postgres": "^2.0.0-beta.5",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "ts-jest": "^27.0.3"
   },
   "devDependencies": {
     "@types/cookie": "^0.4.0",
@@ -29,6 +32,7 @@
     "@types/react": "^17.0.14",
     "eslint": "7.29.0",
     "eslint-config-next": "11.0.1",
+    "jest": "^27.0.6",
     "typescript": "^4.3.5"
   },
   "cacheDirectories": [

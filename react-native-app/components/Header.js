@@ -23,6 +23,7 @@ const headerStyles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
     fontWeight: '600',
+    maxWidth: 240,
   },
 });
 
@@ -43,7 +44,9 @@ export default function Header(props) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="ios-arrow-back" size={32} color="white" />
         </TouchableOpacity>
-        <Text style={headerStyles.label}>{props.label}</Text>
+        <Text style={headerStyles.label} numberOfLines={1}>
+          {props.label}
+        </Text>
         {props.firstName ? (
           <TouchableOpacity onPress={() => logoutButtonHandler()}>
             <MaterialIcons name="logout" size={32} color="white" />

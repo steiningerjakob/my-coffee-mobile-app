@@ -28,6 +28,7 @@ const setupStyles = StyleSheet.create({
     borderColor: '#BC6C25',
     borderRadius: 4,
     padding: 12,
+    width: 320,
   },
   heading: {
     display: 'flex',

@@ -52,9 +52,15 @@ export default function ListItemFav(props) {
           />
         )}
         <View style={listItemStyles.paragraph}>
-          <Text style={listItemStyles.title}>{props.item.productName}</Text>
-          <Text style={listItemStyles.subTitle}>{props.item.beanType}</Text>
-          <Text style={listItemStyles.subTitle}>{props.item.roaster}</Text>
+          <Text numberOfLines={1} style={listItemStyles.title}>
+            {props.item.productName}
+          </Text>
+          <Text numberOfLines={1} style={listItemStyles.subTitle}>
+            {props.item.beanType}
+          </Text>
+          <Text numberOfLines={1} style={listItemStyles.subTitle}>
+            {props.item.roaster}
+          </Text>
           <View style={listItemStyles.rating}>
             <Rating startingValue={props.item.rating} readonly imageSize={24} />
           </View>
