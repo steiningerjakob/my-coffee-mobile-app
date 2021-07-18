@@ -77,10 +77,19 @@ export async function getSellers() {
   return sellers;
 }
 
-export async function getRatings() {
-  const response = await fetch(`${apiBaseUrl}/products/ratings`);
-  const ratings = await response.json();
-  return ratings;
+export async function getUserReviews(beanId) {
+  const response = await fetch(`${apiBaseUrl}/products/reviews`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      beanId: beanId,
+    }),
+  });
+  const userReviews = await response.json();
+  return userReviews;
 }
 
 export async function getRatedBeans() {

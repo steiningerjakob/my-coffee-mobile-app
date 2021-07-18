@@ -6,6 +6,7 @@ const spacerStyles = StyleSheet.create({
     width: 320,
     borderBottomColor: 'lightgray',
     borderBottomWidth: 1,
+    alignSelf: 'center',
   },
 });
 

@@ -31,11 +31,17 @@ const listItemStyles = StyleSheet.create({
     marginTop: 4,
     fontStyle: 'italic',
   },
+  reviewCount: {
+    color: 'grey',
+    marginLeft: 12,
+    fontStyle: 'italic',
+  },
   icon: { marginLeft: 'auto' },
   rating: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'center',
     marginTop: 4,
   },
 });
@@ -63,8 +69,15 @@ export default function ListItemFav(props) {
           </Text>
           <View style={listItemStyles.rating}>
             <Rating startingValue={props.item.rating} readonly imageSize={24} />
+            {props.item.reviewCount && (
+              <Text style={listItemStyles.reviewCount}>
+                ({props.item.reviewCount})
+              </Text>
+            )}
           </View>
-          <Text style={listItemStyles.review}>{props.item.review}</Text>
+          {props.item.review && (
+            <Text style={listItemStyles.review}>{props.item.review}</Text>
+          )}
         </View>
         <AntDesign
           name="right"

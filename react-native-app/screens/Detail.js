@@ -23,15 +23,17 @@ import ImagePreview from '../components/ImagePreview';
 import Input from '../components/Input';
 import Loading from '../components/Loading';
 import RatingElement from '../components/RatingElement';
+import Review from '../components/Review';
 import Screen from '../components/Screen';
 import Separator from '../components/Separator';
 import Spacer from '../components/Spacer';
-import { Headline } from '../components/Text';
+import { Headline, Paragraph } from '../components/Text';
 import {
   addBeansToFavourites,
   checkFavouriteStatus,
   checkReviewStatus,
   getFlavourProfile,
+  getUserReviews,
   insertReview,
   removeBeansFromFavourites,
   updateReview,
@@ -63,6 +65,19 @@ const detailStyles = StyleSheet.create({
   text: {
     fontSize: 16,
   },
+  ratingHeading: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+    width: '100%',
+    paddingHorizontal: 8,
+    overflow: 'hidden',
+  },
+  icon: {
+    marginLeft: 'auto',
+  },
 });
 
 export default function Detail(props) {
@@ -75,6 +90,8 @@ export default function Detail(props) {
   const [rating, setRating] = useState();
   const [review, setReview] = useState('');
   const [isReviewed, setReviewed] = useState(false);
+  const [userReviewsVisible, setUserReviewsVisible] = useState(false);
+  const [userReviews, setUserReviews] = useState([]);
 
   function addButtonHandler() {
     addBeansToFavourites(firstName, id, params.bean.id);
@@ -121,6 +138,11 @@ export default function Detail(props) {
         setReviewed(false);
       }
     });
+    getUserReviews(params.bean.id).then((data) => {
+      if (data) {
+        setUserReviews(data.userReviews);
+      }
+    });
     setLoading(false);
   }, []);
 
@@ -155,6 +177,7 @@ export default function Detail(props) {
                 <ImagePreview source={{ uri: params.bean.uri }} />
               )}
               <Headline>{params.bean.productName}</Headline>
+
               <View style={detailStyles.container}>
                 <View style={detailStyles.description}>
                   <View style={detailStyles.iconWrapper}>
@@ -201,10 +224,33 @@ export default function Detail(props) {
                 label="Fruit"
               />
             </Container>
+            <Container>
+              <TouchableOpacity
+                style={detailStyles.ratingHeading}
+                onPress={() => {
+                  setUserReviewsVisible(!userReviewsVisible);
+                }}
+              >
+                <Headline>What other users think...</Headline>
+                <AntDesign
+                  name="down"
+                  size={24}
+                  color="black"
+                  style={detailStyles.icon}
+                />
+              </TouchableOpacity>
+              {userReviewsVisible &&
+                (userReviews.length === 0 ? (
+                  <Paragraph>No reviews yet...</Paragraph>
+                ) : (
+                  userReviews.map((userReview) => (
+                    <Review key={userReview.uri} item={userReview} />
+                  ))
+                ))}
+            </Container>
             {isFavourite &&
               (isReviewed === false ? (
                 <>
-                  <Separator />
                   <Container>
                     <Headline>Rate these beans...</Headline>
                     <Rating
@@ -226,7 +272,6 @@ export default function Detail(props) {
                 </>
               ) : (
                 <>
-                  <Separator />
                   <Container>
                     <Headline>Your rating</Headline>
                     <Rating

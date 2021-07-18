@@ -11,10 +11,10 @@ import { userContext } from '../App';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import ListItem from '../components/ListItem';
+import ListItemFav from '../components/ListItemFav';
 import Loading from '../components/Loading';
 import Screen from '../components/Screen';
-import { getFilteredBeans, getRatedBeans } from '../util/apiFunctions';
+import { getFilteredBeans } from '../util/apiFunctions';
 
 const productListStyles = StyleSheet.create({
   searchWrapper: {
@@ -73,8 +73,6 @@ export default function Browse() {
   const navigation = useNavigation();
   const { firstName, refreshUserContext } = useContext(userContext);
   const [beans, setBeans] = useState([]);
-  const [ratedBeans, setRatedBeans] = useState([]);
-  console.log('rated beans', ratedBeans);
   const [query, setQuery] = useState();
   const [roasterFilter, setRoasterFilter] = useState(false);
   const [typeFilter, setTypeFilter] = useState(false);
@@ -118,56 +116,8 @@ export default function Browse() {
           }
         }
       });
-      getRatedBeans().then((data) => {
-        if (data) {
-          setRatedBeans(data.ratedBeans);
-        }
-      });
     }, [query, roasterFilter, typeFilter]),
   );
-
-  // WORK IN PROGRESS
-  const beansWithoutRating = beans.filter(
-    (all) => !ratedBeans.find((rated) => all.id === rated.beanId),
-  );
-  // console.log('beans without rating', beansWithoutRating);
-
-  function removeDuplicates(array) {
-    const resultArray = [];
-    for (let i = 1; i < array.length; i++) {
-      const groupedBeans = ratedBeans.filter((bean) => bean.beanId === i);
-      console.log('grouped bean', groupedBeans);
-
-      if (groupedBeans.length === 0) {
-        resultArray.push(groupedBeans);
-      } else {
-        const groupedBeanRatings = groupedBeans.map((bean) =>
-          Number(bean.rating),
-        );
-        console.log('grouped bean ratings', groupedBeanRatings);
-        const ratingSum = groupedBeanRatings.reduce(
-          (accumulator, currentValue) => accumulator + currentValue,
-        );
-        const ratingAverage = ratingSum / groupedBeanRatings.length;
-        const groupedBeanReviews = groupedBeans.map((bean) => bean.review);
-
-        const collapsedBean = {
-          id: i,
-          rating: ratingAverage,
-          reviews: groupedBeanReviews,
-        };
-        console.log('collapsed bean', collapsedBean);
-        resultArray.push(collapsedBean);
-        console.log('result array', resultArray);
-        return resultArray;
-      }
-    }
-  }
-
-  const result = removeDuplicates(ratedBeans);
-  console.log('result of the function', result);
-
-  // WORK IN PROGRESS
 
   return (
     <Screen>
@@ -203,7 +153,7 @@ export default function Browse() {
                   setTypeFilter(false);
                 }}
               >
-                <Text style={productListStyles.sortLabel}>Name</Text>
+                <Text style={productListStyles.sortLabel}>Rating</Text>
                 <FontAwesome name="sort" size={16} color="#BC6C25" />
               </TouchableOpacity>
               <TouchableOpacity
@@ -242,7 +192,7 @@ export default function Browse() {
                 data={beans}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                  <ListItem
+                  <ListItemFav
                     item={item}
                     onPress={() =>
                       navigation.navigate('Detail', { bean: item })

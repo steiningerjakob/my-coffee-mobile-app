@@ -46,6 +46,11 @@ export type Bean = {
   uri: string;
 };
 
+export type BeanWithRating = Bean & {
+  rating: number;
+  reviewCount: number;
+};
+
 export type BeanType = {
   id: number;
   beanType: string;
@@ -86,8 +91,14 @@ export type Rating = {
   id: number;
   userId: number;
   beanId: number;
-  rating: number;
+  rating: string;
   review: string;
+};
+
+export type UserRating = Rating & {
+  firstName: string;
+  lastName: string;
+  profileImage: string;
 };
 
 export type Setup = {

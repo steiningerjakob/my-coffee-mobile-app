@@ -6,6 +6,7 @@ import {
   ApplicationError,
   Bean,
   BeanType,
+  BeanWithRating,
   Favourite,
   FlavourProfile,
   Grinder,
@@ -16,6 +17,7 @@ import {
   Session,
   Setup,
   User,
+  UserRating,
   UserWithPasswordHash,
 } from './types';
 
@@ -81,7 +83,7 @@ export async function getUsersIfValidSessionToken(token?: string) {
 
   const session = await getValidSessionByToken(token);
 
-  // Security: Return "Access denied" token does not
+  // Security: Return "Access denied" if token does not
   // match valid session
   if (!session) {
     const errors: ApplicationError[] = [{ message: 'Access denied' }];
@@ -192,7 +194,7 @@ export async function insertUser(
   email: string,
   passwordHash: string,
 ) {
-  const users = await sql`
+  const newUser = await sql<User>`
     INSERT INTO users
       (first_name, last_name, email, password_hash)
     VALUES
@@ -204,7 +206,7 @@ export async function insertUser(
       email,
       profile_image
   `;
-  return users.map((user) => camelcaseKeys(user))[0];
+  return newUser.map((user) => camelcaseKeys(user))[0];
 }
 
 export async function insertSession(token: string, userId: number) {
@@ -292,13 +294,23 @@ export async function getBeansById(id?: number) {
 }
 
 export async function getFilteredBeans(query?: string) {
-  const beans = await sql<Bean[]>`
+  const beans = await sql<BeanWithRating[]>`
     SELECT
-      *
+      product_name,
+      beans.id as id,
+      avg(user_rating) as rating,
+      count(user_review) as review_count,
+      uri,
+      roaster,
+      roaster_country,
+      bean_type,
+      origin,
+      flavour_profile
     FROM
       beans
-    ORDER by
-      product_name
+      LEFT JOIN ratings ON ratings.bean_id = beans.id
+    GROUP BY beans.id
+    ORDER BY review_count DESC
   `;
   if (!query) {
     return beans.map((bean) => camelcaseKeys(bean));
@@ -555,7 +567,7 @@ export async function getFavouritesByUserId(userId: number) {
 export async function insertReview(
   userId: number,
   beanId: number,
-  rating: number,
+  rating: string,
   review: string,
 ) {
   const newReview = await sql<Rating>`
@@ -573,13 +585,24 @@ export async function insertReview(
   return newReview.map((rating) => camelcaseKeys(rating))[0];
 }
 
-export async function getAllRatings() {
-  const ratings = await sql<Rating[]>`
+export async function getReviewsByBeanId(beanId: number) {
+  const userReviews = await sql<UserRating[]>`
     SELECT
-      *
-    FROM ratings
+      user_rating,
+      user_review,
+      to_char(rating_date, 'dd.mm.yy') as rating_date,
+      first_name,
+      last_name,
+      profile_image as uri
+    FROM
+      ratings,
+      users
+    WHERE
+      ratings.bean_id = ${beanId} AND
+      ratings.user_id = users.id
+    ORDER BY rating_date DESC
   `;
-  return ratings.map((rating) => camelcaseKeys(rating));
+  return userReviews.map((review) => camelcaseKeys(review));
 }
 
 export async function checkReviewStatus(userId: number, beanId: number) {
@@ -604,7 +627,7 @@ export async function checkReviewStatus(userId: number, beanId: number) {
 export async function updateReview(
   userId: number,
   beanId: number,
-  rating: number,
+  rating: string,
   review: string,
 ) {
   const updatedReview = await sql<Rating>`
@@ -626,29 +649,25 @@ export async function updateReview(
 }
 
 export async function getBeansWithRatings() {
-  const ratedBeans = await sql<Bean[]>`
+  const beans = await sql<BeanWithRating[]>`
     SELECT
-      DISTINCT ratings.id as id,
-      ratings.bean_id as bean_id,
-      beans.product_name as product_name,
-      beans.uri as uri,
-      beans.roaster as roaster,
-      beans.roaster_country as roaster_country,
-      beans.bean_type as bean_type,
-      beans.origin as origin,
-      beans.flavour_profile as flavour_profile,
-      ratings.user_rating as rating,
-      ratings.user_review as review,
-      ratings.user_id as ratingUserId
+      product_name,
+      beans.id as bean_id,
+      avg(user_rating) as average_rating,
+      count(user_review) as review_count,
+      uri,
+      roaster,
+      roaster_country,
+      bean_type,
+      origin,
+      flavour_profile
     FROM
-      beans,
-      ratings
-    WHERE
-      ratings.bean_id = beans.id
-    ORDER BY
-      ratings.bean_id
+      beans
+      LEFT JOIN ratings ON ratings.bean_id = beans.id
+    GROUP BY beans.id
+    ORDER BY beans.id
   `;
-  return ratedBeans.map((bean) => camelcaseKeys(bean));
+  return beans.map((bean) => camelcaseKeys(bean));
 }
 
 export async function updateProfileImage(id: number, profileImage: string) {
@@ -730,7 +749,7 @@ export async function removeSetup(setupId: number) {
 }
 
 export async function getUserSetups(userId?: number) {
-  const userSetups = await sql<Setup[]>`
+  const userSetup = await sql<Setup>`
     SELECT
       setups.id as id,
       users.id as user_id,
@@ -751,7 +770,7 @@ export async function getUserSetups(userId?: number) {
       setups.machine_id = machines.id AND
       setups.grinder_id = grinders.id
   `;
-  return userSetups.map((setup) => camelcaseKeys(setup));
+  return userSetup.map((setup) => camelcaseKeys(setup));
 }
 
 export async function insertPreference(
