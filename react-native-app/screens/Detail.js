@@ -179,6 +179,7 @@ export default function Detail(props) {
       }
     });
     setLoading(false);
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -192,12 +193,14 @@ export default function Detail(props) {
         <Loading />
       ) : (
         <>
+          {/* eslint-disable-next-line */}
           {isFavourite && !isReviewed && (
             <FloatingButton
               label="add review"
               onPress={() => setModalVisible(true)}
             />
           )}
+          {/* eslint-disable-next-line */}
           {isFavourite && isReviewed && (
             <FloatingButton
               label="view review"
@@ -206,6 +209,7 @@ export default function Detail(props) {
           )}
           <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
             <View style={detailStyles.cancel}>
+              {/* eslint-disable-next-line */}
               {isFavourite ? (
                 <AntDesign
                   name="star"

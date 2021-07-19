@@ -13,7 +13,7 @@
     "@types/react-dom": "^17.0.6",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
-    "@upleveled/eslint-config-upleveled": "1.14.4",
+    "@upleveled/eslint-config-upleveled": "1.14.5",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.23.0",
     "eslint-config-next": "^11.0.0",
@@ -34,7 +34,5 @@
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-testing-library": "4.6.0"
   },
-  "dependencies": {
-    "patch-package": "^6.4.7"
-  }
+  "dependencies": {}
 }

@@ -1,15 +1,7 @@
 import { AntDesign, Entypo, Feather } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useContext, useState } from 'react';
-import {
-  Alert,
-  Image,
-  Modal,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Alert, Image, Modal, StyleSheet, Text, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { userContext } from '../App';
 import coverImage from '../assets/setup-cover.jpg';
@@ -210,6 +202,7 @@ export default function Setup() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
+      {/* eslint-disable-next-line */}
       {!machines.length || !grinders.length || !userSetup ? (
         <Loading />
       ) : (
@@ -444,6 +437,7 @@ export default function Setup() {
                 <Container>
                   <FloatingButton
                     label="Save setup"
+                    // eslint-disable-next-line
                     disabled={!userGrinder || !userMachine}
                     onPress={saveSetupButtonHandler}
                     bottom
@@ -453,6 +447,7 @@ export default function Setup() {
                 <Container>
                   <FloatingButton
                     label="Update setup"
+                    // eslint-disable-next-line
                     disabled={!userGrinder || !userMachine}
                     onPress={updateSetupButtonHandler}
                     bottom

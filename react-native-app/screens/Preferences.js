@@ -249,6 +249,7 @@ export default function Preferences() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
+      {/* eslint-disable-next-line */}
       {!beanTypes && <Loading />}
       <Image source={coverImage} style={preferencesStyles.cover} />
       {existingPreference === false ? (

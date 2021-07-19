@@ -38,7 +38,6 @@
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@types/react-native": "~0.63.2",
-    "cypress": "^7.7.0",
     "jest": "^27.0.6",
     "jest-expo": "^42.0.1",
     "react-test-renderer": "^17.0.2"

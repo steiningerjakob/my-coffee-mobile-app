@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { Rating } from 'react-native-ratings';
-import Container from './Container';
 
 const reviewStyles = StyleSheet.create({
   wrapper: {

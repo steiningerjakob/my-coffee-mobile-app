@@ -73,6 +73,7 @@ export default function Favourites() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
+      {/* eslint-disable-next-line */}
       {!userFavourites ? (
         <Loading />
       ) : (
