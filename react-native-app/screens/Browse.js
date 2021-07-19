@@ -153,7 +153,7 @@ export default function Browse() {
                   setTypeFilter(false);
                 }}
               >
-                <Text style={productListStyles.sortLabel}>Rating</Text>
+                <Text style={productListStyles.sortLabel}>Reviews</Text>
                 <FontAwesome name="sort" size={16} color="#BC6C25" />
               </TouchableOpacity>
               <TouchableOpacity

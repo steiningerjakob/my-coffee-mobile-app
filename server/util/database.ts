@@ -371,7 +371,7 @@ export async function getUserFavourites(userId?: number) {
       beans.origin as origin,
       beans.flavour_profile as flavour_profile,
       flavour_profiles.body as body,
-      flavour_profiles.fruit as fruit,
+      flavour_profiles.intensity as intensity,
       flavour_profiles.acidity as acidity,
       ratings.user_rating as rating,
       ratings.user_review as review
@@ -397,7 +397,7 @@ export async function getUserFavourites(userId?: number) {
 export async function getRecommendations(
   body?: number,
   acidity?: number,
-  fruit?: number,
+  intensity?: number,
 ) {
   const recommendations = await sql<Bean[]>`
     SELECT
@@ -410,7 +410,7 @@ export async function getRecommendations(
       beans.origin as origin,
       beans.flavour_profile as flavour_profile,
       flavour_profiles.body as body,
-      flavour_profiles.fruit as fruit,
+      flavour_profiles.intensity as intensity,
       flavour_profiles.acidity as acidity
     FROM
       users,
@@ -422,7 +422,7 @@ export async function getRecommendations(
       flavour_profiles.id = beans.flavour_profile AND
       flavour_profiles.body BETWEEN ${body - 1} AND ${body + 1} AND
       flavour_profiles.acidity BETWEEN ${acidity - 1} AND ${acidity + 1} AND
-      flavour_profiles.fruit BETWEEN ${fruit - 1} AND ${fruit + 1}
+      flavour_profiles.intensity BETWEEN ${intensity - 1} AND ${intensity + 1}
     ORDER BY
       beans.product_name
   `;
@@ -480,7 +480,7 @@ export async function getBeansBySeller(sellerName) {
       beans.kg as amount,
       beans.uri as uri,
       flavour_profiles.body as body,
-      flavour_profiles.fruit as fruit,
+      flavour_profiles.intensity as intensity,
       flavour_profiles.acidity as acidity
     FROM
       sellers,
@@ -593,13 +593,21 @@ export async function getReviewsByBeanId(beanId: number) {
       to_char(rating_date, 'dd.mm.yy') as rating_date,
       first_name,
       last_name,
-      profile_image as uri
+      profile_image as uri,
+      machine_name,
+      grinder_name
     FROM
       ratings,
-      users
+      users,
+      setups,
+      machines,
+      grinders
     WHERE
       ratings.bean_id = ${beanId} AND
-      ratings.user_id = users.id
+      ratings.user_id = users.id AND
+      setups.user_id = users.id AND
+      setups.machine_id = machines.id AND
+      setups.grinder_id = grinders.id
     ORDER BY rating_date DESC
   `;
   return userReviews.map((review) => camelcaseKeys(review));
@@ -648,6 +656,19 @@ export async function updateReview(
   return updatedReview.map((update) => camelcaseKeys(update))[0];
 }
 
+export async function deleteReview(userId: number, beanId: number) {
+  const deletedReview = await sql<Rating>`
+    DELETE FROM
+      ratings
+    WHERE
+      user_id = ${userId} AND
+      bean_id = ${beanId}
+    RETURNING
+      *
+  `;
+  return deletedReview.map((review) => camelcaseKeys(review))[0];
+}
+
 export async function getBeansWithRatings() {
   const beans = await sql<BeanWithRating[]>`
     SELECT
@@ -665,7 +686,7 @@ export async function getBeansWithRatings() {
       beans
       LEFT JOIN ratings ON ratings.bean_id = beans.id
     GROUP BY beans.id
-    ORDER BY beans.id
+    ORDER BY review.count DESC
   `;
   return beans.map((bean) => camelcaseKeys(bean));
 }
@@ -777,14 +798,14 @@ export async function insertPreference(
   userId: number,
   beanType: string,
   body: number,
-  fruit: number,
+  intensity: number,
   acidity: number,
 ) {
   const newPreference = await sql<Preference>`
     INSERT INTO preferences
-      (user_id, bean_type, body, fruit, acidity)
+      (user_id, bean_type, body, intensity, acidity)
     VALUES
-      (${userId}, ${beanType}, ${body}, ${fruit}, ${acidity})
+      (${userId}, ${beanType}, ${body}, ${intensity}, ${acidity})
     RETURNING
       *
   `;
@@ -823,7 +844,7 @@ export async function updatePreference(
   userId: number,
   beanType: string,
   body: number,
-  fruit: number,
+  intensity: number,
   acidity: number,
 ) {
   const updatedPreference = await sql<Preference>`
@@ -831,7 +852,7 @@ export async function updatePreference(
     SET
       bean_type = ${beanType},
       body = ${body},
-      fruit = ${fruit},
+      intensity = ${intensity},
       acidity = ${acidity}
     WHERE
       user_id = ${userId}

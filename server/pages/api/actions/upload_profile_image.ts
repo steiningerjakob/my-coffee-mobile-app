@@ -27,7 +27,6 @@ export default async function uploadProfileImageHandler(
     });
 
     const image = await response.json();
-    console.log('image', image);
 
     updateProfileImage(id, image.url);
 

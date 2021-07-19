@@ -21,6 +21,7 @@ const listItemStyles = StyleSheet.create({
   paragraph: {
     display: 'flex',
     flexDirection: 'column',
+    flexShrink: -1,
   },
   title: { fontSize: 16, color: 'black', textAlign: 'left' },
   subTitle: { fontSize: 14, color: 'grey', textAlign: 'left', marginTop: 4 },
@@ -30,6 +31,7 @@ const listItemStyles = StyleSheet.create({
     textAlign: 'left',
     marginTop: 4,
     fontStyle: 'italic',
+    flexShrink: -1,
   },
   reviewCount: {
     color: 'grey',

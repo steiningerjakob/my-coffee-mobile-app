@@ -85,11 +85,11 @@ export default function ListItem(props) {
                 label="Acidity"
               />
               <RatingElement
-                startingValue={props.item.fruit}
+                startingValue={props.item.intensity}
                 ratingImage={ratingImage}
                 readonly
                 onFinishRating={() => {}}
-                label="Fruit"
+                label="Intensity"
               />
             </>
           )}

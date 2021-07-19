@@ -7,9 +7,9 @@ export default async function getRecommendationsHandler(
 ) {
   if (req.method === 'POST') {
     // Destructure relevant information from the request body
-    const { body, acidity, fruit } = req.body;
+    const { body, acidity, intensity } = req.body;
 
-    const recommendations = await getRecommendations(body, acidity, fruit);
+    const recommendations = await getRecommendations(body, acidity, intensity);
 
     return res.status(200).json({ recommendations: recommendations });
   }

@@ -57,7 +57,22 @@ const mapStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginVertical: 12,
+    marginVertical: 8,
+  },
+  buttonWrapper: {
+    paddingVertical: 4,
+    marginTop: 5,
+    width: '95%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: '#BC6C25',
+    borderWidth: 1,
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#BC6C25',
   },
 });
 
@@ -75,7 +90,7 @@ export default function MapElement(props) {
   };
 
   return (
-    <MapView style={mapStyles.map} initialRegion={region}>
+    <MapView style={mapStyles.map} initialRegion={region} showsUserLocation>
       {props.sellers.length > 0 &&
         props.sellers.map((seller) => (
           <View key={seller.id}>
@@ -104,6 +119,9 @@ export default function MapElement(props) {
                     <Text style={mapStyles.cardText}>({seller.reviews})</Text>
                   </View>
                   <Image style={mapStyles.image} source={{ uri: seller.uri }} />
+                  <View style={mapStyles.buttonWrapper}>
+                    <Text style={mapStyles.buttonText}>Go to website</Text>
+                  </View>
                 </View>
                 <View style={mapStyles.arrowBorder} />
                 <View style={mapStyles.arrow} />

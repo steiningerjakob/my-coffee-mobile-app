@@ -5,7 +5,7 @@ exports.up = async function up(sql) {
 			user_id integer REFERENCES users (id) ON DELETE CASCADE,
 			bean_type varchar(40),
 			body numeric,
-			fruit numeric,
+			intensity numeric,
 			acidity numeric
 		)
 	`;

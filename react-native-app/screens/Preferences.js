@@ -1,9 +1,10 @@
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Entypo, Feather } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useContext, useState } from 'react';
 import {
   Alert,
   Image,
+  Modal,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -11,20 +12,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { Rating } from 'react-native-ratings';
 import { userContext } from '../App';
 import ratingImage from '../assets/custom_bean.png';
 import coverImage from '../assets/preferences-cover.jpeg';
 import Button from '../components/Button';
 import Container from '../components/Container';
+import FloatingButton from '../components/FloatingButton';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import ListItem from '../components/ListItem';
 import Loading from '../components/Loading';
 import Screen from '../components/Screen';
-import Separator from '../components/Separator';
 import Spacer from '../components/Spacer';
-import { Headline, Label } from '../components/Text';
+import { Headline, Label, Paragraph } from '../components/Text';
 import {
   clearPreference,
   getBeanTypes,
@@ -41,18 +43,30 @@ const preferencesStyles = StyleSheet.create({
     width: '100%',
     resizeMode: 'contain',
   },
+  message: {
+    color: '#BC6C25',
+    fontSize: 16,
+    fontWeight: '500',
+    textAlign: 'center',
+    padding: 24,
+  },
   heading: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
-    borderBottomColor: '#F9DFC2',
-    borderBottomWidth: 1,
-    width: '90%',
+    width: '100%',
     paddingLeft: 16,
     paddingRight: 16,
     overflow: 'hidden',
+  },
+  headline: {
+    color: 'black',
+    fontSize: 24,
+    textAlign: 'center',
+    marginVertical: 12,
+    fontWeight: '500',
   },
   wrapper: {
     display: 'flex',
@@ -79,6 +93,12 @@ const preferencesStyles = StyleSheet.create({
     fontWeight: '500',
     marginTop: 8,
   },
+  cancel: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 999,
+  },
 });
 
 export default function Preferences() {
@@ -90,10 +110,13 @@ export default function Preferences() {
   const [beanTypeSelectionIsActive, setBeanTypeSelectionIsActive] =
     useState(false);
   const [existingPreference, setExistingPreference] = useState(false);
+  const [modalIsVisible, setModalVisible] = useState(false);
+  const [recommendationsActive, setRecommendationsActive] = useState(false);
+
   const [beanTypes, setBeanTypes] = useState([]);
   const [userBeanType, setUserBeanType] = useState('');
   const [userBody, setUserBody] = useState();
-  const [userFruit, setUserFruit] = useState();
+  const [userIntensity, setUserIntensity] = useState();
   const [userAcidity, setUserAcidity] = useState();
   const [recommendations, setRecommendations] = useState([]);
 
@@ -118,9 +141,9 @@ export default function Preferences() {
     setUserBody(inputForState);
   }
 
-  function fruitStateHandler(userInput) {
+  function intensityStateHandler(userInput) {
     const inputForState = userInput;
-    setUserFruit(inputForState);
+    setUserIntensity(inputForState);
   }
 
   function acidityStateHandler(userInput) {
@@ -128,23 +151,38 @@ export default function Preferences() {
     setUserAcidity(inputForState);
   }
 
-  function savePreferencesButtonHandler() {
-    insertPreference(id, userBeanType, userBody, userFruit, userAcidity);
-    setExistingPreference(true);
+  function editPreferencesButtonHandler() {
+    setModalVisible(true);
   }
 
-  function updatePreferencesButtonHandler() {
-    updatePreference(id, userBeanType, userBody, userFruit, userAcidity);
+  async function savePreferencesButtonHandler() {
+    await insertPreference(
+      id,
+      userBeanType,
+      userBody,
+      userIntensity,
+      userAcidity,
+    );
     setExistingPreference(true);
+    setModalVisible(false);
+  }
+
+  async function updatePreferencesButtonHandler() {
+    await updatePreference(
+      id,
+      userBeanType,
+      userBody,
+      userIntensity,
+      userAcidity,
+    );
+    setExistingPreference(true);
+    setModalVisible(false);
   }
 
   async function clearPreferences() {
-    clearPreference(id);
+    await clearPreference(id);
+    setUserBeanType(null);
     setExistingPreference(false);
-    setUserBeanType('');
-    setUserBody();
-    setUserFruit();
-    setUserAcidity();
   }
 
   function clearPreferencesButtonHandler() {
@@ -168,12 +206,12 @@ export default function Preferences() {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
-      getRecommendations(userBody, userAcidity, userFruit).then((d) =>
+      getRecommendations(userBody, userAcidity, userIntensity).then((d) =>
         setRecommendations(d.recommendations),
       );
       setRefreshing(false);
     });
-  }, [userBody, userAcidity, userFruit]);
+  }, [userBody, userAcidity, userIntensity]);
 
   useFocusEffect(
     useCallback(() => {
@@ -188,13 +226,15 @@ export default function Preferences() {
         if (data) {
           setUserBeanType(data.beanType);
           setUserBody(data.body);
-          setUserFruit(data.fruit);
+          setUserIntensity(data.intensity);
           setUserAcidity(data.acidity);
           setExistingPreference(true);
 
-          getRecommendations(data.body, data.acidity, data.fruit).then((d) => {
-            setRecommendations(d.recommendations);
-          });
+          getRecommendations(data.body, data.acidity, data.intensity).then(
+            (d) => {
+              setRecommendations(d.recommendations);
+            },
+          );
         } else {
           setExistingPreference(false);
         }
@@ -209,196 +249,241 @@ export default function Preferences() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      {!beanTypes.length ? (
-        <Loading />
-      ) : (
-        <>
-          <Image source={coverImage} style={preferencesStyles.cover} />
-          <Container fill>
-            <ScrollView
-              style={{ flex: 1 }}
-              showsVerticalScrollIndicator={false}
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-            >
-              {existingPreference === false ? (
-                <>
-                  <Container>
-                    <Headline>Select flavour profile</Headline>
-                    <View style={preferencesStyles.wrapper}>
-                      <Label>Body: </Label>
-                      <Rating
-                        startingValue={0}
-                        imageSize={24}
-                        type="custom"
-                        ratingImage={ratingImage}
-                        ratingColor="#F7D6B1"
-                        onFinishRating={bodyStateHandler}
-                      />
-                    </View>
-                    <View style={preferencesStyles.wrapper}>
-                      <Label>Acidity: </Label>
-                      <Rating
-                        startingValue={0}
-                        imageSize={24}
-                        type="custom"
-                        ratingImage={ratingImage}
-                        ratingColor="#F7D6B1"
-                        onFinishRating={acidityStateHandler}
-                      />
-                    </View>
-                    <View style={preferencesStyles.wrapper}>
-                      <Label>Fruit: </Label>
-                      <Rating
-                        startingValue={0}
-                        imageSize={24}
-                        type="custom"
-                        ratingImage={ratingImage}
-                        ratingColor="#F7D6B1"
-                        onFinishRating={fruitStateHandler}
-                      />
-                    </View>
-                  </Container>
-                  <Container>
-                    <TouchableOpacity
-                      onPress={() =>
-                        setBeanTypeSelectionIsActive(!beanTypeSelectionIsActive)
-                      }
-                    >
-                      <View style={preferencesStyles.heading}>
-                        {userBeanType ? (
-                          <Headline>{userBeanType}</Headline>
-                        ) : (
-                          <Headline>Select bean type</Headline>
-                        )}
-                        <AntDesign
-                          name="down"
-                          size={24}
-                          color="black"
-                          style={preferencesStyles.icon}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                    {beanTypeSelectionIsActive === true &&
-                      beanTypes.map((b) => (
-                        <TouchableOpacity
-                          key={b.beanType}
-                          style={preferencesStyles.selectionWrapper}
-                          onPress={() => beanTypeSelectionHandler(b.beanType)}
-                        >
-                          <Text>{b.beanType}</Text>
-                        </TouchableOpacity>
-                      ))}
-                  </Container>
-                  <Container>
-                    <Button
-                      label="Save preferences"
-                      disabled={
-                        !userBeanType | !userAcidity | !userBody | !userFruit
-                      }
-                      onPress={savePreferencesButtonHandler}
-                    />
-                  </Container>
-                </>
-              ) : (
-                <>
-                  <Container>
-                    <Headline>Your flavour profile</Headline>
-                    <View style={preferencesStyles.wrapper}>
-                      <Label>Body: </Label>
-                      <Rating
-                        startingValue={userBody}
-                        imageSize={24}
-                        type="custom"
-                        ratingImage={ratingImage}
-                        ratingColor="#F7D6B1"
-                        onFinishRating={bodyStateHandler}
-                      />
-                    </View>
-                    <View style={preferencesStyles.wrapper}>
-                      <Label>Acidity: </Label>
-                      <Rating
-                        startingValue={userAcidity}
-                        imageSize={24}
-                        type="custom"
-                        ratingImage={ratingImage}
-                        ratingColor="#F7D6B1"
-                        onFinishRating={acidityStateHandler}
-                      />
-                    </View>
-                    <View style={preferencesStyles.wrapper}>
-                      <Label>Fruit: </Label>
-                      <Rating
-                        startingValue={userFruit}
-                        imageSize={24}
-                        type="custom"
-                        ratingImage={ratingImage}
-                        ratingColor="#F7D6B1"
-                        onFinishRating={fruitStateHandler}
-                      />
-                    </View>
-                  </Container>
-                  <Container>
-                    <TouchableOpacity
-                      onPress={() =>
-                        setBeanTypeSelectionIsActive(!beanTypeSelectionIsActive)
-                      }
-                    >
-                      <View style={preferencesStyles.heading}>
-                        <Headline>{userBeanType}</Headline>
-                        <AntDesign
-                          name="down"
-                          size={24}
-                          color="black"
-                          style={preferencesStyles.icon}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                    {beanTypeSelectionIsActive === true &&
-                      beanTypes.map((b) => (
-                        <TouchableOpacity
-                          key={b.beanType}
-                          style={preferencesStyles.selectionWrapper}
-                          onPress={() => beanTypeSelectionHandler(b.beanType)}
-                        >
-                          <Text>{b.beanType}</Text>
-                        </TouchableOpacity>
-                      ))}
-                  </Container>
-                  <Container>
-                    <Button
-                      label="Update preferences"
-                      disabled={
-                        !userBeanType | !userAcidity | !userBody | !userFruit
-                      }
-                      onPress={updatePreferencesButtonHandler}
-                    />
-                    <TouchableOpacity onPress={clearPreferencesButtonHandler}>
-                      <Text style={preferencesStyles.clear}>
-                        Clear preferences
-                      </Text>
-                    </TouchableOpacity>
-                  </Container>
-                  <Spacer />
-                  <Spacer />
-                  <Separator />
-                  <Spacer />
-                  <Container>
-                    <Headline>Our recommendations for you:</Headline>
-                    {recommendations.map((bean) => (
-                      <ListItem
-                        key={bean.id}
-                        item={bean}
-                        onPress={() => navigation.navigate('Detail', { bean })}
-                      />
-                    ))}
-                  </Container>
-                </>
-              )}
-            </ScrollView>
+      {!beanTypes && <Loading />}
+      <Image source={coverImage} style={preferencesStyles.cover} />
+      {existingPreference === false ? (
+        <Container fill>
+          <Container>
+            <Text style={preferencesStyles.message}>
+              You haven't entered your preferences yet...
+            </Text>
           </Container>
-        </>
+          <Spacer />
+          <Button
+            label="enter preferences"
+            onPress={editPreferencesButtonHandler}
+          />
+        </Container>
+      ) : (
+        <Container fill>
+          <ScrollView
+            style={{ flex: 1 }}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            <Container>
+              <Headline>Your flavour profile</Headline>
+              <View style={preferencesStyles.wrapper}>
+                <Label>Body: </Label>
+                <Rating
+                  startingValue={userBody}
+                  imageSize={24}
+                  type="custom"
+                  ratingImage={ratingImage}
+                  ratingColor="#F7D6B1"
+                  onFinishRating={bodyStateHandler}
+                />
+              </View>
+              <View style={preferencesStyles.wrapper}>
+                <Label>Acidity: </Label>
+                <Rating
+                  startingValue={userAcidity}
+                  imageSize={24}
+                  type="custom"
+                  ratingImage={ratingImage}
+                  ratingColor="#F7D6B1"
+                  onFinishRating={acidityStateHandler}
+                />
+              </View>
+              <View style={preferencesStyles.wrapper}>
+                <Label>Intensity: </Label>
+                <Rating
+                  startingValue={userIntensity}
+                  imageSize={24}
+                  type="custom"
+                  ratingImage={ratingImage}
+                  ratingColor="#F7D6B1"
+                  onFinishRating={intensityStateHandler}
+                />
+              </View>
+            </Container>
+            <Container>
+              <Headline>Your bean type preferences</Headline>
+              <Paragraph>{userBeanType}</Paragraph>
+            </Container>
+            <Spacer />
+            <Container>
+              <Button
+                label="edit preferences"
+                disabled={
+                  !userBeanType | !userAcidity | !userBody | !userIntensity
+                }
+                onPress={editPreferencesButtonHandler}
+              />
+              <TouchableOpacity onPress={clearPreferencesButtonHandler}>
+                <Text style={preferencesStyles.clear}>Clear preferences</Text>
+              </TouchableOpacity>
+            </Container>
+
+            <Container>
+              <TouchableOpacity
+                onPress={() => setRecommendationsActive(!recommendationsActive)}
+              >
+                <View style={preferencesStyles.heading}>
+                  <Text style={preferencesStyles.headline}>
+                    Our recommendations
+                  </Text>
+                  <AntDesign
+                    name="down"
+                    size={24}
+                    color="black"
+                    style={preferencesStyles.icon}
+                  />
+                </View>
+              </TouchableOpacity>
+              {recommendationsActive &&
+                recommendations.map((bean) => (
+                  <ListItem
+                    key={bean.id}
+                    item={bean}
+                    onPress={() => navigation.navigate('Detail', { bean })}
+                  />
+                ))}
+            </Container>
+          </ScrollView>
+        </Container>
+      )}
+
+      {modalIsVisible && (
+        <Modal
+          visible={modalIsVisible}
+          animationType="slide"
+          presentationStyle="pageSheet"
+          style={{ flex: 1 }}
+        >
+          <View style={preferencesStyles.cancel}>
+            <Entypo
+              name="cross"
+              size={36}
+              color="#BC6C25"
+              onPress={() => setModalVisible(false)}
+            />
+          </View>
+          <Spacer large />
+          <Spacer large />
+          <Container fill>
+            <Headline>Select flavour profile</Headline>
+            <View style={preferencesStyles.wrapper}>
+              <Label>Body: </Label>
+              <Rating
+                startingValue={0}
+                imageSize={24}
+                type="custom"
+                ratingImage={ratingImage}
+                ratingColor="#F7D6B1"
+                onFinishRating={bodyStateHandler}
+              />
+            </View>
+            <View style={preferencesStyles.wrapper}>
+              <Label>Acidity: </Label>
+              <Rating
+                startingValue={0}
+                imageSize={24}
+                type="custom"
+                ratingImage={ratingImage}
+                ratingColor="#F7D6B1"
+                onFinishRating={acidityStateHandler}
+              />
+            </View>
+            <View style={preferencesStyles.wrapper}>
+              <Label>Intensity: </Label>
+              <Rating
+                startingValue={0}
+                imageSize={24}
+                type="custom"
+                ratingImage={ratingImage}
+                ratingColor="#F7D6B1"
+                onFinishRating={intensityStateHandler}
+              />
+            </View>
+
+            <Container>
+              <TouchableOpacity
+                onPress={() =>
+                  setBeanTypeSelectionIsActive(!beanTypeSelectionIsActive)
+                }
+              >
+                {userBeanType ? (
+                  <>
+                    <View style={preferencesStyles.heading}>
+                      <Text style={preferencesStyles.headline}>
+                        Selected bean type:
+                      </Text>
+                    </View>
+                    <Paragraph>{userBeanType}</Paragraph>
+                  </>
+                ) : (
+                  <View style={preferencesStyles.heading}>
+                    <Text style={preferencesStyles.headline}>
+                      Select bean type
+                    </Text>
+                    <AntDesign
+                      name="down"
+                      size={24}
+                      color="black"
+                      style={preferencesStyles.icon}
+                    />
+                  </View>
+                )}
+              </TouchableOpacity>
+              {beanTypeSelectionIsActive === true && (
+                <FlatList
+                  data={beanTypes}
+                  keyExtractor={(item) => item.beanType.toString()}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      style={preferencesStyles.selectionWrapper}
+                      onPress={() => beanTypeSelectionHandler(item.beanType)}
+                    >
+                      <Text>{item.beanType}</Text>
+                      <Feather
+                        name="circle"
+                        size={24}
+                        color="lightgray"
+                        style={preferencesStyles.icon}
+                      />
+                    </TouchableOpacity>
+                  )}
+                />
+              )}
+            </Container>
+          </Container>
+          {existingPreference ? (
+            <Container>
+              <FloatingButton
+                label="Update preferences"
+                disabled={
+                  !userBeanType | !userAcidity | !userBody | !userIntensity
+                }
+                onPress={updatePreferencesButtonHandler}
+                bottom
+              />
+            </Container>
+          ) : (
+            <Container>
+              <FloatingButton
+                label="Save preferences"
+                disabled={
+                  !userBeanType | !userAcidity | !userBody | !userIntensity
+                }
+                onPress={savePreferencesButtonHandler}
+                bottom
+              />
+            </Container>
+          )}
+        </Modal>
       )}
       <Footer />
     </Screen>

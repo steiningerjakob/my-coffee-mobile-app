@@ -19,9 +19,9 @@ export default function Home() {
         <Link href="/">
           <a>Home</a>
         </Link>
-        <Link href="/admin">
+        {/* <Link href="/admin">
           <a>Admin area</a>
-        </Link>
+        </Link> */}
       </header>
 
       <main className={styles.main}>

@@ -74,7 +74,7 @@ export default function SignIn() {
         <Container>
           <Spacer />
           <Spacer />
-          <Paragraph>Email:</Paragraph>
+          <Paragraph>Username:</Paragraph>
           <Spacer />
           <Input
             value={email}
@@ -83,9 +83,7 @@ export default function SignIn() {
             clearButtonMode="while-editing"
             type="emailAddress"
           />
-          <Spacer />
-          <Spacer />
-          <Spacer />
+          <Spacer large />
           <Paragraph>Password:</Paragraph>
           <Spacer />
           <Input
@@ -95,13 +93,9 @@ export default function SignIn() {
             clearButtonMode="while-editing"
             secureTextEntry={true}
           />
-          <Spacer />
-          <Spacer />
-          <Spacer />
+          <Spacer large />
           <Text style={signInStyles.error}>{error}</Text>
-          <Spacer />
-          <Spacer />
-          <Spacer />
+          <Spacer large />
           <Button label="sign in" onPress={verifyUser} />
           <Spacer />
           <Spacer />

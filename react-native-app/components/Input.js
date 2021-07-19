@@ -23,6 +23,7 @@ export default function Input(props) {
       style={inputStyles.field}
       secureTextEntry={props.secureTextEntry}
       multiline={props.multiline}
+      editable={props.editable}
     />
   );
 }

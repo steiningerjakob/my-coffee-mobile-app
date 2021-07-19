@@ -1,11 +1,14 @@
 import {
   AntDesign,
+  Entypo,
   Fontisto,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
 import React, { useContext, useEffect, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,8 +18,8 @@ import {
 import { Rating } from 'react-native-ratings';
 import { userContext } from '../App';
 import ratingImage from '../assets/custom_bean.png';
-import Button from '../components/Button';
 import Container from '../components/Container';
+import FloatingButton from '../components/FloatingButton';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import ImagePreview from '../components/ImagePreview';
@@ -25,13 +28,13 @@ import Loading from '../components/Loading';
 import RatingElement from '../components/RatingElement';
 import Review from '../components/Review';
 import Screen from '../components/Screen';
-import Separator from '../components/Separator';
 import Spacer from '../components/Spacer';
 import { Headline, Paragraph } from '../components/Text';
 import {
   addBeansToFavourites,
   checkFavouriteStatus,
   checkReviewStatus,
+  deleteReview,
   getFlavourProfile,
   getUserReviews,
   insertReview,
@@ -40,12 +43,6 @@ import {
 } from '../util/apiFunctions';
 
 const detailStyles = StyleSheet.create({
-  favourite: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    zIndex: 999,
-  },
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -78,6 +75,17 @@ const detailStyles = StyleSheet.create({
   icon: {
     marginLeft: 'auto',
   },
+  deleteButton: {
+    color: '#BC6C25',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  cancel: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 999,
+  },
 });
 
 export default function Detail(props) {
@@ -85,12 +93,15 @@ export default function Detail(props) {
   const { firstName, id, refreshUserContext } = useContext(userContext);
 
   const [isLoading, setLoading] = useState(true);
-  const [flavourProfile, setFlavourProfile] = useState({});
   const [isFavourite, setFavourite] = useState();
-  const [rating, setRating] = useState();
-  const [review, setReview] = useState('');
   const [isReviewed, setReviewed] = useState(false);
   const [userReviewsVisible, setUserReviewsVisible] = useState(false);
+  const [modalIsVisible, setModalVisible] = useState(false);
+  const [editing, setEditing] = useState(false);
+
+  const [flavourProfile, setFlavourProfile] = useState({});
+  const [rating, setRating] = useState();
+  const [review, setReview] = useState('');
   const [userReviews, setUserReviews] = useState([]);
 
   function addButtonHandler() {
@@ -111,11 +122,35 @@ export default function Detail(props) {
   function saveReviewHandler() {
     insertReview(id, params.bean.id, rating, review);
     setReviewed(true);
+    setModalVisible(false);
   }
 
   async function updateReviewHandler() {
     updateReview(id, params.bean.id, rating, review);
     setReviewed(true);
+    setModalVisible(false);
+  }
+
+  function deleteReviewHandler() {
+    Alert.alert(
+      'Delete review',
+      'Are you sure you want to delete your review?',
+      [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            deleteReview(id, params.bean.id);
+            setReviewed(false);
+            removeButtonHandler();
+            setRating('');
+            setReview('');
+          },
+        },
+      ],
+    );
   }
 
   useEffect(() => {
@@ -156,20 +191,35 @@ export default function Detail(props) {
       {isLoading === true ? (
         <Loading />
       ) : (
-        <KeyboardAvoidingView
-          behavior="padding"
-          style={{ flex: 1, alignItems: 'center' }}
-        >
+        <>
+          {isFavourite && !isReviewed && (
+            <FloatingButton
+              label="add review"
+              onPress={() => setModalVisible(true)}
+            />
+          )}
+          {isFavourite && isReviewed && (
+            <FloatingButton
+              label="view review"
+              onPress={() => setModalVisible(true)}
+            />
+          )}
           <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-            <View style={detailStyles.favourite}>
+            <View style={detailStyles.cancel}>
               {isFavourite ? (
-                <TouchableOpacity onPress={removeButtonHandler}>
-                  <AntDesign name="star" size={40} color="#BC6C25" />
-                </TouchableOpacity>
+                <AntDesign
+                  name="star"
+                  size={40}
+                  color="#BC6C25"
+                  onPress={removeButtonHandler}
+                />
               ) : (
-                <TouchableOpacity onPress={addButtonHandler}>
-                  <AntDesign name="staro" size={40} color="#BC6C25" />
-                </TouchableOpacity>
+                <AntDesign
+                  name="staro"
+                  size={40}
+                  color="#BC6C25"
+                  onPress={addButtonHandler}
+                />
               )}
             </View>
             <Container>
@@ -217,11 +267,11 @@ export default function Detail(props) {
                 label="Acidity"
               />
               <RatingElement
-                startingValue={flavourProfile.fruit}
+                startingValue={flavourProfile.intensity}
                 ratingImage={ratingImage}
                 readonly
                 onFinishRating={() => {}}
-                label="Fruit"
+                label="Intensity"
               />
             </Container>
             <Container>
@@ -231,7 +281,7 @@ export default function Detail(props) {
                   setUserReviewsVisible(!userReviewsVisible);
                 }}
               >
-                <Headline>What other users think...</Headline>
+                <Headline>What our users think...</Headline>
                 <AntDesign
                   name="down"
                   size={24}
@@ -241,63 +291,133 @@ export default function Detail(props) {
               </TouchableOpacity>
               {userReviewsVisible &&
                 (userReviews.length === 0 ? (
-                  <Paragraph>No reviews yet...</Paragraph>
+                  <>
+                    <Paragraph>No reviews yet...</Paragraph>
+                    <Spacer />
+                  </>
                 ) : (
                   userReviews.map((userReview) => (
                     <Review key={userReview.uri} item={userReview} />
                   ))
                 ))}
             </Container>
-            {isFavourite &&
-              (isReviewed === false ? (
-                <>
-                  <Container>
-                    <Headline>Rate these beans...</Headline>
-                    <Rating
-                      startingValue={0}
-                      onFinishRating={ratingStateHandler}
-                    />
-                  </Container>
-                  <Container>
-                    <Headline>... and let us know your thoughts:</Headline>
-                    <Input
-                      value={review}
-                      onChangeText={(text) => setReview(text)}
-                      placeholder="Hmmm... beautiful coffeeeee"
-                      multiline
-                    />
-                    <Spacer />
-                    <Button label="save review" onPress={saveReviewHandler} />
-                  </Container>
-                </>
-              ) : (
-                <>
-                  <Container>
-                    <Headline>Your rating</Headline>
-                    <Rating
-                      startingValue={rating}
-                      onFinishRating={ratingStateHandler}
-                    />
-                  </Container>
-                  <Container>
-                    <Headline>Your review:</Headline>
-                    <Input
-                      value={review}
-                      onChangeText={(text) => setReview(text)}
-                      placeholder={review}
-                      multiline
-                      clearButtonMode="while-editing"
-                    />
-                    <Spacer />
-                    <Button
+            {modalIsVisible && !isReviewed && (
+              <Container fill>
+                <Modal
+                  visible={modalIsVisible}
+                  animationType="slide"
+                  presentationStyle="pageSheet"
+                >
+                  <ScrollView
+                    style={{ flex: 1 }}
+                    showsVerticalScrollIndicator={false}
+                  >
+                    <KeyboardAvoidingView
+                      behavior="padding"
+                      style={{ flex: 1, alignItems: 'center' }}
+                    >
+                      <View style={detailStyles.cancel}>
+                        <Entypo
+                          name="cross"
+                          size={36}
+                          color="#BC6C25"
+                          onPress={() => setModalVisible(false)}
+                        />
+                      </View>
+                      <Spacer large />
+                      <Container>
+                        <Headline>Rate these beans...</Headline>
+                        <Spacer />
+                        <Rating
+                          startingValue={0}
+                          onFinishRating={ratingStateHandler}
+                        />
+                      </Container>
+                      <Spacer />
+                      <Container>
+                        <Headline>... and let us know your thoughts:</Headline>
+                        <Spacer />
+                        <Input
+                          value={review}
+                          onChangeText={(text) => setReview(text)}
+                          placeholder="Hmmm... beautiful coffeeeee"
+                          multiline
+                        />
+                      </Container>
+                    </KeyboardAvoidingView>
+                  </ScrollView>
+                  {editing ? (
+                    <FloatingButton
                       label="update review"
                       onPress={updateReviewHandler}
+                      bottom
                     />
-                  </Container>
-                </>
-              ))}
+                  ) : (
+                    <FloatingButton
+                      label="save review"
+                      onPress={saveReviewHandler}
+                      bottom
+                    />
+                  )}
+                </Modal>
+              </Container>
+            )}
+            {modalIsVisible && isReviewed && (
+              <Modal
+                visible={modalIsVisible}
+                animationType="slide"
+                presentationStyle="pageSheet"
+              >
+                <View style={detailStyles.cancel}>
+                  <Entypo
+                    name="cross"
+                    size={36}
+                    color="#BC6C25"
+                    onPress={() => setModalVisible(false)}
+                  />
+                </View>
+                <Spacer large />
+                <Container>
+                  <Headline>Your rating</Headline>
+                  <Rating
+                    startingValue={rating}
+                    onFinishRating={ratingStateHandler}
+                    readonly
+                  />
+                </Container>
+                <Container>
+                  <Headline>Your review:</Headline>
+                  <Input
+                    value={review}
+                    onChangeText={(text) => setReview(text)}
+                    placeholder={review}
+                    multiline
+                    clearButtonMode="while-editing"
+                    editable={false}
+                  />
+                </Container>
+                <Spacer large />
+                <Spacer large />
+                <Container>
+                  <FloatingButton
+                    label="edit review"
+                    onPress={() => {
+                      setEditing(true);
+                      setReviewed(false);
+                      setModalVisible(true);
+                      setReview('');
+                    }}
+                    bottom
+                  />
+                  <Spacer />
+                  <TouchableOpacity onPress={deleteReviewHandler}>
+                    <Text style={detailStyles.deleteButton}>Delete review</Text>
+                  </TouchableOpacity>
+                </Container>
+              </Modal>
+            )}
           </ScrollView>
-        </KeyboardAvoidingView>
+        </>
       )}
       <Footer />
     </Screen>

@@ -42,7 +42,7 @@ export async function getFilteredBeans(query) {
   return data;
 }
 
-export async function getRecommendations(body, acidity, fruit) {
+export async function getRecommendations(body, acidity, intensity) {
   const response = await fetch(`${apiBaseUrl}/actions/get_recommendations`, {
     method: 'POST',
     headers: {
@@ -52,7 +52,7 @@ export async function getRecommendations(body, acidity, fruit) {
     body: JSON.stringify({
       body: body,
       acidity: acidity,
-      fruit: fruit,
+      intensity: intensity,
     }),
   });
   const data = await response.json();
@@ -173,9 +173,7 @@ export async function addBeansToFavourites(firstName, userId, beanId) {
     });
 
     const data = await response.json();
-    if (data.message) {
-      alert(data.message);
-    } else {
+    if (!data) {
       alert('Oops.. something went wrong');
     }
   }
@@ -195,9 +193,7 @@ export async function removeBeansFromFavourites(userId, beanId) {
   });
 
   const data = await response.json();
-  if (data.message) {
-    alert(data.message);
-  } else {
+  if (!data) {
     alert('Oops.. something went wrong');
   }
 }
@@ -285,6 +281,27 @@ export async function updateReview(userId, beanId, rating, review) {
   }
 }
 
+export async function deleteReview(userId, beanId) {
+  const response = await fetch(`${apiBaseUrl}/actions/remove_review`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: userId,
+      beanId: beanId,
+    }),
+  });
+
+  const data = await response.json();
+  if (data.message) {
+    alert(data.message);
+  } else {
+    alert('Oops.. something went wrong');
+  }
+}
+
 export async function updateProfileImage(id, profileImage) {
   const response = await fetch(`${apiBaseUrl}/actions/update_profile_image`, {
     method: 'PUT',
@@ -299,7 +316,6 @@ export async function updateProfileImage(id, profileImage) {
   });
 
   const data = await response.json();
-  console.log('api function data', data);
   if (data.message) {
     alert(data.message);
   } else {
@@ -361,6 +377,13 @@ export async function insertSetup(userId, machineId, grinderId) {
       grinderId: grinderId,
     }),
   });
+
+  const data = await response.json();
+  if (data.message) {
+    alert(data.message);
+  } else {
+    alert('Oops.. something went wrong');
+  }
 }
 
 export async function updateSetup(userId, machineId, grinderId) {
@@ -425,7 +448,7 @@ export async function insertPreference(
   userId: number,
   beanType: string,
   body: number,
-  fruit: number,
+  intensity: number,
   acidity: number,
 ) {
   const response = await fetch(`${apiBaseUrl}/actions/insert_preference`, {
@@ -438,7 +461,7 @@ export async function insertPreference(
       userId: userId,
       beanType: beanType,
       body: body,
-      fruit: fruit,
+      intensity: intensity,
       acidity: acidity,
     }),
   });
@@ -491,7 +514,13 @@ export async function clearPreference(userId: number) {
   }
 }
 
-export async function updatePreference(userId, beanType, body, fruit, acidity) {
+export async function updatePreference(
+  userId,
+  beanType,
+  body,
+  intensity,
+  acidity,
+) {
   const response = await fetch(`${apiBaseUrl}/actions/update_preference`, {
     method: 'PUT',
     headers: {
@@ -502,7 +531,7 @@ export async function updatePreference(userId, beanType, body, fruit, acidity) {
       userId: userId,
       beanType: beanType,
       body: body,
-      fruit: fruit,
+      intensity: intensity,
       acidity: acidity,
     }),
   });

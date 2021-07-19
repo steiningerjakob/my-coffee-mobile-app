@@ -77,7 +77,7 @@ export type Grinder = {
 export type FlavourProfile = {
   id: number;
   body: number;
-  fruit: number;
+  intensity: number;
   acidity: number;
 };
 
@@ -99,6 +99,8 @@ export type UserRating = Rating & {
   firstName: string;
   lastName: string;
   profileImage: string;
+  machineName: string;
+  grinderName: string;
 };
 
 export type Setup = {
@@ -117,7 +119,7 @@ export type Preference = {
   userId: number;
   beanType: string;
   body: number;
-  fruit: number;
+  intensity: number;
   acidity: number;
 };
 

@@ -7,14 +7,14 @@ export default async function insertPreferenceHandler(
 ) {
   if (req.method === 'POST') {
     // Destructure relevant information from the request body
-    const { userId, beanType, body, fruit, acidity } = req.body;
+    const { userId, beanType, body, intensity, acidity } = req.body;
 
     // Insert into database
     const newPreference = await insertPreference(
       userId,
       beanType,
       body,
-      fruit,
+      intensity,
       acidity,
     );
 
