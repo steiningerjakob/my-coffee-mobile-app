@@ -1,11 +1,15 @@
 import {
   checkFavouriteStatus,
   checkReviewStatus,
+  connectOneTimeToDatabase,
+  deleteReview,
+  deleteUser,
   getAllBeans,
   getFilteredBeans,
   insertFavourite,
   insertReview,
   insertUser,
+  removeFavourite,
 } from '../database';
 
 test('getAllBeans returns an array with bean objects', async () => {
@@ -27,6 +31,9 @@ test('insertFavourite creates DB entry with specified IDs', async () => {
   expect(newFavourite.beanId).toBe(testBeanId);
   const favouriteStatus = await checkFavouriteStatus(testUserId, testBeanId);
   expect(favouriteStatus).toBeTruthy();
+  const deletedFavourite = await removeFavourite(testUserId, testBeanId);
+  expect(deletedFavourite.userId).toBe(testUserId);
+  expect(deletedFavourite.beanId).toBe(testBeanId);
 });
 
 test('insertReview creates DB entry with specified rating and review', async () => {
@@ -45,11 +52,14 @@ test('insertReview creates DB entry with specified rating and review', async () 
   const reviewStatus = await checkReviewStatus(testUserId, testBeanId);
   expect(reviewStatus.userRating).toBe(testRating);
   expect(reviewStatus.userReview).toBe(testReview);
+  const deletedReview = await deleteReview(testUserId, testBeanId);
+  expect(deletedReview.userRating).toBe(testRating);
+  expect(deletedReview.userReview).toBe(testReview);
 });
 
 test('insertUser creates correct DB entry', async () => {
-  const testFirstName = 'Jakob';
-  const testLastName = 'Steininger';
+  const testFirstName = 'FirstName';
+  const testLastName = 'LastName';
   const testEmail = 'Email';
   const testPasswordHash = '1234abcd';
   const newUser = await insertUser(
@@ -61,4 +71,13 @@ test('insertUser creates correct DB entry', async () => {
   expect(newUser.firstName).toBe(testFirstName);
   expect(newUser.lastName).toBe(testLastName);
   expect(newUser.email).toBe(testEmail);
+  const deletedUser = await deleteUser(testEmail);
+  expect(deletedUser.firstName).toBe(testFirstName);
+  expect(deletedUser.lastName).toBe(testLastName);
+  expect(deletedUser.email).toBe(testEmail);
+});
+
+afterAll(() => {
+  const sql = connectOneTimeToDatabase();
+  sql.end({ timeout: 0 });
 });

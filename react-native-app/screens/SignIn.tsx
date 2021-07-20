@@ -79,9 +79,9 @@ export default function SignIn() {
           <Input
             value={email}
             onChangeText={(text) => setEmail(text)}
-            placeholder="Email"
+            placeholder="Username"
             clearButtonMode="while-editing"
-            type="emailAddress"
+            type="text"
           />
           <Spacer large />
           <Paragraph>Password:</Paragraph>

@@ -69,7 +69,7 @@ export default function Favourites() {
   return (
     <Screen>
       <Header
-        label="Favourites"
+        label="My coffee list"
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />

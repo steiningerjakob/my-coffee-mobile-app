@@ -2,9 +2,10 @@ import {
   AntDesign,
   Entypo,
   Fontisto,
+  Ionicons,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -15,6 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Tooltip } from 'react-native-elements';
 import { Rating } from 'react-native-ratings';
 import { userContext } from '../App';
 import ratingImage from '../assets/custom_bean.png';
@@ -93,7 +95,7 @@ export default function Detail(props) {
   const { firstName, id, refreshUserContext } = useContext(userContext);
 
   const [isLoading, setLoading] = useState(true);
-  const [isFavourite, setFavourite] = useState();
+  const [isFavourite, setFavourite] = useState(false);
   const [isReviewed, setReviewed] = useState(false);
   const [userReviewsVisible, setUserReviewsVisible] = useState(false);
   const [modalIsVisible, setModalVisible] = useState(false);
@@ -104,14 +106,19 @@ export default function Detail(props) {
   const [review, setReview] = useState('');
   const [userReviews, setUserReviews] = useState([]);
 
+  const addTooltip = useRef(null);
+  const removeTooltip = useRef(null);
+
   function addButtonHandler() {
     addBeansToFavourites(firstName, id, params.bean.id);
     setFavourite(true);
+    removeTooltip.current.toggleTooltip();
   }
 
   function removeButtonHandler() {
     removeBeansFromFavourites(id, params.bean.id);
     setFavourite(false);
+    addTooltip.current.toggleTooltip();
   }
 
   function ratingStateHandler(userInput) {
@@ -211,19 +218,34 @@ export default function Detail(props) {
             <View style={detailStyles.cancel}>
               {/* eslint-disable-next-line */}
               {isFavourite ? (
-                <AntDesign
-                  name="star"
-                  size={40}
-                  color="#BC6C25"
-                  onPress={removeButtonHandler}
-                />
+                <Tooltip
+                  popover={<Text>Added to your list</Text>}
+                  ref={addTooltip}
+                  backgroundColor="#DDA15E"
+                  withOverlay={false}
+                >
+                  <Ionicons
+                    name="checkmark-circle"
+                    size={40}
+                    color="#BC6C25"
+                    onPress={removeButtonHandler}
+                  />
+                </Tooltip>
               ) : (
-                <AntDesign
-                  name="staro"
-                  size={40}
-                  color="#BC6C25"
-                  onPress={addButtonHandler}
-                />
+                <Tooltip
+                  popover={<Text>Removed from your list</Text>}
+                  ref={removeTooltip}
+                  backgroundColor="#DDA15E"
+                  width={180}
+                  withOverlay={false}
+                >
+                  <Ionicons
+                    name="checkmark-circle-outline"
+                    size={40}
+                    color="#BC6C25"
+                    onPress={addButtonHandler}
+                  />
+                </Tooltip>
               )}
             </View>
             <Container>

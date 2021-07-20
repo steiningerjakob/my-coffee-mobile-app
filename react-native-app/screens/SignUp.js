@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { userContext } from '../App';
@@ -13,7 +12,6 @@ import { Paragraph } from '../components/Text';
 import { apiBaseUrl } from '../util/apiBaseUrl';
 
 export default function SignUp() {
-  const navigation = useNavigation();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -60,6 +58,7 @@ export default function SignUp() {
             type="name"
           />
           <Spacer />
+          <Spacer />
           <Paragraph>Last name:</Paragraph>
           <Input
             value={lastName}
@@ -69,14 +68,16 @@ export default function SignUp() {
             type="name"
           />
           <Spacer />
-          <Paragraph>Email:</Paragraph>
+          <Spacer />
+          <Paragraph>Username:</Paragraph>
           <Input
             value={email}
             onChangeText={(text) => setEmail(text)}
-            placeholder="Email"
+            placeholder="Username"
             clearButtonMode="while-editing"
-            type="emailAddress"
+            type="name"
           />
+          <Spacer />
           <Spacer />
           <Paragraph>Password:</Paragraph>
           <Input

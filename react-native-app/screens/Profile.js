@@ -1,4 +1,4 @@
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useCallback, useContext, useState } from 'react';
@@ -7,11 +7,17 @@ import { userContext } from '../App';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
 import { Headline } from '../components/Text';
 import { apiBaseUrl } from '../util/apiBaseUrl';
-import { checkProfileImageStatus } from '../util/apiFunctions';
+import {
+  checkProfileImageStatus,
+  getPreference,
+  getUserFavourites,
+  getUserSetups,
+} from '../util/apiFunctions';
 
 const linkStyles = StyleSheet.create({
   wrapper: {
@@ -26,6 +32,11 @@ const linkStyles = StyleSheet.create({
   title: { fontSize: 24, color: 'black', textAlign: 'left' },
   icon: {
     marginLeft: 'auto',
+  },
+  prefix: {
+    marginRight: 12,
+    fontSize: 24,
+    color: '#BC6C25',
   },
 });
 
@@ -58,9 +69,15 @@ export default function Profile() {
   const { id, firstName, refreshUserContext } = useContext(userContext);
 
   const [profileImage, setProfileImage] = useState(null);
+  const [userSetup, setUserSetup] = useState(false);
+  const [userPreferences, setUserPreferences] = useState(false);
+  const [userFavourites, setUserFavourites] = useState([]);
+
+  const [loading, setLoading] = useState(false);
 
   // Source: https://dev.to/joypalumbo/uploading-images-to-cloudinary-in-react-native-using-cloudinary-s-api-37mo
   async function selectProfileImage() {
+    setLoading(true);
     // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     // console.log(status);
     // if (status !== 'granted') {
@@ -94,6 +111,7 @@ export default function Profile() {
 
     const data = await response.json();
     if (data) {
+      setLoading(false);
       alert(data.message);
       setProfileImage(data.imageURL);
     } else {
@@ -108,6 +126,21 @@ export default function Profile() {
           setProfileImage(result.profileImage);
         }
       });
+      getUserSetups(id).then((setup) => {
+        if (setup.userSetup) {
+          setUserSetup(setup.userSetup);
+        }
+      });
+      getPreference(id).then((preference) => {
+        if (preference.beanType) {
+          setUserPreferences(preference.beanType);
+        }
+      });
+      getUserFavourites(id).then((data) => {
+        if (data) {
+          setUserFavourites(data.userFavourites);
+        }
+      });
     }, [id]),
   );
 
@@ -118,6 +151,7 @@ export default function Profile() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
+
       <Container fill>
         <Container>
           <Headline>Welcome back, {firstName}!</Headline>
@@ -127,18 +161,28 @@ export default function Profile() {
               onPress={selectProfileImage}
               style={profileImageStyles.wrapper}
             >
-              <AntDesign name="camerao" size={32} color="lightgray" />
-              <Text style={profileImageStyles.text}>Upload image</Text>
+              {loading ? (
+                <Loading label="Loading..." />
+              ) : (
+                <>
+                  <AntDesign name="camerao" size={32} color="lightgray" />
+                  <Text style={profileImageStyles.text}>Upload image</Text>
+                </>
+              )}
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               onPress={selectProfileImage}
               style={profileImageStyles.wrapper}
             >
-              <Image
-                source={{ uri: profileImage }}
-                style={profileImageStyles.image}
-              />
+              {loading ? (
+                <Loading label="Loading..." />
+              ) : (
+                <Image
+                  source={{ uri: profileImage }}
+                  style={profileImageStyles.image}
+                />
+              )}
             </TouchableOpacity>
           )}
         </Container>
@@ -147,7 +191,8 @@ export default function Profile() {
             style={linkStyles.wrapper}
             onPress={() => navigation.navigate('Favourites')}
           >
-            <Text style={linkStyles.title}>My favourites</Text>
+            <Text style={linkStyles.prefix}>({userFavourites.length})</Text>
+            <Text style={linkStyles.title}>My list</Text>
             <AntDesign
               name="right"
               size={24}
@@ -159,6 +204,14 @@ export default function Profile() {
             style={linkStyles.wrapper}
             onPress={() => navigation.navigate('Preferences')}
           >
+            {userPreferences ? (
+              <Ionicons name="checkmark-circle" style={linkStyles.prefix} />
+            ) : (
+              <Ionicons
+                name="checkmark-circle-outline"
+                style={linkStyles.prefix}
+              />
+            )}
             <Text style={linkStyles.title}>My preferences</Text>
             <AntDesign
               name="right"
@@ -171,6 +224,14 @@ export default function Profile() {
             style={linkStyles.wrapper}
             onPress={() => navigation.navigate('Setup')}
           >
+            {userSetup.length > 0 ? (
+              <Ionicons name="checkmark-circle" style={linkStyles.prefix} />
+            ) : (
+              <Ionicons
+                name="checkmark-circle-outline"
+                style={linkStyles.prefix}
+              />
+            )}
             <Text style={linkStyles.title}>My setup</Text>
             <AntDesign
               name="right"

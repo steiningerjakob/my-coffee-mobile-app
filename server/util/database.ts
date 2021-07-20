@@ -34,7 +34,7 @@ declare module globalThis {
 
 // Connect only once to the database
 // https://github.com/vercel/next.js/issues/7811#issuecomment-715259370
-function connectOneTimeToDatabase() {
+export function connectOneTimeToDatabase() {
   let sql;
 
   if (process.env.NODE_ENV === 'production') {
@@ -207,6 +207,17 @@ export async function insertUser(
       profile_image
   `;
   return newUser.map((user) => camelcaseKeys(user))[0];
+}
+
+export async function deleteUser(email: string) {
+  const deletedUser = await sql<User>`
+    DELETE FROM users
+    WHERE
+      email = ${email}
+    RETURNING
+      *
+  `;
+  return deletedUser.map((user) => camelcaseKeys(user))[0];
 }
 
 export async function insertSession(token: string, userId: number) {
