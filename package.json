@@ -36,7 +36,8 @@
   },
   "scripts": {
     "server": "cd server && yarn jest",
-    "server-lockfile": "cd server && yarn --frozen-lockfile"
+    "server-lockfile": "cd server && yarn --frozen-lockfile",
+    "server-migrate-up": "cd server && yarn migrate up"
   },
   "dependencies": {}
 }
