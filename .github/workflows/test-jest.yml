@@ -20,9 +20,7 @@ jobs:
           postgresql user: ${{ secrets.PGUSERNAME }}
           postgresql password: ${{ secrets.PGPASSWORD }}
       - name: Checkout
-      # Use the official Checkout action:
-      # https://github.com/actions/checkout
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
       # Use the official setup-node action:
       # https://github.com/actions/setup-node
       - name: Use Node.js
