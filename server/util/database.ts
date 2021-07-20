@@ -55,6 +55,8 @@ export function connectOneTimeToDatabase() {
 // Connect to PostgreSQL
 const sql = connectOneTimeToDatabase();
 
+console.log('secret', process.env.PGDATABASE);
+
 // 1. User-related queries:
 
 export async function getAllUsers() {
