@@ -29,11 +29,14 @@ jobs:
           node-version: '16.x'
       # Install all dependencies
       - run: yarn server-lockfile
-      # Run the Jest unit tests
-      - name: run tests
-        with:
-          build: yarn server-migrate-up
-          start: yarn server
+      - run: yarn server-migrate-up
+        env:
+          PGHOST: localhost
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+          PGUSERNAME: ${{ secrets.PGUSERNAME }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          CLOUDINARY_UPLOAD_PRESET: ${{ secrets.CLOUDINARY_UPLOAD_PRESET }}
+      - run: yarn server
         env:
           PGHOST: localhost
           PGDATABASE: ${{ secrets.PGDATABASE }}
