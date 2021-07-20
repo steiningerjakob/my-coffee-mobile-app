@@ -27,40 +27,6 @@ test('getFilteredBeans returns queried beans', async () => {
   expect(filteredBeans[0].beanType).toBe('100% Arabica');
 });
 
-test('insertFavourite creates DB entry with specified IDs', async () => {
-  const testUserId = 1;
-  const testBeanId = 2;
-  const newFavourite = await insertFavourite(testUserId, testBeanId);
-  expect(newFavourite.userId).toBe(testUserId);
-  expect(newFavourite.beanId).toBe(testBeanId);
-  const favouriteStatus = await checkFavouriteStatus(testUserId, testBeanId);
-  expect(favouriteStatus).toBeTruthy();
-  const deletedFavourite = await removeFavourite(testUserId, testBeanId);
-  expect(deletedFavourite.userId).toBe(testUserId);
-  expect(deletedFavourite.beanId).toBe(testBeanId);
-});
-
-test('insertReview creates DB entry with specified rating and review', async () => {
-  const testUserId = 1;
-  const testBeanId = 2;
-  const testRating = '4';
-  const testReview = 'Pretty good';
-  const newReview = await insertReview(
-    testUserId,
-    testBeanId,
-    testRating,
-    testReview,
-  );
-  expect(newReview.userRating).toBe(testRating);
-  expect(newReview.userReview).toBe(testReview);
-  const reviewStatus = await checkReviewStatus(testUserId, testBeanId);
-  expect(reviewStatus.userRating).toBe(testRating);
-  expect(reviewStatus.userReview).toBe(testReview);
-  const deletedReview = await deleteReview(testUserId, testBeanId);
-  expect(deletedReview.userRating).toBe(testRating);
-  expect(deletedReview.userReview).toBe(testReview);
-});
-
 test('insertUser creates correct DB entry', async () => {
   const testFirstName = 'FirstName';
   const testLastName = 'LastName';
@@ -79,6 +45,64 @@ test('insertUser creates correct DB entry', async () => {
   expect(deletedUser.firstName).toBe(testFirstName);
   expect(deletedUser.lastName).toBe(testLastName);
   expect(deletedUser.email).toBe(testEmail);
+});
+
+test('insertFavourite creates DB entry with specified IDs', async () => {
+  const testFirstName = 'FirstName';
+  const testLastName = 'LastName';
+  const testEmail = 'Email';
+  const testPasswordHash = '1234abcd';
+  const testUserId = 1;
+  const testBeanId = 2;
+  const newUser = await insertUser(
+    testFirstName,
+    testLastName,
+    testEmail,
+    testPasswordHash,
+  );
+  expect(newUser.id).toBe(1);
+  const newFavourite = await insertFavourite(testUserId, testBeanId);
+  expect(newFavourite.userId).toBe(testUserId);
+  expect(newFavourite.beanId).toBe(testBeanId);
+  const favouriteStatus = await checkFavouriteStatus(testUserId, testBeanId);
+  expect(favouriteStatus).toBeTruthy();
+  const deletedFavourite = await removeFavourite(testUserId, testBeanId);
+  expect(deletedFavourite.userId).toBe(testUserId);
+  expect(deletedFavourite.beanId).toBe(testBeanId);
+  await deleteUser(testEmail);
+});
+
+test('insertReview creates DB entry with specified rating and review', async () => {
+  const testFirstName = 'FirstName';
+  const testLastName = 'LastName';
+  const testEmail = 'Email';
+  const testPasswordHash = '1234abcd';
+  const testUserId = 1;
+  const testBeanId = 2;
+  const testRating = '4';
+  const testReview = 'Pretty good';
+  const newUser = await insertUser(
+    testFirstName,
+    testLastName,
+    testEmail,
+    testPasswordHash,
+  );
+  expect(newUser.id).toBe(1);
+  const newReview = await insertReview(
+    testUserId,
+    testBeanId,
+    testRating,
+    testReview,
+  );
+  expect(newReview.userRating).toBe(testRating);
+  expect(newReview.userReview).toBe(testReview);
+  const reviewStatus = await checkReviewStatus(testUserId, testBeanId);
+  expect(reviewStatus.userRating).toBe(testRating);
+  expect(reviewStatus.userReview).toBe(testReview);
+  const deletedReview = await deleteReview(testUserId, testBeanId);
+  expect(deletedReview.userRating).toBe(testRating);
+  expect(deletedReview.userReview).toBe(testReview);
+  await deleteUser(testEmail);
 });
 
 afterAll(() => {
