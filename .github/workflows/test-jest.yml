@@ -19,6 +19,6 @@ jobs:
         with:
           node-version: '16.x'
       # Install all dependencies
-      - run: yarn lockfile
+      - run: yarn server-lockfile
       # Run the Jest unit tests
       - run: yarn server
