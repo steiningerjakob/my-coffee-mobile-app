@@ -28,6 +28,7 @@ test('getFilteredBeans returns queried beans', async () => {
 });
 
 test('insertUser creates correct DB entry', async () => {
+  // insert user
   const testFirstName = 'FirstName';
   const testLastName = 'LastName';
   const testEmail = 'Email';
@@ -41,53 +42,19 @@ test('insertUser creates correct DB entry', async () => {
   expect(newUser.firstName).toBe(testFirstName);
   expect(newUser.lastName).toBe(testLastName);
   expect(newUser.email).toBe(testEmail);
-  const deletedUser = await deleteUser(testEmail);
-  expect(deletedUser.firstName).toBe(testFirstName);
-  expect(deletedUser.lastName).toBe(testLastName);
-  expect(deletedUser.email).toBe(testEmail);
-});
 
-test('insertFavourite creates DB entry with specified IDs', async () => {
-  const testFirstName = 'FirstName';
-  const testLastName = 'LastName';
-  const testEmail = 'Email';
-  const testPasswordHash = '1234abcd';
-  const testUserId = 1;
+  // add to favourites list
+  const testUserId = newUser.id;
   const testBeanId = 2;
-  const newUser = await insertUser(
-    testFirstName,
-    testLastName,
-    testEmail,
-    testPasswordHash,
-  );
-  expect(newUser.id).toBe(1);
   const newFavourite = await insertFavourite(testUserId, testBeanId);
   expect(newFavourite.userId).toBe(testUserId);
   expect(newFavourite.beanId).toBe(testBeanId);
   const favouriteStatus = await checkFavouriteStatus(testUserId, testBeanId);
   expect(favouriteStatus).toBeTruthy();
-  const deletedFavourite = await removeFavourite(testUserId, testBeanId);
-  expect(deletedFavourite.userId).toBe(testUserId);
-  expect(deletedFavourite.beanId).toBe(testBeanId);
-  await deleteUser(testEmail);
-});
 
-test('insertReview creates DB entry with specified rating and review', async () => {
-  const testFirstName = 'FirstName';
-  const testLastName = 'LastName';
-  const testEmail = 'Email';
-  const testPasswordHash = '1234abcd';
-  const testUserId = 1;
-  const testBeanId = 2;
+  // add review and rating
   const testRating = '4';
   const testReview = 'Pretty good';
-  const newUser = await insertUser(
-    testFirstName,
-    testLastName,
-    testEmail,
-    testPasswordHash,
-  );
-  expect(newUser.id).toBe(1);
   const newReview = await insertReview(
     testUserId,
     testBeanId,
@@ -99,10 +66,22 @@ test('insertReview creates DB entry with specified rating and review', async () 
   const reviewStatus = await checkReviewStatus(testUserId, testBeanId);
   expect(reviewStatus.userRating).toBe(testRating);
   expect(reviewStatus.userReview).toBe(testReview);
+
+  // delete review and rating
   const deletedReview = await deleteReview(testUserId, testBeanId);
   expect(deletedReview.userRating).toBe(testRating);
   expect(deletedReview.userReview).toBe(testReview);
-  await deleteUser(testEmail);
+
+  // remove from favourite list
+  const deletedFavourite = await removeFavourite(testUserId, testBeanId);
+  expect(deletedFavourite.userId).toBe(testUserId);
+  expect(deletedFavourite.beanId).toBe(testBeanId);
+
+  // delete user
+  const deletedUser = await deleteUser(testEmail);
+  expect(deletedUser.firstName).toBe(testFirstName);
+  expect(deletedUser.lastName).toBe(testLastName);
+  expect(deletedUser.email).toBe(testEmail);
 });
 
 afterAll(() => {
