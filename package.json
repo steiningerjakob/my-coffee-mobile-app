@@ -34,5 +34,9 @@
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-testing-library": "4.6.0"
   },
+  "scripts": {
+    "server": "cd server && yarn jest",
+    "lockfile": "cd server && yarn --frozen-lockfile"
+  },
   "dependencies": {}
 }
