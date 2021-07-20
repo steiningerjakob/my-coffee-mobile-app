@@ -12,6 +12,10 @@ import {
   removeFavourite,
 } from '../database';
 
+beforeAll(() => {
+  connectOneTimeToDatabase();
+});
+
 test('getAllBeans returns an array with bean objects', async () => {
   const beans = await getAllBeans();
   expect(beans.length).toBeGreaterThan(0);
