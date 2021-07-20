@@ -31,7 +31,6 @@ jobs:
       - run: yarn server-lockfile
       # Run the Jest unit tests
       - name: run tests
-        uses: cypress-io/github-action@v2
         with:
           build: yarn server-migrate-up
           start: yarn server
