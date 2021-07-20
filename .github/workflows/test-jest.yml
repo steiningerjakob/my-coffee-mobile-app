@@ -22,3 +22,8 @@ jobs:
       - run: yarn server-lockfile
       # Run the Jest unit tests
       - run: yarn server
+        env:
+          PGHOST: localhost
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+          PGUSERNAME: ${{ secrets.PGUSERNAME }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
