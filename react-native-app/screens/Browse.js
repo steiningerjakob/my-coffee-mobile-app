@@ -204,7 +204,7 @@ export default function Browse() {
           </Container>
         </>
       )}
-      <Footer />
+      <Footer firstName={firstName} />
     </Screen>
   );
 }

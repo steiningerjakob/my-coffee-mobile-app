@@ -486,7 +486,7 @@ export default function Preferences() {
           )}
         </Modal>
       )}
-      <Footer />
+      <Footer firstName={firstName} />
     </Screen>
   );
 }

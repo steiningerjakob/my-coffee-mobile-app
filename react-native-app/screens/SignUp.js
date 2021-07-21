@@ -92,7 +92,7 @@ export default function SignUp() {
       <Container>
         <Button label="sign up" onPress={createUser} />
       </Container>
-      <Footer />
+      <Footer firstName={firstName} />
     </Screen>
   );
 }

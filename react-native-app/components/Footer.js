@@ -4,8 +4,10 @@ import {
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useRef } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-elements';
+import { Tooltip } from 'react-native-elements/dist/tooltip/Tooltip';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const footerStyles = StyleSheet.create({
@@ -42,6 +44,15 @@ const footerStyles = StyleSheet.create({
     padding: 12,
     overflow: 'visible',
   },
+  element: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    height: 32,
+  },
   label: {
     fontSize: 8,
     color: 'white',
@@ -51,35 +62,136 @@ const footerStyles = StyleSheet.create({
   },
 });
 
-export default function Footer() {
+export default function Footer(props) {
   const navigation = useNavigation();
+
+  const tooltipFav = useRef(null);
+  const tooltipBrowse = useRef(null);
+  const tooltipScan = useRef(null);
+  const tooltipMap = useRef(null);
+  const tooltipPro = useRef(null);
+
+  const tooltipText = 'You need to be logged in to perform this action';
+
   return (
     <SafeAreaView style={footerStyles.safeAreaView}>
       <View style={footerStyles.container}>
         <View style={footerStyles.wrapperLeft}>
-          <TouchableOpacity onPress={() => navigation.navigate('Favourites')}>
-            <AntDesign name="staro" size={32} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Browse')}>
-            <AntDesign name="search1" size={32} color="white" />
-          </TouchableOpacity>
+          <View style={footerStyles.element}>
+            <Tooltip
+              popover={<Text style={{ color: 'white' }}>{tooltipText}</Text>}
+              ref={tooltipFav}
+              backgroundColor="#5C5552"
+              width={180}
+              height={56}
+              withOverlay={false}
+            >
+              <AntDesign
+                name="staro"
+                size={32}
+                color="white"
+                style={footerStyles.icon}
+                onPress={
+                  props.firstName
+                    ? () => navigation.navigate('Favourites')
+                    : () => tooltipFav.current.toggleTooltip()
+                }
+              />
+            </Tooltip>
+            <Text style={footerStyles.label}>Favourites</Text>
+          </View>
+          <View style={footerStyles.element}>
+            <Tooltip
+              popover={<Text style={{ color: 'white' }}>{tooltipText}</Text>}
+              ref={tooltipBrowse}
+              backgroundColor="#5C5552"
+              width={180}
+              height={56}
+              withOverlay={false}
+            >
+              <AntDesign
+                name="search1"
+                size={32}
+                color="white"
+                style={footerStyles.icon}
+                onPress={
+                  props.firstName
+                    ? () => navigation.navigate('Browse')
+                    : () => tooltipBrowse.current.toggleTooltip()
+                }
+              />
+            </Tooltip>
+            <Text style={footerStyles.label}>Browse</Text>
+          </View>
         </View>
         <View style={footerStyles.scanner}>
-          <TouchableOpacity onPress={() => navigation.navigate('Scanner')}>
+          <Tooltip
+            popover={<Text style={{ color: 'white' }}>{tooltipText}</Text>}
+            ref={tooltipScan}
+            backgroundColor="#5C5552"
+            width={180}
+            height={56}
+            withOverlay={false}
+          >
             <MaterialCommunityIcons
               name="barcode-scan"
               size={32}
               color="#BC6C25"
+              onPress={
+                props.firstName
+                  ? () => navigation.navigate('Scanner')
+                  : () => tooltipScan.current.toggleTooltip()
+              }
             />
-          </TouchableOpacity>
+          </Tooltip>
         </View>
         <View style={footerStyles.wrapperRight}>
-          <TouchableOpacity onPress={() => navigation.navigate('Map')}>
-            <Ionicons name="ios-map-outline" size={32} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <AntDesign name="user" size={32} color="white" />
-          </TouchableOpacity>
+          <View style={footerStyles.element}>
+            <Tooltip
+              popover={<Text style={{ color: 'white' }}>{tooltipText}</Text>}
+              ref={tooltipMap}
+              backgroundColor="#5C5552"
+              width={180}
+              height={56}
+              withOverlay={false}
+            >
+              <Ionicons
+                name="ios-map-outline"
+                size={32}
+                color="white"
+                onPress={
+                  props.firstName
+                    ? () => navigation.navigate('Map')
+                    : () => tooltipMap.current.toggleTooltip()
+                }
+                style={footerStyles.icon}
+              />
+            </Tooltip>
+            <Text style={footerStyles.label}>Find store</Text>
+          </View>
+          <View style={footerStyles.element}>
+            <Tooltip
+              popover={<Text style={{ color: 'white' }}>{tooltipText}</Text>}
+              ref={tooltipPro}
+              backgroundColor="#5C5552"
+              width={180}
+              height={56}
+              withOverlay={false}
+            >
+              <AntDesign
+                name="user"
+                size={32}
+                color="white"
+                onPress={
+                  props.firstName
+                    ? () => navigation.navigate('Profile')
+                    : () => tooltipPro.current.toggleTooltip()
+                }
+                style={footerStyles.icon}
+              />
+            </Tooltip>
+            <Text style={footerStyles.label}>Profile</Text>
+          </View>
         </View>
       </View>
     </SafeAreaView>

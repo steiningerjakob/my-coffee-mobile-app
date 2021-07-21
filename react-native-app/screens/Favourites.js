@@ -111,7 +111,7 @@ export default function Favourites() {
           </Container>
         </>
       )}
-      <Footer />
+      <Footer firstName={firstName} />
     </Screen>
   );
 }

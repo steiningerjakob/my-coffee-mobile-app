@@ -102,7 +102,7 @@ export default function Scanner() {
           <Spacer />
         </Container>
       )}
-      <Footer />
+      <Footer firstName={firstName} />
     </Screen>
   );
 }

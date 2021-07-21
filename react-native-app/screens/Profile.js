@@ -1,53 +1,48 @@
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useCallback, useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { userContext } from '../App';
+import Button from '../components/Button';
 import Container from '../components/Container';
+import FloatingButton from '../components/FloatingButton';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import Input from '../components/Input';
 import Loading from '../components/Loading';
 import Screen from '../components/Screen';
 import Spacer from '../components/Spacer';
-import { Headline } from '../components/Text';
+import { Headline, Paragraph } from '../components/Text';
 import { apiBaseUrl } from '../util/apiBaseUrl';
 import {
   checkProfileImageStatus,
+  deleteUser,
   getPreference,
   getUserFavourites,
   getUserSetups,
+  logoutUser,
+  updateUser,
 } from '../util/apiFunctions';
 
-const linkStyles = StyleSheet.create({
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 24,
-    borderBottomColor: 'lightgray',
-    borderBottomWidth: 1,
-    width: 320,
-  },
-  title: { fontSize: 24, color: 'black', textAlign: 'left' },
-  icon: {
-    marginLeft: 'auto',
-  },
-  prefix: {
-    marginRight: 12,
-    fontSize: 24,
-    color: '#BC6C25',
-  },
-});
-
-const profileImageStyles = StyleSheet.create({
+const profileStyles = StyleSheet.create({
   image: {
     resizeMode: 'cover',
     width: 160,
     height: 160,
     borderRadius: 100,
   },
-  wrapper: {
+  imageWrapper: {
     width: 160,
     height: 160,
     borderRadius: 100,
@@ -57,33 +52,78 @@ const profileImageStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
+  imageLabel: {
     textAlign: 'center',
     color: 'lightgray',
+  },
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 1,
+    width: '100%',
+  },
+  title: { fontSize: 24, color: 'black', textAlign: 'left' },
+  icon: {
+    marginLeft: 'auto',
+  },
+  prefixWrapper: {
+    width: 48,
+    alignContent: 'flex-start',
+  },
+  prefix: {
+    marginRight: 12,
+    fontSize: 24,
+    color: '#BC6C25',
+  },
+  clear: {
+    color: '#BC6C25',
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 8,
+  },
+  cancel: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 999,
   },
 });
 
 export default function Profile() {
   const navigation = useNavigation();
 
-  const { id, firstName, refreshUserContext } = useContext(userContext);
+  const { id, firstName, email, refreshUserContext } = useContext(userContext);
 
   const [profileImage, setProfileImage] = useState(null);
   const [userSetup, setUserSetup] = useState(false);
   const [userPreferences, setUserPreferences] = useState(false);
   const [userFavourites, setUserFavourites] = useState([]);
 
+  const [draftFirstName, setDraftFirstName] = useState('');
+  const [draftLastName, setDraftLastName] = useState('');
+  const [draftEmail, setDraftEmail] = useState('');
+  const [draftPassword, setDraftPassword] = useState('');
+
+  const [outputFirstName, setOutputFirstName] = useState(firstName);
+  const [outputEmail, setOutputEmail] = useState(email);
+
   const [loading, setLoading] = useState(false);
+  const [modalIsVisible, setModalVisible] = useState(false);
 
   // Source: https://dev.to/joypalumbo/uploading-images-to-cloudinary-in-react-native-using-cloudinary-s-api-37mo
   async function selectProfileImage() {
     setLoading(true);
-    // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    // console.log(status);
-    // if (status !== 'granted') {
-    //   alert('Permission to access camera roll is required!');
-    //   return;
-    // } else {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    console.log(status);
+    if (status !== 'granted') {
+      alert('Permission to access camera roll is required!');
+      setLoading(false);
+      return;
+    }
 
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -108,7 +148,6 @@ export default function Profile() {
         base64Img: base64Img,
       }),
     });
-
     const data = await response.json();
     if (data) {
       setLoading(false);
@@ -117,6 +156,44 @@ export default function Profile() {
     } else {
       alert('Oops.. something went wrong');
     }
+  }
+
+  function editButtonHandler() {
+    setModalVisible(true);
+  }
+
+  async function updateUserProfileHandler() {
+    await updateUser(
+      id,
+      draftFirstName,
+      draftLastName,
+      draftEmail,
+      draftPassword,
+    );
+
+    setOutputEmail(draftEmail);
+    setOutputFirstName(draftFirstName);
+    setModalVisible(false);
+  }
+
+  function deleteProfileHandler() {
+    Alert.alert(
+      'Delete profile',
+      'Are you sure you want to delete your user profile? This cannot be undone..',
+      [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            deleteUser(outputEmail ? outputEmail : email);
+            logoutUser();
+            refreshUserContext(true);
+          },
+        },
+      ],
+    );
   }
 
   useFocusEffect(
@@ -148,39 +225,39 @@ export default function Profile() {
     <Screen>
       <Header
         label="Profile"
-        firstName={firstName}
+        firstName={outputFirstName}
         refreshUserContext={refreshUserContext}
       />
 
       <Container fill>
         <Container>
-          <Headline>Welcome back, {firstName}!</Headline>
+          <Headline>Welcome back, {outputFirstName}!</Headline>
           <Spacer />
           {!profileImage ? (
             <TouchableOpacity
               onPress={selectProfileImage}
-              style={profileImageStyles.wrapper}
+              style={profileStyles.imageWrapper}
             >
               {loading ? (
                 <Loading label="Loading..." />
               ) : (
                 <>
                   <AntDesign name="camerao" size={32} color="lightgray" />
-                  <Text style={profileImageStyles.text}>Upload image</Text>
+                  <Text style={profileStyles.imageLabel}>Upload image</Text>
                 </>
               )}
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               onPress={selectProfileImage}
-              style={profileImageStyles.wrapper}
+              style={profileStyles.imageWrapper}
             >
               {loading ? (
                 <Loading label="Loading..." />
               ) : (
                 <Image
                   source={{ uri: profileImage }}
-                  style={profileImageStyles.image}
+                  style={profileStyles.image}
                 />
               )}
             </TouchableOpacity>
@@ -188,61 +265,162 @@ export default function Profile() {
         </Container>
         <Container>
           <TouchableOpacity
-            style={linkStyles.wrapper}
+            style={profileStyles.wrapper}
             onPress={() => navigation.navigate('Favourites')}
           >
-            <Text style={linkStyles.prefix}>({userFavourites.length})</Text>
-            <Text style={linkStyles.title}>My list</Text>
+            <View style={profileStyles.prefixWrapper}>
+              <Text style={profileStyles.prefix}>
+                ({userFavourites.length})
+              </Text>
+            </View>
+            <Text style={profileStyles.title}>My list</Text>
             <AntDesign
               name="right"
               size={24}
               color="black"
-              style={linkStyles.icon}
+              style={profileStyles.icon}
             />
           </TouchableOpacity>
           <TouchableOpacity
-            style={linkStyles.wrapper}
+            style={profileStyles.wrapper}
             onPress={() => navigation.navigate('Preferences')}
           >
-            {userPreferences ? (
-              <Ionicons name="checkmark-circle" style={linkStyles.prefix} />
-            ) : (
-              <Ionicons
-                name="checkmark-circle-outline"
-                style={linkStyles.prefix}
-              />
-            )}
-            <Text style={linkStyles.title}>My preferences</Text>
+            <View style={profileStyles.prefixWrapper}>
+              {userPreferences ? (
+                <Ionicons
+                  name="checkmark-circle"
+                  style={profileStyles.prefix}
+                />
+              ) : (
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  style={profileStyles.prefix}
+                />
+              )}
+            </View>
+            <Text style={profileStyles.title}>My preferences</Text>
             <AntDesign
               name="right"
               size={24}
               color="black"
-              style={linkStyles.icon}
+              style={profileStyles.icon}
             />
           </TouchableOpacity>
           <TouchableOpacity
-            style={linkStyles.wrapper}
+            style={profileStyles.wrapper}
             onPress={() => navigation.navigate('Setup')}
           >
-            {userSetup.length > 0 ? (
-              <Ionicons name="checkmark-circle" style={linkStyles.prefix} />
-            ) : (
-              <Ionicons
-                name="checkmark-circle-outline"
-                style={linkStyles.prefix}
-              />
-            )}
-            <Text style={linkStyles.title}>My setup</Text>
+            <View style={profileStyles.prefixWrapper}>
+              {userSetup.length > 0 ? (
+                <Ionicons
+                  name="checkmark-circle"
+                  style={profileStyles.prefix}
+                />
+              ) : (
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  style={profileStyles.prefix}
+                />
+              )}
+            </View>
+            <Text style={profileStyles.title}>My setup</Text>
             <AntDesign
               name="right"
               size={24}
               color="black"
-              style={linkStyles.icon}
+              style={profileStyles.icon}
             />
           </TouchableOpacity>
         </Container>
+        <Container>
+          <Button label="edit profile" onPress={editButtonHandler} />
+          <TouchableOpacity onPress={deleteProfileHandler}>
+            <Text style={profileStyles.clear}>Delete profile</Text>
+          </TouchableOpacity>
+        </Container>
       </Container>
-      <Footer />
+      {modalIsVisible && (
+        <Modal
+          visible={modalIsVisible}
+          animationType="slide"
+          presentationStyle="pageSheet"
+          style={{ flex: 1 }}
+        >
+          <View style={profileStyles.cancel}>
+            <Entypo
+              name="cross"
+              size={36}
+              color="#BC6C25"
+              onPress={() => setModalVisible(false)}
+            />
+          </View>
+          <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+            <KeyboardAvoidingView
+              behavior="padding"
+              style={{ flex: 1, alignItems: 'center' }}
+            >
+              <Spacer large />
+              <Spacer />
+              <Container fill>
+                <Headline>Edit your profile details:</Headline>
+                <Spacer />
+                <Paragraph>First name:</Paragraph>
+                <Input
+                  value={draftFirstName}
+                  onChangeText={(text) => setDraftFirstName(text)}
+                  placeholder="New first name"
+                  clearButtonMode="while-editing"
+                  type="name"
+                />
+                <Spacer />
+                <Spacer />
+                <Paragraph>Last name:</Paragraph>
+                <Input
+                  value={draftLastName}
+                  onChangeText={(text) => setDraftLastName(text)}
+                  placeholder="New last name"
+                  clearButtonMode="while-editing"
+                  type="name"
+                />
+                <Spacer />
+                <Spacer />
+                <Paragraph>Username:</Paragraph>
+                <Input
+                  value={draftEmail}
+                  onChangeText={(text) => setDraftEmail(text)}
+                  placeholder="New username"
+                  clearButtonMode="while-editing"
+                  type="name"
+                />
+                <Spacer />
+                <Spacer />
+                <Paragraph>Password:</Paragraph>
+                <Input
+                  value={draftPassword}
+                  onChangeText={(text) => setDraftPassword(text)}
+                  placeholder="New password"
+                  clearButtonMode="while-editing"
+                  secureTextEntry={true}
+                />
+                <Spacer large />
+                <Spacer large />
+                <Spacer large />
+              </Container>
+            </KeyboardAvoidingView>
+          </ScrollView>
+          <Container>
+            <FloatingButton
+              label="Update profile details"
+              disabled={
+                !draftFirstName | !draftLastName | !draftEmail | !draftPassword
+              }
+              onPress={updateUserProfileHandler}
+              bottom
+            />
+          </Container>
+        </Modal>
+      )}
+      <Footer firstName={outputFirstName} />
     </Screen>
   );
 }

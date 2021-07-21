@@ -67,7 +67,7 @@ export default function Map() {
         const userLocation = await Location.getCurrentPositionAsync({});
         setLocation(userLocation);
       })();
-    }, [selectedSeller]),
+    }, [selectedSeller, errorMsg]),
   );
 
   return (
@@ -93,7 +93,7 @@ export default function Map() {
           )}
         </View>
       )}
-      <Footer />
+      <Footer firstName={firstName} />
     </Screen>
   );
 }

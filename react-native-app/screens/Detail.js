@@ -92,6 +92,7 @@ const detailStyles = StyleSheet.create({
 
 export default function Detail(props) {
   const { params } = props.route;
+  console.log('params', params.bean.id);
   const { firstName, id, refreshUserContext } = useContext(userContext);
 
   const [isLoading, setLoading] = useState(true);
@@ -105,6 +106,7 @@ export default function Detail(props) {
   const [rating, setRating] = useState();
   const [review, setReview] = useState('');
   const [userReviews, setUserReviews] = useState([]);
+  console.log('user reviews', userReviews);
 
   const addTooltip = useRef(null);
   const removeTooltip = useRef(null);
@@ -181,6 +183,7 @@ export default function Detail(props) {
       }
     });
     getUserReviews(params.bean.id).then((data) => {
+      console.log('data', data);
       if (data) {
         setUserReviews(data.userReviews);
       }
@@ -219,9 +222,11 @@ export default function Detail(props) {
               {/* eslint-disable-next-line */}
               {isFavourite ? (
                 <Tooltip
-                  popover={<Text>Added to your list</Text>}
+                  popover={
+                    <Text style={{ color: 'white' }}>Added to your list</Text>
+                  }
                   ref={addTooltip}
-                  backgroundColor="#DDA15E"
+                  backgroundColor="#5C5552"
                   withOverlay={false}
                 >
                   <Ionicons
@@ -233,9 +238,13 @@ export default function Detail(props) {
                 </Tooltip>
               ) : (
                 <Tooltip
-                  popover={<Text>Removed from your list</Text>}
+                  popover={
+                    <Text style={{ color: 'white' }}>
+                      Removed from your list
+                    </Text>
+                  }
                   ref={removeTooltip}
-                  backgroundColor="#DDA15E"
+                  backgroundColor="#5C5552"
                   width={180}
                   withOverlay={false}
                 >
@@ -445,7 +454,7 @@ export default function Detail(props) {
           </ScrollView>
         </>
       )}
-      <Footer />
+      <Footer firstName={firstName} />
     </Screen>
   );
 }

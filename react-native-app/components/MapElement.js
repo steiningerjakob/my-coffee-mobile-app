@@ -3,8 +3,7 @@ import * as React from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Rating } from 'react-native-ratings';
-// Coffee location by Hoeda from the Noun Project
-import coffeeLocation from '../assets/coffee-location.png';
+import coffeeLocation from '../assets/cafe-location_small.png';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;

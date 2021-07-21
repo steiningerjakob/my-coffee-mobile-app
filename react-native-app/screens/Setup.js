@@ -458,7 +458,7 @@ export default function Setup() {
           )}
         </>
       )}
-      <Footer />
+      <Footer firstName={firstName} />
     </Screen>
   );
 }

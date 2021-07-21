@@ -21,6 +21,46 @@ export async function getUserProfile(clearCookie) {
   return json;
 }
 
+export async function deleteUser(email) {
+  const response = await fetch(`${apiBaseUrl}/users/delete_user`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: email,
+    }),
+  });
+  const data = await response.json();
+  return data;
+}
+
+export async function updateUser(id, firstName, lastName, email, password) {
+  console.log('apif function id', id);
+  console.log('apif function password', password);
+  const response = await fetch(`${apiBaseUrl}/users/update_user`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+    }),
+  });
+  const data = await response.json();
+  if (data.message) {
+    alert(data.message);
+  } else {
+    alert('Oops.. something went wrong');
+  }
+}
+
 export async function getBeans() {
   const response = await fetch(`${apiBaseUrl}/products/beans`);
   const beans = await response.json();

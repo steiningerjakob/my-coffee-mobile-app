@@ -209,6 +209,28 @@ export async function insertUser(
   return newUser.map((user) => camelcaseKeys(user))[0];
 }
 
+export async function updateUser(
+  id: number,
+  firstName: string,
+  lastName: string,
+  email: string,
+  passwordHash: string,
+) {
+  const updatedUser = await sql<User>`
+    UPDATE users
+    SET
+      first_name = ${firstName},
+      last_name = ${lastName},
+      email = ${email},
+      password_hash = ${passwordHash}
+    WHERE
+      id = ${id}
+    RETURNING
+      *
+  `;
+  return updatedUser.map((user) => camelcaseKeys(user))[0];
+}
+
 export async function deleteUser(email: string) {
   const deletedUser = await sql<User>`
     DELETE FROM users
@@ -604,23 +626,16 @@ export async function getReviewsByBeanId(beanId: number) {
       to_char(rating_date, 'dd.mm.yy') as rating_date,
       first_name,
       last_name,
-      profile_image as uri,
-      machine_name,
-      grinder_name
+      profile_image as uri
     FROM
       ratings,
-      users,
-      setups,
-      machines,
-      grinders
+      users
     WHERE
       ratings.bean_id = ${beanId} AND
-      ratings.user_id = users.id AND
-      setups.user_id = users.id AND
-      setups.machine_id = machines.id AND
-      setups.grinder_id = grinders.id
+      ratings.user_id = users.id
     ORDER BY rating_date DESC
   `;
+  console.log('database', userReviews);
   return userReviews.map((review) => camelcaseKeys(review));
 }
 

@@ -35,7 +35,6 @@ export default function Header(props) {
 
     // pass in true as an argument to clear cookie
     props.refreshUserContext(true);
-    navigation.navigate('SignIn');
   }
 
   return (

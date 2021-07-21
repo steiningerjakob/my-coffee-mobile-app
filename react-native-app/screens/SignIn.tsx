@@ -106,7 +106,7 @@ export default function SignIn() {
           </TouchableOpacity>
         </Container>
       </ScrollView>
-      <Footer />
+      <Footer firstName={firstName} />
     </Screen>
   );
 }

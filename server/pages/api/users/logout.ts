@@ -9,6 +9,7 @@ export default async function logoutHandler(
   if (req.method === 'GET') {
     // Get cookie from the browser and destructure sessionToken
     const sessionToken = req.cookies.sessionToken;
+    console.log('session token', sessionToken);
 
     if (sessionToken) {
       await deleteSessionByToken(sessionToken);
