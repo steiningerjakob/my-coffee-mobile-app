@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "Beanify",
-    "slug": "Beanify-world-of-coffee",
+    "slug": "beanify",
+    "description": "Find, rate and store your favourite coffee beans.",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

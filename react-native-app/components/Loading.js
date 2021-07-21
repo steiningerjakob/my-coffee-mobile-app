@@ -16,7 +16,7 @@ export default function Loading(props) {
           alignContent: 'center',
           fontSize: 14,
           marginTop: 12,
-          color: 'lightgrey',
+          color: 'grey',
         }}
       >
         {props.label}
