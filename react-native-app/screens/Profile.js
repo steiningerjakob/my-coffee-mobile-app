@@ -235,6 +235,7 @@ export default function Profile() {
         <Container>
           <Headline>Welcome back, {outputFirstName}!</Headline>
           <Spacer />
+          {/* eslint-disable-next-line */}
           {!profileImage ? (
             <TouchableOpacity
               onPress={selectProfileImage}

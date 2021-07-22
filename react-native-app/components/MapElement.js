@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Rating } from 'react-native-ratings';
-import coffeeLocation from '../assets/cafe-location_small.png';
+import coffeeLocation from '../assets/coffee-location.png';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
