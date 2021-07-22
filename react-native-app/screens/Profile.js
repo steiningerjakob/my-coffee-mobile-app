@@ -30,7 +30,7 @@ import {
   deleteUser,
   getPreference,
   getUserFavourites,
-  getUserSetups,
+  getUserSetup,
   logoutUser,
   updateUser,
 } from '../util/apiFunctions';
@@ -137,7 +137,7 @@ export default function Profile() {
 
     const base64Img = `data:image/jpg;base64,${result.base64}`;
 
-    const response = await fetch(`${apiBaseUrl}/actions/upload_profile_image`, {
+    const response = await fetch(`${apiBaseUrl}/actions/image`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -155,6 +155,7 @@ export default function Profile() {
       setProfileImage(data.imageURL);
     } else {
       alert('Oops.. something went wrong');
+      setLoading(false);
     }
   }
 
@@ -198,29 +199,27 @@ export default function Profile() {
 
   useFocusEffect(
     useCallback(() => {
-      if (id) {
-        checkProfileImageStatus(id).then((result) => {
-          if (result) {
-            setProfileImage(result.profileImage);
-          }
-        });
-        getUserSetups(id).then((setup) => {
-          if (setup.userSetup) {
-            setUserSetup(setup.userSetup);
-          }
-        });
-        getPreference(id).then((preference) => {
-          if (preference.beanType) {
-            setUserPreferences(preference.beanType);
-          }
-        });
-        getUserFavourites(id).then((data) => {
-          if (data) {
-            setUserFavourites(data.userFavourites);
-          }
-        });
-      }
-    }, [id]),
+      checkProfileImageStatus().then((result) => {
+        if (result) {
+          setProfileImage(result.profileImage);
+        }
+      });
+      getUserSetup().then((setup) => {
+        if (setup.userSetup) {
+          setUserSetup(setup.userSetup);
+        }
+      });
+      getPreference().then((preference) => {
+        if (preference.beanType) {
+          setUserPreferences(preference.beanType);
+        }
+      });
+      getUserFavourites().then((data) => {
+        if (data) {
+          setUserFavourites(data.userFavourites);
+        }
+      });
+    }, []),
   );
 
   return (

@@ -45,21 +45,21 @@ export default function Favourites() {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
-      getUserFavourites(id).then((data) => {
+      getUserFavourites().then((data) => {
         setUserFavourites(data.userFavourites);
       });
       setRefreshing(false);
     });
-  }, [id]);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
-      getUserFavourites(id).then((data) => {
+      getUserFavourites().then((data) => {
         if (data) {
           setUserFavourites(data.userFavourites);
         }
       });
-    }, [id]),
+    }, []),
   );
 
   function redirectHandler() {

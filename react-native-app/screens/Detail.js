@@ -108,6 +108,7 @@ export default function Detail(props) {
   const [userReviewsVisible, setUserReviewsVisible] = useState(false);
   const [modalIsVisible, setModalVisible] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [updating, setUpdating] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const [flavourProfile, setFlavourProfile] = useState({});
@@ -133,13 +134,13 @@ export default function Detail(props) {
   function addButtonHandler() {
     addBeansToFavourites(firstName, id, params.bean.id);
     setFavourite(true);
-    removeTooltip.current.toggleTooltip();
+    removeTooltip.current && removeTooltip.current.toggleTooltip();
   }
 
   function removeButtonHandler() {
     removeBeansFromFavourites(id, params.bean.id);
     setFavourite(false);
-    addTooltip.current.toggleTooltip();
+    addTooltip.current && addTooltip.current.toggleTooltip();
   }
 
   function ratingStateHandler(userInput) {
@@ -157,6 +158,7 @@ export default function Detail(props) {
     updateReview(id, params.bean.id, rating, review);
     setReviewed(true);
     setModalVisible(false);
+    setUpdating(false);
   }
 
   function deleteReviewHandler() {
@@ -175,6 +177,7 @@ export default function Detail(props) {
             removeButtonHandler();
             setRating('');
             setReview('');
+            setModalVisible(false);
           },
         },
       ],
@@ -405,7 +408,7 @@ export default function Detail(props) {
                       </Container>
                     </KeyboardAvoidingView>
                   </ScrollView>
-                  {editing ? (
+                  {editing && updating ? (
                     <FloatingButton
                       label="update review"
                       onPress={updateReviewHandler}
@@ -462,6 +465,7 @@ export default function Detail(props) {
                     label="edit review"
                     onPress={() => {
                       setEditing(true);
+                      setUpdating(true);
                       setReviewed(false);
                       setModalVisible(true);
                       setReview('');

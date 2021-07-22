@@ -22,7 +22,7 @@ export async function getUserProfile(clearCookie) {
 }
 
 export async function deleteUser(email) {
-  const response = await fetch(`${apiBaseUrl}/users/delete_user`, {
+  const response = await fetch(`${apiBaseUrl}/users/profile`, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
@@ -37,7 +37,7 @@ export async function deleteUser(email) {
 }
 
 export async function updateUser(id, firstName, lastName, email, password) {
-  const response = await fetch(`${apiBaseUrl}/users/update_user`, {
+  const response = await fetch(`${apiBaseUrl}/users/profile`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -81,7 +81,7 @@ export async function getFilteredBeans(query) {
 }
 
 export async function getRecommendations(body, acidity, intensity) {
-  const response = await fetch(`${apiBaseUrl}/actions/get_recommendations`, {
+  const response = await fetch(`${apiBaseUrl}/actions/recommendations`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -137,7 +137,7 @@ export async function getRatedBeans() {
 }
 
 export async function getBeansBySeller(sellerName) {
-  const response = await fetch(`${apiBaseUrl}/actions/get_sellerbeans`, {
+  const response = await fetch(`${apiBaseUrl}/actions/sellerbeans`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -198,7 +198,7 @@ export async function addBeansToFavourites(firstName, userId, beanId) {
   if (firstName === '') {
     alert('You need to sign in to perform this action');
   } else {
-    const response = await fetch(`${apiBaseUrl}/actions/add_favourite`, {
+    const response = await fetch(`${apiBaseUrl}/actions/favourites`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -218,8 +218,8 @@ export async function addBeansToFavourites(firstName, userId, beanId) {
 }
 
 export async function removeBeansFromFavourites(userId, beanId) {
-  const response = await fetch(`${apiBaseUrl}/actions/remove_favourite`, {
-    method: 'POST',
+  const response = await fetch(`${apiBaseUrl}/actions/favourites`, {
+    method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -236,16 +236,13 @@ export async function removeBeansFromFavourites(userId, beanId) {
   }
 }
 
-export async function getUserFavourites(id) {
-  const response = await fetch(`${apiBaseUrl}/actions/get_favourites`, {
-    method: 'POST',
+export async function getUserFavourites() {
+  const response = await fetch(`${apiBaseUrl}/actions/favourites`, {
+    method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      userId: id,
-    }),
   });
 
   const favourites = await response.json();
@@ -253,7 +250,7 @@ export async function getUserFavourites(id) {
 }
 
 export async function insertReview(userId, beanId, rating, review) {
-  const response = await fetch(`${apiBaseUrl}/actions/insert_review`, {
+  const response = await fetch(`${apiBaseUrl}/actions/reviews`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -297,7 +294,7 @@ export async function checkReviewStatus(userId, beanId) {
 }
 
 export async function updateReview(userId, beanId, rating, review) {
-  const response = await fetch(`${apiBaseUrl}/actions/update_review`, {
+  const response = await fetch(`${apiBaseUrl}/actions/reviews`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -320,8 +317,8 @@ export async function updateReview(userId, beanId, rating, review) {
 }
 
 export async function deleteReview(userId, beanId) {
-  const response = await fetch(`${apiBaseUrl}/actions/remove_review`, {
-    method: 'POST',
+  const response = await fetch(`${apiBaseUrl}/actions/reviews`, {
+    method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -341,7 +338,7 @@ export async function deleteReview(userId, beanId) {
 }
 
 export async function updateProfileImage(id, profileImage) {
-  const response = await fetch(`${apiBaseUrl}/actions/update_profile_image`, {
+  const response = await fetch(`${apiBaseUrl}/actions/image`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -362,7 +359,7 @@ export async function updateProfileImage(id, profileImage) {
 }
 
 export async function uploadProfileImage(id, base64Img) {
-  const response = await fetch(`${apiBaseUrl}/actions/upload_profile_image`, {
+  const response = await fetch(`${apiBaseUrl}/actions/image`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -382,16 +379,13 @@ export async function uploadProfileImage(id, base64Img) {
   }
 }
 
-export async function checkProfileImageStatus(id) {
-  const response = await fetch(`${apiBaseUrl}/actions/profile_image_status`, {
-    method: 'POST',
+export async function checkProfileImageStatus() {
+  const response = await fetch(`${apiBaseUrl}/actions/image`, {
+    method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      id: id,
-    }),
   });
 
   const data = await response.json();
@@ -403,7 +397,7 @@ export async function checkProfileImageStatus(id) {
 }
 
 export async function insertSetup(userId, machineId, grinderId) {
-  const response = await fetch(`${apiBaseUrl}/actions/insert_setup`, {
+  const response = await fetch(`${apiBaseUrl}/actions/setups`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -425,7 +419,7 @@ export async function insertSetup(userId, machineId, grinderId) {
 }
 
 export async function updateSetup(userId, machineId, grinderId) {
-  const response = await fetch(`${apiBaseUrl}/actions/update_setup`, {
+  const response = await fetch(`${apiBaseUrl}/actions/setups`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -447,8 +441,8 @@ export async function updateSetup(userId, machineId, grinderId) {
 }
 
 export async function removeFromSetups(setupId) {
-  const response = await fetch(`${apiBaseUrl}/actions/remove_setup`, {
-    method: 'POST',
+  const response = await fetch(`${apiBaseUrl}/actions/setups`, {
+    method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -466,16 +460,13 @@ export async function removeFromSetups(setupId) {
   }
 }
 
-export async function getUserSetups(id) {
-  const response = await fetch(`${apiBaseUrl}/actions/get_setups`, {
-    method: 'POST',
+export async function getUserSetup() {
+  const response = await fetch(`${apiBaseUrl}/actions/setups`, {
+    method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      userId: id,
-    }),
   });
 
   const setups = await response.json();
@@ -489,7 +480,7 @@ export async function insertPreference(
   intensity: number,
   acidity: number,
 ) {
-  const response = await fetch(`${apiBaseUrl}/actions/insert_preference`, {
+  const response = await fetch(`${apiBaseUrl}/actions/preferences`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -512,16 +503,13 @@ export async function insertPreference(
   }
 }
 
-export async function getPreference(userId: number) {
-  const response = await fetch(`${apiBaseUrl}/actions/get_preference`, {
-    method: 'POST',
+export async function getPreference() {
+  const response = await fetch(`${apiBaseUrl}/actions/preferences`, {
+    method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      userId: userId,
-    }),
   });
 
   const data = await response.json();
@@ -533,8 +521,8 @@ export async function getPreference(userId: number) {
 }
 
 export async function clearPreference(userId: number) {
-  const response = await fetch(`${apiBaseUrl}/actions/remove_preference`, {
-    method: 'POST',
+  const response = await fetch(`${apiBaseUrl}/actions/preferences`, {
+    method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -559,7 +547,7 @@ export async function updatePreference(
   intensity,
   acidity,
 ) {
-  const response = await fetch(`${apiBaseUrl}/actions/update_preference`, {
+  const response = await fetch(`${apiBaseUrl}/actions/preferences`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',

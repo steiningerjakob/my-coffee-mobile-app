@@ -1,10 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { checkFavouriteStatus } from '../../../util/database';
+import {
+  checkFavouriteStatus,
+  getUserByValidSessionToken,
+} from '../../../util/database';
 
-export default async function ckeckFavouriteStatusHandler(
+export default async function favouriteStatusHandler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  const sessionToken = req.cookies.sessionToken;
+  const user = await getUserByValidSessionToken(sessionToken);
+  if (!user) {
+    return res.status(401).send({ message: 'Unauthorized' });
+  }
+
   if (req.method === 'POST') {
     // Destructure relevant information from the request body
     const { userId, beanId } = req.body;

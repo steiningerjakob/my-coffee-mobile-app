@@ -153,6 +153,7 @@ export default function Preferences() {
 
   function editPreferencesButtonHandler() {
     setModalVisible(true);
+    setUserBeanType('');
   }
 
   async function savePreferencesButtonHandler() {
@@ -222,7 +223,7 @@ export default function Preferences() {
           setBeanTypes(sortedBeanTypes);
         }
       });
-      getPreference(id).then((data) => {
+      getPreference().then((data) => {
         if (data) {
           setUserBeanType(data.beanType);
           setUserBody(data.body);
@@ -239,7 +240,7 @@ export default function Preferences() {
           setExistingPreference(false);
         }
       });
-    }, [id]),
+    }, []),
   );
 
   return (
@@ -285,6 +286,7 @@ export default function Preferences() {
                   ratingImage={ratingImage}
                   ratingColor="#F7D6B1"
                   onFinishRating={bodyStateHandler}
+                  readonly
                 />
               </View>
               <View style={preferencesStyles.wrapper}>
@@ -296,6 +298,7 @@ export default function Preferences() {
                   ratingImage={ratingImage}
                   ratingColor="#F7D6B1"
                   onFinishRating={acidityStateHandler}
+                  readonly
                 />
               </View>
               <View style={preferencesStyles.wrapper}>
@@ -307,6 +310,7 @@ export default function Preferences() {
                   ratingImage={ratingImage}
                   ratingColor="#F7D6B1"
                   onFinishRating={intensityStateHandler}
+                  readonly
                 />
               </View>
             </Container>
@@ -318,9 +322,6 @@ export default function Preferences() {
             <Container>
               <Button
                 label="edit preferences"
-                disabled={
-                  !userBeanType | !userAcidity | !userBody | !userIntensity
-                }
                 onPress={editPreferencesButtonHandler}
               />
               <TouchableOpacity onPress={clearPreferencesButtonHandler}>
@@ -461,28 +462,26 @@ export default function Preferences() {
               )}
             </Container>
           </Container>
-          {existingPreference ? (
-            <Container>
-              <FloatingButton
-                label="Update preferences"
-                disabled={
-                  !userBeanType | !userAcidity | !userBody | !userIntensity
-                }
-                onPress={updatePreferencesButtonHandler}
-                bottom
-              />
-            </Container>
+          {userBeanType && userAcidity && userBody && userIntensity ? (
+            existingPreference ? (
+              <Container>
+                <FloatingButton
+                  label="Update preferences"
+                  onPress={updatePreferencesButtonHandler}
+                  bottom
+                />
+              </Container>
+            ) : (
+              <Container>
+                <FloatingButton
+                  label="Save preferences"
+                  onPress={savePreferencesButtonHandler}
+                  bottom
+                />
+              </Container>
+            )
           ) : (
-            <Container>
-              <FloatingButton
-                label="Save preferences"
-                disabled={
-                  !userBeanType | !userAcidity | !userBody | !userIntensity
-                }
-                onPress={savePreferencesButtonHandler}
-                bottom
-              />
-            </Container>
+            <Text>{''}</Text>
           )}
         </Modal>
       )}

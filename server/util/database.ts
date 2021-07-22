@@ -392,7 +392,7 @@ export async function insertBean(
   return newBean.map((bean) => camelcaseKeys(bean))[0];
 }
 
-export async function getUserFavourites(userId?: number) {
+export async function getUserFavourites(token?: string) {
   const userFavourites = await sql<Bean[]>`
     SELECT
       beans.id as id,
@@ -413,12 +413,13 @@ export async function getUserFavourites(userId?: number) {
       beans,
       favourites,
       flavour_profiles,
-      ratings
+      ratings,
+      sessions
     WHERE
-      users.id = ${userId} AND
-      users.id = ratings.user_id AND
+      sessions.token = ${token} AND
+      sessions.user_id = ratings.user_id AND
       ratings.bean_id = beans.id AND
-      users.id = favourites.user_id AND
+      sessions.user_id = favourites.user_id AND
       favourites.bean_id = beans.id AND
       flavour_profiles.id = beans.flavour_profile
     ORDER BY
@@ -731,17 +732,19 @@ export async function updateProfileImage(id: number, profileImage: string) {
   return updatedProfileImage.map((img) => camelcaseKeys(img))[0];
 }
 
-export async function checkProfileImageStatus(id: number) {
+export async function checkProfileImageStatus(token: string) {
   const profileImage = await sql<string>`
     SELECT
       profile_image
     FROM
-      users
+      users,
+      sessions
     WHERE
-      id = ${id}
+      sessions.token = ${token} AND
+      sessions.user_id = users.id
   `;
   if (profileImage) {
-    return profileImage.map((r) => camelcaseKeys(r))[0];
+    return profileImage.map((image) => camelcaseKeys(image))[0];
   } else {
     return undefined;
   }
@@ -794,7 +797,7 @@ export async function removeSetup(setupId: number) {
   return removedSetup.map((setup) => camelcaseKeys(setup))[0];
 }
 
-export async function getUserSetups(userId?: number) {
+export async function getUserSetups(token?: string) {
   const userSetup = await sql<Setup>`
     SELECT
       setups.id as id,
@@ -809,10 +812,11 @@ export async function getUserSetups(userId?: number) {
       users,
       setups,
       machines,
-      grinders
+      grinders,
+      sessions
     WHERE
-      users.id = ${userId} AND
-      users.id = setups.user_id AND
+      sessions.token = ${token} AND
+      sessions.user_id = setups.user_id AND
       setups.machine_id = machines.id AND
       setups.grinder_id = grinders.id
   `;
@@ -837,14 +841,19 @@ export async function insertPreference(
   return newPreference.map((preference) => camelcaseKeys(preference))[0];
 }
 
-export async function checkPreferences(userId: number) {
+export async function checkPreferences(token?: string) {
   const existingPreference = await sql<Preference>`
     SELECT
-      *
+      bean_type,
+      body,
+      intensity,
+      acidity
     FROM
-      preferences
+      preferences,
+      sessions
     WHERE
-      user_id = ${userId}
+      sessions.token = ${token} AND
+      sessions.user_id = preferences.user_id
   `;
   if (existingPreference) {
     return existingPreference.map((preference) => camelcaseKeys(preference))[0];

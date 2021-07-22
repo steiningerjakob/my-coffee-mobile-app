@@ -17,7 +17,7 @@ import { Headline } from '../components/Text';
 import {
   getGrinders,
   getMachines,
-  getUserSetups as getUserSetup,
+  getUserSetup,
   insertSetup,
   removeFromSetups,
   updateSetup,
@@ -140,7 +140,7 @@ export default function Setup() {
 
   async function saveSetupButtonHandler() {
     await insertSetup(id, userMachine.id, userGrinder.id);
-    await getUserSetup(id).then((data) => {
+    await getUserSetup().then((data) => {
       if (data) {
         setUserSetup(data.userSetup);
       }
@@ -150,7 +150,7 @@ export default function Setup() {
 
   async function updateSetupButtonHandler() {
     await updateSetup(id, userMachine.id, userGrinder.id);
-    await getUserSetup(id).then((data) => {
+    await getUserSetup().then((data) => {
       if (data) {
         setUserSetup(data.userSetup);
       }
@@ -187,12 +187,12 @@ export default function Setup() {
       getGrinders().then((data) => {
         if (data) setGrinders(data.grinders);
       });
-      getUserSetup(id).then((data) => {
+      getUserSetup().then((data) => {
         if (data) {
           setUserSetup(data.userSetup);
         }
       });
-    }, [id]),
+    }, []),
   );
 
   return (
