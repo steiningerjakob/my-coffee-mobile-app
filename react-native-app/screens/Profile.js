@@ -131,6 +131,7 @@ export default function Profile() {
       base64: true,
     });
     if (result.cancelled === true) {
+      setLoading(false);
       return;
     }
 
