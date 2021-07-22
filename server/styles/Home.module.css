@@ -74,9 +74,14 @@
   align-self: center;
 }
 
-.title a {
-  color: #0070f3;
+.text a {
+  color: #bc6c25;
   text-decoration: none;
+}
+
+.text a:hover {
+  color: #0070f3;
+  text-decoration: underline;
 }
 
 .title {

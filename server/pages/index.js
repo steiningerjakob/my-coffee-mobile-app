@@ -34,7 +34,7 @@ export default function Home() {
         </h1>
         <p className={styles.text}>
           Click
-          <Link href="https://expo.dev/@steiningerjakob/beanify">
+          <Link href="https://expo.io/@steiningerjakob/beanify?release-channel=prod-v1">
             <a>
               {' '}
               --{'>'} here {'<'}--{' '}
