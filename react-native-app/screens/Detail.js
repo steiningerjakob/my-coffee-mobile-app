@@ -5,11 +5,18 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
   Modal,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -43,6 +50,7 @@ import {
   removeBeansFromFavourites,
   updateReview,
 } from '../util/apiFunctions';
+import { wait } from '../util/utilFunctions';
 
 const detailStyles = StyleSheet.create({
   container: {
@@ -92,7 +100,6 @@ const detailStyles = StyleSheet.create({
 
 export default function Detail(props) {
   const { params } = props.route;
-  console.log('params', params.bean.id);
   const { firstName, id, refreshUserContext } = useContext(userContext);
 
   const [isLoading, setLoading] = useState(true);
@@ -101,15 +108,27 @@ export default function Detail(props) {
   const [userReviewsVisible, setUserReviewsVisible] = useState(false);
   const [modalIsVisible, setModalVisible] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [flavourProfile, setFlavourProfile] = useState({});
   const [rating, setRating] = useState();
   const [review, setReview] = useState('');
   const [userReviews, setUserReviews] = useState([]);
-  console.log('user reviews', userReviews);
 
   const addTooltip = useRef(null);
   const removeTooltip = useRef(null);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => {
+      getUserReviews(params.bean.id).then((data) => {
+        if (data) {
+          setUserReviews(data.userReviews);
+        }
+      });
+      setRefreshing(false);
+    });
+  }, [params.bean.id]);
 
   function addButtonHandler() {
     addBeansToFavourites(firstName, id, params.bean.id);
@@ -183,7 +202,6 @@ export default function Detail(props) {
       }
     });
     getUserReviews(params.bean.id).then((data) => {
-      console.log('data', data);
       if (data) {
         setUserReviews(data.userReviews);
       }
@@ -217,7 +235,13 @@ export default function Detail(props) {
               onPress={() => setModalVisible(true)}
             />
           )}
-          <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={{ flex: 1 }}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+            }
+          >
             <View style={detailStyles.cancel}>
               {/* eslint-disable-next-line */}
               {isFavourite ? (

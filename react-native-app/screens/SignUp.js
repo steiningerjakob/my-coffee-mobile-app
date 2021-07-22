@@ -90,7 +90,11 @@ export default function SignUp() {
         </Container>
       </ScrollView>
       <Container>
-        <Button label="sign up" onPress={createUser} />
+        <Button
+          label="sign up"
+          onPress={createUser}
+          disabled={!firstName || !lastName || !email || !password}
+        />
       </Container>
       <Footer firstName={firstName} />
     </Screen>

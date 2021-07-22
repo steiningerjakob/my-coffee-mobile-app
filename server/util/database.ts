@@ -635,7 +635,6 @@ export async function getReviewsByBeanId(beanId: number) {
       ratings.user_id = users.id
     ORDER BY rating_date DESC
   `;
-  console.log('database', userReviews);
   return userReviews.map((review) => camelcaseKeys(review));
 }
 

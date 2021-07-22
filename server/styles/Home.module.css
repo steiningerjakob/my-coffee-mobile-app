@@ -86,9 +86,14 @@
   margin-top: 5rem;
 }
 
+.text {
+  justify-self: 'center';
+  text-align: center;
+}
+
 .logo {
-  height: 15em;
-  margin-bottom: 5rem;
+  height: 12em;
+  margin-bottom: 4rem;
 }
 
 @media (max-width: 600px) {

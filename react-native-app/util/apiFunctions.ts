@@ -37,8 +37,6 @@ export async function deleteUser(email) {
 }
 
 export async function updateUser(id, firstName, lastName, email, password) {
-  console.log('apif function id', id);
-  console.log('apif function password', password);
   const response = await fetch(`${apiBaseUrl}/users/update_user`, {
     method: 'PUT',
     headers: {

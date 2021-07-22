@@ -57,8 +57,8 @@ export default function Review(props) {
       )}
       <View style={reviewStyles.paragraph}>
         <Text numberOfLines={1} style={reviewStyles.subTitle}>
-          {props.item.firstName}
-          {props.item.lastName}({props.item.ratingDate}):
+          {props.item.firstName} {props.item.lastName} ({props.item.ratingDate}
+          ):
         </Text>
         <Rating
           startingValue={props.item.userRating}

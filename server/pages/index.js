@@ -25,24 +25,30 @@ export default function Home() {
         <Image
           src="/cover.png"
           alt=""
-          width={800}
-          height={320}
+          width={600}
+          height={240}
           className={styles.logo}
         />
         <h1 className={styles.title}>
           Welcome to beanify - your world of coffee!
         </h1>
-        <h2>
+        <p className={styles.text}>
           Click
           <Link href="https://expo.dev/@steiningerjakob/beanify">
-            <a>here</a>
+            <a>
+              {' '}
+              --{'>'} here {'<'}--{' '}
+            </a>
           </Link>
           to go to my Expo project and download
           <Link href="https://expo.dev/tools">
-            <a>Expo Go</a>
+            <a>
+              {' '}
+              --{'>'} Expo Go {'<'}--{' '}
+            </a>
           </Link>
           on your device to try out my mobile app!
-        </h2>
+        </p>
       </main>
 
       <footer className={styles.footer}>

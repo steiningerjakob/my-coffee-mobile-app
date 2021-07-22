@@ -40,13 +40,19 @@ export default function Header(props) {
   return (
     <SafeAreaView style={headerStyles.safeAreaView}>
       <View style={headerStyles.wrapper}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="ios-arrow-back" size={32} color="white" />
-        </TouchableOpacity>
+        {props.noGoBack ? (
+          <Ionicons name="ios-arrow-back" size={32} color="#BC6C25" />
+        ) : (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="ios-arrow-back" size={32} color="white" />
+          </TouchableOpacity>
+        )}
         <Text style={headerStyles.label} numberOfLines={1}>
           {props.label}
         </Text>
-        {props.firstName ? (
+        {props.noSignIn ? (
+          <MaterialIcons name="logout" size={32} color="#BC6C25" />
+        ) : props.firstName ? (
           <TouchableOpacity onPress={() => logoutButtonHandler()}>
             <MaterialIcons name="logout" size={32} color="white" />
           </TouchableOpacity>

@@ -9,11 +9,6 @@ export default async function editUserHandler(
   if (req.method === 'PUT') {
     // Destructure relevant information from the request body
     const { id, firstName, lastName, email, password } = req.body;
-    console.log('api route id', id);
-    console.log('api route draftFirstName', firstName);
-    console.log('api route draftLastName', lastName);
-    console.log('api route draftEmail', email);
-    console.log('api route draftPassword', password);
 
     // Create a hash of the password to save in the database
     const passwordHash = await argon2.hash(password);

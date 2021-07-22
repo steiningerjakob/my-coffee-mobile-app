@@ -118,7 +118,6 @@ export default function Profile() {
   async function selectProfileImage() {
     setLoading(true);
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    console.log(status);
     if (status !== 'granted') {
       alert('Permission to access camera roll is required!');
       setLoading(false);
@@ -198,26 +197,28 @@ export default function Profile() {
 
   useFocusEffect(
     useCallback(() => {
-      checkProfileImageStatus(id).then((result) => {
-        if (result) {
-          setProfileImage(result.profileImage);
-        }
-      });
-      getUserSetups(id).then((setup) => {
-        if (setup.userSetup) {
-          setUserSetup(setup.userSetup);
-        }
-      });
-      getPreference(id).then((preference) => {
-        if (preference.beanType) {
-          setUserPreferences(preference.beanType);
-        }
-      });
-      getUserFavourites(id).then((data) => {
-        if (data) {
-          setUserFavourites(data.userFavourites);
-        }
-      });
+      if (id) {
+        checkProfileImageStatus(id).then((result) => {
+          if (result) {
+            setProfileImage(result.profileImage);
+          }
+        });
+        getUserSetups(id).then((setup) => {
+          if (setup.userSetup) {
+            setUserSetup(setup.userSetup);
+          }
+        });
+        getPreference(id).then((preference) => {
+          if (preference.beanType) {
+            setUserPreferences(preference.beanType);
+          }
+        });
+        getUserFavourites(id).then((data) => {
+          if (data) {
+            setUserFavourites(data.userFavourites);
+          }
+        });
+      }
     }, [id]),
   );
 
@@ -227,6 +228,7 @@ export default function Profile() {
         label="Profile"
         firstName={outputFirstName}
         refreshUserContext={refreshUserContext}
+        noGoBack
       />
 
       <Container fill>

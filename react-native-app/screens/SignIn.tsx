@@ -69,6 +69,8 @@ export default function SignIn() {
         label="Sign in"
         firstName={firstName}
         refreshUserContext={refreshUserContext}
+        noGoBack
+        noSignIn
       />
       <ScrollView style={{ flex: 1 }}>
         <Container>
@@ -96,7 +98,11 @@ export default function SignIn() {
           <Spacer large />
           <Text style={signInStyles.error}>{error}</Text>
           <Spacer large />
-          <Button label="sign in" onPress={verifyUser} />
+          <Button
+            label="sign in"
+            onPress={verifyUser}
+            disabled={!email || !password}
+          />
           <Spacer />
           <Spacer />
           <TouchableOpacity onPress={signUpButtonHandler}>
