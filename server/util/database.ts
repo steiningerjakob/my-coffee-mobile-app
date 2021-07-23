@@ -408,18 +408,18 @@ export async function getUserFavourites(userId?: number) {
       flavour_profiles.intensity as intensity,
       flavour_profiles.acidity as acidity,
       ratings.user_rating as rating,
-      ratings.user_review as review
+      ratings.user_review as review,
+      favourites.user_id as user_id
     FROM
       favourites
     LEFT JOIN ratings
-      ON ratings.bean_id = favourites.bean_id
+      ON ratings.bean_id = favourites.bean_id AND ratings.user_id = ${userId}
     LEFT JOIN beans
       ON beans.id = favourites.bean_id
     LEFT JOIN flavour_profiles
       ON flavour_profiles.id = beans.flavour_profile
     WHERE
-      favourites.user_id = ${userId} AND
-      ratings.user_id = ${userId}
+      favourites.user_id = ${userId}
     ORDER BY
       ratings.user_rating DESC
   `;
