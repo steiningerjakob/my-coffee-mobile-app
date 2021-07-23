@@ -214,12 +214,12 @@ export default function Profile() {
           setUserPreferences(preference.beanType);
         }
       });
-      getUserFavourites(id).then((data) => {
+      getUserFavourites().then((data) => {
         if (data) {
           setUserFavourites(data.userFavourites);
         }
       });
-    }, [id]),
+    }, []),
   );
 
   return (

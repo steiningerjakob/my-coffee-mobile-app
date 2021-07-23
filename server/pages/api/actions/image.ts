@@ -16,7 +16,7 @@ export default async function profileImageHandler(
   }
 
   if (req.method === 'GET') {
-    const profileImage = await checkProfileImageStatus(sessionToken);
+    const profileImage = await checkProfileImageStatus(user.id);
 
     return res.status(200).json({ profileImage: profileImage });
   }

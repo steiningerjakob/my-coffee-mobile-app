@@ -36,31 +36,30 @@ const favouritesStyles = StyleSheet.create({
 
 export default function Favourites() {
   const navigation = useNavigation();
-  const { firstName, id, refreshUserContext } = useContext(userContext);
+  const { firstName, refreshUserContext } = useContext(userContext);
 
   const [refreshing, setRefreshing] = useState(false);
 
   const [userFavourites, setUserFavourites] = useState([]);
-  console.log('userFavourites', userFavourites);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
-      getUserFavourites(id).then((data) => {
+      getUserFavourites().then((data) => {
         setUserFavourites(data.userFavourites);
       });
       setRefreshing(false);
     });
-  }, [id]);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
-      getUserFavourites(id).then((data) => {
+      getUserFavourites().then((data) => {
         if (data) {
           setUserFavourites(data.userFavourites);
         }
       });
-    }, [id]),
+    }, []),
   );
 
   function redirectHandler() {

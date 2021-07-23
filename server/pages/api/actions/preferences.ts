@@ -18,7 +18,7 @@ export default async function userPreferenceHandler(
   }
 
   if (req.method === 'GET') {
-    const existingPreference = await checkPreferences(sessionToken);
+    const existingPreference = await checkPreferences(user.id);
 
     return res.status(200).json({ existingPreference: existingPreference });
   }

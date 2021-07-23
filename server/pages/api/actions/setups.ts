@@ -18,7 +18,7 @@ export default async function userReviewsHandler(
   }
 
   if (req.method === 'GET') {
-    const userSetup = await getUserSetups(sessionToken);
+    const userSetup = await getUserSetups(user.id);
 
     return res.status(200).json({ userSetup: userSetup });
   }
