@@ -341,7 +341,8 @@ export async function getFilteredBeans(query?: string) {
       flavour_profile
     FROM
       beans
-      LEFT JOIN ratings ON ratings.bean_id = beans.id
+    LEFT JOIN
+      ratings ON ratings.bean_id = beans.id
     GROUP BY beans.id
     ORDER BY review_count DESC
   `;
@@ -392,7 +393,7 @@ export async function insertBean(
   return newBean.map((bean) => camelcaseKeys(bean))[0];
 }
 
-export async function getUserFavourites(token?: string) {
+export async function getUserFavourites(userId?: number) {
   const userFavourites = await sql<Bean[]>`
     SELECT
       beans.id as id,
@@ -413,13 +414,12 @@ export async function getUserFavourites(token?: string) {
       beans,
       favourites,
       flavour_profiles,
-      ratings,
-      sessions
+      ratings
     WHERE
-      sessions.token = ${token} AND
-      sessions.user_id = ratings.user_id AND
+      users.id = ${userId} AND
+      users.id = ratings.user_id AND
       ratings.bean_id = beans.id AND
-      sessions.user_id = favourites.user_id AND
+      users.id = favourites.user_id AND
       favourites.bean_id = beans.id AND
       flavour_profiles.id = beans.flavour_profile
     ORDER BY

@@ -6,7 +6,7 @@ import {
   removeFavourite,
 } from '../../../util/database';
 
-export default async function userFavouritesHandler(
+export default async function favouritesHandler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -14,12 +14,6 @@ export default async function userFavouritesHandler(
   const user = await getUserByValidSessionToken(sessionToken);
   if (!user) {
     return res.status(401).send({ message: 'Unauthorized' });
-  }
-
-  if (req.method === 'GET') {
-    const userFavourites = await getUserFavourites(sessionToken);
-
-    return res.status(200).json({ userFavourites: userFavourites });
   }
 
   if (req.method === 'POST') {

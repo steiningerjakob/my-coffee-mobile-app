@@ -236,13 +236,16 @@ export async function removeBeansFromFavourites(userId, beanId) {
   }
 }
 
-export async function getUserFavourites() {
-  const response = await fetch(`${apiBaseUrl}/actions/favourites`, {
-    method: 'GET',
+export async function getUserFavourites(userId) {
+  const response = await fetch(`${apiBaseUrl}/actions/user_favourites`, {
+    method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({
+      userId: userId,
+    }),
   });
 
   const favourites = await response.json();

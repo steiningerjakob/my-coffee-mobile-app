@@ -41,25 +41,26 @@ export default function Favourites() {
   const [refreshing, setRefreshing] = useState(false);
 
   const [userFavourites, setUserFavourites] = useState([]);
+  console.log('userFavourites', userFavourites);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
-      getUserFavourites().then((data) => {
+      getUserFavourites(id).then((data) => {
         setUserFavourites(data.userFavourites);
       });
       setRefreshing(false);
     });
-  }, []);
+  }, [id]);
 
   useFocusEffect(
     useCallback(() => {
-      getUserFavourites().then((data) => {
+      getUserFavourites(id).then((data) => {
         if (data) {
           setUserFavourites(data.userFavourites);
         }
       });
-    }, []),
+    }, [id]),
   );
 
   function redirectHandler() {

@@ -71,13 +71,13 @@ const profileStyles = StyleSheet.create({
     marginLeft: 'auto',
   },
   prefixWrapper: {
-    width: 48,
-    alignContent: 'flex-start',
+    width: 64,
   },
   prefix: {
     marginRight: 12,
     fontSize: 24,
     color: '#BC6C25',
+    alignSelf: 'center',
   },
   clear: {
     color: '#BC6C25',
@@ -214,12 +214,12 @@ export default function Profile() {
           setUserPreferences(preference.beanType);
         }
       });
-      getUserFavourites().then((data) => {
+      getUserFavourites(id).then((data) => {
         if (data) {
           setUserFavourites(data.userFavourites);
         }
       });
-    }, []),
+    }, [id]),
   );
 
   return (
