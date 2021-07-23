@@ -1,7 +1,7 @@
 import * as Linking from 'expo-linking';
 import * as React from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
-import MapView, { Callout, Marker } from 'react-native-maps';
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Rating } from 'react-native-ratings';
 import coffeeLocation from '../assets/coffee-location.png';
 
@@ -89,44 +89,47 @@ export default function MapElement(props) {
   };
 
   return (
-    <MapView style={mapStyles.map} initialRegion={region} showsUserLocation>
+    <MapView
+      style={mapStyles.map}
+      initialRegion={region}
+      showsUserLocation
+      provider={PROVIDER_GOOGLE}
+    >
       {props.sellers.length > 0 &&
         props.sellers.map((seller) => (
-          <View key={seller.id}>
-            <Text>{seller.sellerName}</Text>
-            <Marker
-              coordinate={{
-                latitude: Number(seller.latitude),
-                longitude: Number(seller.longitude),
-              }}
-              image={coffeeLocation}
-              title={seller.sellerName}
-              description={seller.sellerDescription}
-              onPress={() => {
-                props.onPress(seller.sellerName);
-              }}
-            >
-              <Callout tooltip onPress={() => Linking.openURL(seller.website)}>
-                <View style={mapStyles.bubble}>
-                  <Text style={mapStyles.name}>{seller.sellerName}</Text>
-                  <View style={mapStyles.cardLineItem}>
-                    <Rating
-                      startingValue={seller.rating}
-                      readonly
-                      imageSize={16}
-                    />
-                    <Text style={mapStyles.cardText}>({seller.reviews})</Text>
-                  </View>
-                  <Image style={mapStyles.image} source={{ uri: seller.uri }} />
-                  <View style={mapStyles.buttonWrapper}>
-                    <Text style={mapStyles.buttonText}>Go to website</Text>
-                  </View>
+          <Marker
+            key={seller.id}
+            coordinate={{
+              latitude: Number(seller.latitude),
+              longitude: Number(seller.longitude),
+            }}
+            image={coffeeLocation}
+            title={seller.sellerName}
+            description={seller.sellerDescription}
+            onPress={() => {
+              props.onPress(seller.sellerName);
+            }}
+          >
+            <Callout tooltip onPress={() => Linking.openURL(seller.website)}>
+              <View style={mapStyles.bubble}>
+                <Text style={mapStyles.name}>{seller.sellerName}</Text>
+                <View style={mapStyles.cardLineItem}>
+                  <Rating
+                    startingValue={seller.rating}
+                    readonly
+                    imageSize={16}
+                  />
+                  <Text style={mapStyles.cardText}>({seller.reviews})</Text>
                 </View>
-                <View style={mapStyles.arrowBorder} />
-                <View style={mapStyles.arrow} />
-              </Callout>
-            </Marker>
-          </View>
+                <Image style={mapStyles.image} source={{ uri: seller.uri }} />
+                <View style={mapStyles.buttonWrapper}>
+                  <Text style={mapStyles.buttonText}>Go to website</Text>
+                </View>
+              </View>
+              <View style={mapStyles.arrowBorder} />
+              <View style={mapStyles.arrow} />
+            </Callout>
+          </Marker>
         ))}
     </MapView>
   );

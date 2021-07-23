@@ -17,6 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
+      "bundleIdentifier": "com.steiningerjakob.beanify",
       "buildNumber": "1.0.1"
     },
     "android": {
@@ -24,6 +25,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "package": "com.steiningerjakob.beanify",
       "versionCode": 101
     },
     "web": {

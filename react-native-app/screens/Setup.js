@@ -1,8 +1,16 @@
 import { AntDesign, Entypo, Feather } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useContext, useState } from 'react';
-import { Alert, Image, Modal, StyleSheet, Text, View } from 'react-native';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  Alert,
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { userContext } from '../App';
 import coverImage from '../assets/setup-cover.jpg';
 import Button from '../components/Button';
