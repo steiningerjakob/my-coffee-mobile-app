@@ -336,7 +336,7 @@ export default function Profile() {
           </TouchableOpacity>
         </Container>
         <Container>
-          <Button label="edit profile" onPress={editButtonHandler} />
+          <Button label="edit profile details" onPress={editButtonHandler} />
           <TouchableOpacity onPress={deleteProfileHandler}>
             <Text style={profileStyles.clear}>Delete profile</Text>
           </TouchableOpacity>
