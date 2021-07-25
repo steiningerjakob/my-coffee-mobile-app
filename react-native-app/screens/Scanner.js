@@ -68,10 +68,11 @@ export default function Scanner() {
     setScanned(true);
     findBeansByBarCode(data);
   }
-
+  // eslint-disable-next-line
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
+  // eslint-disable-next-line
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }

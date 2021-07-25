@@ -9,6 +9,7 @@ export default async function usersHandler(
   if (req.method === 'GET') {
     const users: User[] = await getAllUsers();
 
+    // eslint-disable-next-line
     if (users) {
       return res.status(200).json({ users: users });
     } else {

@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import * as React from 'react';
+import React from 'react';
 import {
   Dimensions,
   Image,

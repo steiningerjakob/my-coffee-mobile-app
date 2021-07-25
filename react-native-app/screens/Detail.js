@@ -134,12 +134,14 @@ export default function Detail(props) {
   function addButtonHandler() {
     addBeansToFavourites(firstName, id, params.bean.id);
     setFavourite(true);
+    // eslint-disable-next-line
     removeTooltip.current && removeTooltip.current.toggleTooltip();
   }
 
   function removeButtonHandler() {
     removeBeansFromFavourites(id, params.bean.id);
     setFavourite(false);
+    // eslint-disable-next-line
     addTooltip.current && addTooltip.current.toggleTooltip();
   }
 

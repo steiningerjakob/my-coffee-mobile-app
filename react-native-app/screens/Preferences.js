@@ -462,6 +462,7 @@ export default function Preferences() {
               )}
             </Container>
           </Container>
+          {/* eslint-disable-next-line */}
           {userBeanType && userAcidity && userBody && userIntensity ? (
             existingPreference ? (
               <Container>
@@ -481,6 +482,7 @@ export default function Preferences() {
               </Container>
             )
           ) : (
+            // eslint-disable-next-line
             <Text>{''}</Text>
           )}
         </Modal>

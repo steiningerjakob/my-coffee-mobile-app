@@ -141,6 +141,7 @@ export async function getUserByEmailAndToken(email?: string, token?: string) {
 
   // If we have no user, then return undefined
   const user = users[0];
+  // eslint-disable-next-line
   if (!user) return undefined;
 
   // Security: Match ids of session user with user
@@ -150,7 +151,7 @@ export async function getUserByEmailAndToken(email?: string, token?: string) {
     return errors;
   }
 
-  return users.map((user) => camelcaseKeys(user))[0];
+  return users.map((u) => camelcaseKeys(u))[0];
 }
 
 export async function getUserById(id?: number) {
@@ -194,7 +195,7 @@ export async function insertUser(
   email: string,
   passwordHash: string,
 ) {
-  const newUser = await sql<User>`
+  const newUser = await sql<User[]>`
     INSERT INTO users
       (first_name, last_name, email, password_hash)
     VALUES
@@ -216,7 +217,7 @@ export async function updateUser(
   email: string,
   passwordHash: string,
 ) {
-  const updatedUser = await sql<User>`
+  const updatedUser = await sql<User[]>`
     UPDATE users
     SET
       first_name = ${firstName},
@@ -232,7 +233,7 @@ export async function updateUser(
 }
 
 export async function deleteUser(email: string) {
-  const deletedUser = await sql<User>`
+  const deletedUser = await sql<User[]>`
     DELETE FROM users
     WHERE
       email = ${email}
@@ -314,8 +315,8 @@ export async function getAllBeans() {
   return beans.map((bean) => camelcaseKeys(bean));
 }
 
-export async function getBeansById(id?: number) {
-  const singleBean = await sql<Bean>`
+export async function getBeansById(id: number) {
+  const singleBean = await sql<Bean[]>`
     SELECT
       *
     FROM
@@ -378,9 +379,9 @@ export async function insertBean(
   amount: number,
   barcodeEan13: string,
   uri: string,
-  pricePerKg?: number,
-  img?: string,
-  seller?: string,
+  pricePerKg: number,
+  img: string,
+  seller: string,
 ) {
   const newBean = await sql<[Bean]>`
     INSERT INTO beans
@@ -393,7 +394,7 @@ export async function insertBean(
   return newBean.map((bean) => camelcaseKeys(bean))[0];
 }
 
-export async function getUserFavourites(userId?: number) {
+export async function getUserFavourites(userId: number) {
   const userFavourites = await sql<Bean[]>`
     SELECT
       beans.id as id,
@@ -427,9 +428,9 @@ export async function getUserFavourites(userId?: number) {
 }
 
 export async function getRecommendations(
-  body?: number,
-  acidity?: number,
-  intensity?: number,
+  body: number,
+  acidity: number,
+  intensity: number,
 ) {
   const recommendations = await sql<Bean[]>`
     SELECT
@@ -497,7 +498,7 @@ export async function getAllSellers() {
   return sellers.map((seller) => camelcaseKeys(seller));
 }
 
-export async function getBeansBySeller(sellerName) {
+export async function getBeansBySeller(sellerName: string) {
   const beans = await sql<Bean[]>`
     SELECT
       DISTINCT beans.id as id,
@@ -527,8 +528,8 @@ export async function getBeansBySeller(sellerName) {
   return beans.map((bean) => camelcaseKeys(bean));
 }
 
-export async function getFlavourProfileById(id?: number) {
-  const flavourProfile = await sql<FlavourProfile>`
+export async function getFlavourProfileById(id: number) {
+  const flavourProfile = await sql<FlavourProfile[]>`
     SELECT
       *
     FROM
@@ -542,7 +543,7 @@ export async function getFlavourProfileById(id?: number) {
 // 3. Actions-related queries:
 
 export async function insertFavourite(userId: number, beanId: number) {
-  const newFavourite = await sql<Favourite>`
+  const newFavourite = await sql<Favourite[]>`
     INSERT INTO favourites
       (user_id, bean_id)
     VALUES
@@ -556,7 +557,7 @@ export async function insertFavourite(userId: number, beanId: number) {
 }
 
 export async function removeFavourite(userId: number, beanId: number) {
-  const removedFavourite = await sql<Favourite>`
+  const removedFavourite = await sql<Favourite[]>`
     DELETE FROM
       favourites
     WHERE
@@ -568,7 +569,7 @@ export async function removeFavourite(userId: number, beanId: number) {
 }
 
 export async function checkFavouriteStatus(userId: number, beanId: number) {
-  const favourite = await sql<number>`
+  const favourite = await sql<number[]>`
     SELECT
       id
     FROM
@@ -577,8 +578,9 @@ export async function checkFavouriteStatus(userId: number, beanId: number) {
       user_id = ${userId} AND
       bean_id = ${beanId}
   `;
+  // eslint-disable-next-line
   if (favourite) {
-    return favourite.map((favourite) => camelcaseKeys(favourite))[0];
+    return favourite.map((fav) => camelcaseKeys(fav))[0];
   } else {
     return undefined;
   }
@@ -602,7 +604,7 @@ export async function insertReview(
   rating: string,
   review: string,
 ) {
-  const newReview = await sql<Rating>`
+  const newReview = await sql<Rating[]>`
     INSERT INTO ratings
       (user_id, bean_id, user_rating, user_review)
     VALUES
@@ -614,7 +616,7 @@ export async function insertReview(
       user_rating,
       user_review
   `;
-  return newReview.map((rating) => camelcaseKeys(rating))[0];
+  return newReview.map((r) => camelcaseKeys(r))[0];
 }
 
 export async function getReviewsByBeanId(beanId: number) {
@@ -638,7 +640,7 @@ export async function getReviewsByBeanId(beanId: number) {
 }
 
 export async function checkReviewStatus(userId: number, beanId: number) {
-  const userEntry = await sql<Rating>`
+  const userEntry = await sql<Rating[]>`
     SELECT
       id,
       user_rating,
@@ -649,6 +651,7 @@ export async function checkReviewStatus(userId: number, beanId: number) {
       user_id = ${userId} AND
       bean_id = ${beanId}
   `;
+  // eslint-disable-next-line
   if (userEntry) {
     return userEntry.map((r) => camelcaseKeys(r))[0];
   } else {
@@ -662,7 +665,7 @@ export async function updateReview(
   rating: string,
   review: string,
 ) {
-  const updatedReview = await sql<Rating>`
+  const updatedReview = await sql<Rating[]>`
     UPDATE ratings
     SET
       user_rating = ${rating},
@@ -681,7 +684,7 @@ export async function updateReview(
 }
 
 export async function deleteReview(userId: number, beanId: number) {
-  const deletedReview = await sql<Rating>`
+  const deletedReview = await sql<Rating[]>`
     DELETE FROM
       ratings
     WHERE
@@ -731,7 +734,7 @@ export async function updateProfileImage(id: number, profileImage: string) {
 }
 
 export async function checkProfileImageStatus(userId: number) {
-  const profileImage = await sql<string>`
+  const profileImage = await sql<string[]>`
     SELECT
       profile_image
     FROM
@@ -739,6 +742,7 @@ export async function checkProfileImageStatus(userId: number) {
     WHERE
       users.id = ${userId}
   `;
+  // eslint-disable-next-line
   if (profileImage) {
     return profileImage.map((image) => camelcaseKeys(image))[0];
   } else {
@@ -751,7 +755,7 @@ export async function insertSetup(
   machineId: number,
   grinderId: number,
 ) {
-  const newSetup = await sql<Setup>`
+  const newSetup = await sql<Setup[]>`
     INSERT INTO setups
       (user_id, machine_id, grinder_id)
     VALUES
@@ -769,7 +773,7 @@ export async function updateSetup(
   machineId: number,
   grinderId: number,
 ) {
-  const updatedSetup = await sql<Rating>`
+  const updatedSetup = await sql<Rating[]>`
     UPDATE setups
     SET
       machine_id = ${machineId},
@@ -783,7 +787,7 @@ export async function updateSetup(
 }
 
 export async function removeSetup(setupId: number) {
-  const removedSetup = await sql<Setup>`
+  const removedSetup = await sql<Setup[]>`
     DELETE FROM
       setups
     WHERE
@@ -793,8 +797,8 @@ export async function removeSetup(setupId: number) {
   return removedSetup.map((setup) => camelcaseKeys(setup))[0];
 }
 
-export async function getUserSetups(userId?: number) {
-  const userSetup = await sql<Setup>`
+export async function getUserSetups(userId: number) {
+  const userSetup = await sql<Setup[]>`
     SELECT
       setups.id as id,
       machines.id as machine_id,
@@ -822,7 +826,7 @@ export async function insertPreference(
   intensity: number,
   acidity: number,
 ) {
-  const newPreference = await sql<Preference>`
+  const newPreference = await sql<Preference[]>`
     INSERT INTO preferences
       (user_id, bean_type, body, intensity, acidity)
     VALUES
@@ -833,8 +837,8 @@ export async function insertPreference(
   return newPreference.map((preference) => camelcaseKeys(preference))[0];
 }
 
-export async function checkPreferences(userId?: number) {
-  const existingPreference = await sql<Preference>`
+export async function checkPreferences(userId: number) {
+  const existingPreference = await sql<Preference[]>`
     SELECT
       bean_type,
       body,
@@ -845,6 +849,7 @@ export async function checkPreferences(userId?: number) {
     WHERE
       ${userId} = preferences.user_id
   `;
+  // eslint-disable-next-line
   if (existingPreference) {
     return existingPreference.map((preference) => camelcaseKeys(preference))[0];
   } else {
@@ -853,7 +858,7 @@ export async function checkPreferences(userId?: number) {
 }
 
 export async function clearPreferences(userId: number) {
-  const clearedPreference = await sql<Preference>`
+  const clearedPreference = await sql<Preference[]>`
     DELETE FROM
       preferences
     WHERE
@@ -871,7 +876,7 @@ export async function updatePreference(
   intensity: number,
   acidity: number,
 ) {
-  const updatedPreference = await sql<Preference>`
+  const updatedPreference = await sql<Preference[]>`
     UPDATE preferences
     SET
       bean_type = ${beanType},

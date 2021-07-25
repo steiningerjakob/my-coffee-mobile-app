@@ -25,7 +25,7 @@ export default async function insertBeanHandler(
     } = req.body;
 
     // Insert into database
-    const newBean: [Bean] = await insertBean(
+    const newBean: Bean = await insertBean(
       productName,
       roaster,
       roasterCountry,

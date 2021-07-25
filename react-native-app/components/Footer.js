@@ -8,7 +8,6 @@ import React, { useRef } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Tooltip } from 'react-native-elements/dist/tooltip/Tooltip';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const footerStyles = StyleSheet.create({
   safeAreaView: {

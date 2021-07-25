@@ -1,7 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
 import * as Location from 'expo-location';
-import * as React from 'react';
-import { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { userContext } from '../App';
 import Card from '../components/Card';
@@ -77,6 +76,7 @@ export default function Map() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
+      {/* eslint-disable-next-line */}
       {sellers.length === 0 || !location ? (
         <Loading label="Fetching your location, hang tight..." />
       ) : (

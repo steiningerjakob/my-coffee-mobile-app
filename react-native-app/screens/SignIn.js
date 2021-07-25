@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { LoginResponse } from '../../server/util/types';
 import { userContext } from '../App';
 import Button from '../components/Button';
 import Container from '../components/Container';
@@ -46,7 +45,7 @@ export default function SignIn() {
       }),
     });
 
-    const json = (await response.json()) as LoginResponse;
+    const json = await response.json();
 
     // Return error if verification goes wrong
     if ('errors' in json) {

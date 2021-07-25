@@ -10,6 +10,7 @@ export default async function searchQueryHandler(
 
   const filteredBeans: Bean[] = await getFilteredBeans(query);
 
+  // eslint-disable-next-line
   if (filteredBeans) {
     return res.status(200).json({ filteredBeans: filteredBeans });
   } else {

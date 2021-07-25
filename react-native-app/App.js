@@ -63,6 +63,7 @@ export default function App() {
 
   return (
     <Fragment>
+      {/* eslint-disable-next-line */}
       <StatusBar style="light" />
       <userContext.Provider value={userContextValue}>
         <Router />

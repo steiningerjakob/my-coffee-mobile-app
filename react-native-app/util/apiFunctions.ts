@@ -4,7 +4,7 @@ export async function logoutUser() {
   return await fetch(`${apiBaseUrl}/users/logout`);
 }
 
-export async function getUserProfile(clearCookie) {
+export async function getUserProfile(clearCookie: boolean) {
   // if clearCookie is true, set cookie value to empty
   const options = clearCookie
     ? {
@@ -21,7 +21,7 @@ export async function getUserProfile(clearCookie) {
   return json;
 }
 
-export async function deleteUser(email) {
+export async function deleteUser(email: string) {
   const response = await fetch(`${apiBaseUrl}/users/profile`, {
     method: 'DELETE',
     headers: {
@@ -36,7 +36,13 @@ export async function deleteUser(email) {
   return data;
 }
 
-export async function updateUser(id, firstName, lastName, email, password) {
+export async function updateUser(
+  id: number,
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+) {
   const response = await fetch(`${apiBaseUrl}/users/profile`, {
     method: 'PUT',
     headers: {
@@ -65,7 +71,7 @@ export async function getBeans() {
   return beans;
 }
 
-export async function getFilteredBeans(query) {
+export async function getFilteredBeans(query: string) {
   const response = await fetch(`${apiBaseUrl}/products/query`, {
     method: 'POST',
     headers: {
@@ -80,7 +86,11 @@ export async function getFilteredBeans(query) {
   return data;
 }
 
-export async function getRecommendations(body, acidity, intensity) {
+export async function getRecommendations(
+  body: number,
+  acidity: number,
+  intensity: number,
+) {
   const response = await fetch(`${apiBaseUrl}/actions/recommendations`, {
     method: 'POST',
     headers: {
@@ -115,7 +125,7 @@ export async function getSellers() {
   return sellers;
 }
 
-export async function getUserReviews(beanId) {
+export async function getUserReviews(beanId: number) {
   const response = await fetch(`${apiBaseUrl}/products/reviews`, {
     method: 'POST',
     headers: {
@@ -136,7 +146,7 @@ export async function getRatedBeans() {
   return ratedBeans;
 }
 
-export async function getBeansBySeller(sellerName) {
+export async function getBeansBySeller(sellerName: string) {
   const response = await fetch(`${apiBaseUrl}/actions/sellerbeans`, {
     method: 'POST',
     headers: {
@@ -157,7 +167,7 @@ export async function getBeanTypes() {
   return beanTypes;
 }
 
-export async function getFlavourProfile(beanId) {
+export async function getFlavourProfile(beanId: number) {
   const response = await fetch(`${apiBaseUrl}/products/flavour`, {
     method: 'POST',
     headers: {
@@ -173,7 +183,7 @@ export async function getFlavourProfile(beanId) {
   return flavour;
 }
 
-export async function checkFavouriteStatus(userId, beanId) {
+export async function checkFavouriteStatus(userId: number, beanId: number) {
   const response = await fetch(`${apiBaseUrl}/actions/favourite_status`, {
     method: 'POST',
     headers: {
@@ -194,7 +204,11 @@ export async function checkFavouriteStatus(userId, beanId) {
   }
 }
 
-export async function addBeansToFavourites(firstName, userId, beanId) {
+export async function addBeansToFavourites(
+  firstName: string,
+  userId: number,
+  beanId: number,
+) {
   if (firstName === '') {
     alert('You need to sign in to perform this action');
   } else {
@@ -217,7 +231,10 @@ export async function addBeansToFavourites(firstName, userId, beanId) {
   }
 }
 
-export async function removeBeansFromFavourites(userId, beanId) {
+export async function removeBeansFromFavourites(
+  userId: number,
+  beanId: number,
+) {
   const response = await fetch(`${apiBaseUrl}/actions/favourites`, {
     method: 'DELETE',
     headers: {
@@ -249,7 +266,12 @@ export async function getUserFavourites() {
   return favourites;
 }
 
-export async function insertReview(userId, beanId, rating, review) {
+export async function insertReview(
+  userId: number,
+  beanId: number,
+  rating: number,
+  review: string,
+) {
   const response = await fetch(`${apiBaseUrl}/actions/reviews`, {
     method: 'POST',
     headers: {
@@ -272,7 +294,7 @@ export async function insertReview(userId, beanId, rating, review) {
   }
 }
 
-export async function checkReviewStatus(userId, beanId) {
+export async function checkReviewStatus(userId: number, beanId: number) {
   const response = await fetch(`${apiBaseUrl}/actions/review_status`, {
     method: 'POST',
     headers: {
@@ -293,7 +315,12 @@ export async function checkReviewStatus(userId, beanId) {
   }
 }
 
-export async function updateReview(userId, beanId, rating, review) {
+export async function updateReview(
+  userId: number,
+  beanId: number,
+  rating: number,
+  review: string,
+) {
   const response = await fetch(`${apiBaseUrl}/actions/reviews`, {
     method: 'PUT',
     headers: {
@@ -316,7 +343,7 @@ export async function updateReview(userId, beanId, rating, review) {
   }
 }
 
-export async function deleteReview(userId, beanId) {
+export async function deleteReview(userId: number, beanId: number) {
   const response = await fetch(`${apiBaseUrl}/actions/reviews`, {
     method: 'DELETE',
     headers: {
@@ -337,7 +364,7 @@ export async function deleteReview(userId, beanId) {
   }
 }
 
-export async function updateProfileImage(id, profileImage) {
+export async function updateProfileImage(id: number, profileImage: string) {
   const response = await fetch(`${apiBaseUrl}/actions/image`, {
     method: 'PUT',
     headers: {
@@ -358,7 +385,7 @@ export async function updateProfileImage(id, profileImage) {
   }
 }
 
-export async function uploadProfileImage(id, base64Img) {
+export async function uploadProfileImage(id: number, base64Img: string) {
   const response = await fetch(`${apiBaseUrl}/actions/image`, {
     method: 'POST',
     headers: {
@@ -396,7 +423,11 @@ export async function checkProfileImageStatus() {
   }
 }
 
-export async function insertSetup(userId, machineId, grinderId) {
+export async function insertSetup(
+  userId: number,
+  machineId: number,
+  grinderId: number,
+) {
   const response = await fetch(`${apiBaseUrl}/actions/setups`, {
     method: 'POST',
     headers: {
@@ -418,7 +449,11 @@ export async function insertSetup(userId, machineId, grinderId) {
   }
 }
 
-export async function updateSetup(userId, machineId, grinderId) {
+export async function updateSetup(
+  userId: number,
+  machineId: number,
+  grinderId: number,
+) {
   const response = await fetch(`${apiBaseUrl}/actions/setups`, {
     method: 'PUT',
     headers: {
@@ -440,7 +475,7 @@ export async function updateSetup(userId, machineId, grinderId) {
   }
 }
 
-export async function removeFromSetups(setupId) {
+export async function removeFromSetups(setupId: number) {
   const response = await fetch(`${apiBaseUrl}/actions/setups`, {
     method: 'DELETE',
     headers: {
@@ -541,11 +576,11 @@ export async function clearPreference(userId: number) {
 }
 
 export async function updatePreference(
-  userId,
-  beanType,
-  body,
-  intensity,
-  acidity,
+  userId: number,
+  beanType: string,
+  body: number,
+  intensity: number,
+  acidity: number,
 ) {
   const response = await fetch(`${apiBaseUrl}/actions/preferences`, {
     method: 'PUT',

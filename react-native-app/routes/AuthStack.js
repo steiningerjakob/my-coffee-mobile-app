@@ -3,6 +3,7 @@ import React from 'react';
 import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
 
+// eslint-disable-next-line
 const Stack = createStackNavigator();
 
 export default function AppStack() {

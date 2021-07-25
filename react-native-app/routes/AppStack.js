@@ -9,6 +9,7 @@ import Profile from '../screens/Profile';
 import Scanner from '../screens/Scanner';
 import Setup from '../screens/Setup';
 
+// eslint-disable-next-line
 const Stack = createStackNavigator();
 
 export default function AppStack() {

@@ -1,5 +1,5 @@
 import * as Linking from 'expo-linking';
-import * as React from 'react';
+import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Rating } from 'react-native-ratings';
