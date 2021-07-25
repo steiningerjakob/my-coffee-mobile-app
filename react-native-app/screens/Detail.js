@@ -212,8 +212,7 @@ export default function Detail(props) {
       }
     });
     setLoading(false);
-    // eslint-disable-next-line
-  }, []);
+  }, [id, params.bean]);
 
   return (
     <Screen>

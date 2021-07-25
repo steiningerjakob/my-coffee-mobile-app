@@ -73,44 +73,32 @@ export default function Favourites() {
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
-      {/* eslint-disable-next-line */}
-      {!userFavourites ? (
-        <Loading />
-      ) : (
-        <>
-          <Image source={coverImage} style={favouritesStyles.image} />
-          <Container fill>
-            {userFavourites.length > 0 ? (
-              <FlatList
-                data={userFavourites}
-                keyExtractor={(item) => item.id.toString()}
-                refreshControl={
-                  <RefreshControl
-                    onRefresh={onRefresh}
-                    refreshing={refreshing}
-                  />
-                }
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <ListItemFav
-                    item={item}
-                    onPress={() =>
-                      navigation.navigate('Detail', { bean: item })
-                    }
-                  />
-                )}
+      <Image source={coverImage} style={favouritesStyles.image} />
+      <Container fill>
+        {userFavourites.length > 0 ? (
+          <FlatList
+            data={userFavourites}
+            keyExtractor={(item) => item.id.toString()}
+            refreshControl={
+              <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+            }
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <ListItemFav
+                item={item}
+                onPress={() => navigation.navigate('Detail', { bean: item })}
               />
-            ) : (
-              <TouchableOpacity onPress={redirectHandler}>
-                <Text style={favouritesStyles.redirect}>
-                  Nothing here yet... browse through our world of coffee and
-                  select your favourites!
-                </Text>
-              </TouchableOpacity>
             )}
-          </Container>
-        </>
-      )}
+          />
+        ) : (
+          <TouchableOpacity onPress={redirectHandler}>
+            <Text style={favouritesStyles.redirect}>
+              Nothing here yet... browse through our world of coffee and select
+              your favourites!
+            </Text>
+          </TouchableOpacity>
+        )}
+      </Container>
       <Footer firstName={firstName} />
     </Screen>
   );
