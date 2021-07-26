@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { logoutUser } from '../util/apiFunctions';
 
 const headerStyles = StyleSheet.create({
@@ -43,9 +42,12 @@ export default function Header(props) {
         {props.noGoBack ? (
           <Ionicons name="ios-arrow-back" size={32} color="#BC6C25" />
         ) : (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="ios-arrow-back" size={32} color="white" />
-          </TouchableOpacity>
+          <Ionicons
+            name="ios-arrow-back"
+            size={32}
+            color="white"
+            onPress={() => navigation.goBack()}
+          />
         )}
         <Text style={headerStyles.label} numberOfLines={1}>
           {props.label}
@@ -53,13 +55,19 @@ export default function Header(props) {
         {props.noSignIn ? (
           <MaterialIcons name="logout" size={32} color="#BC6C25" />
         ) : props.firstName ? (
-          <TouchableOpacity onPress={() => logoutButtonHandler()}>
-            <MaterialIcons name="logout" size={32} color="white" />
-          </TouchableOpacity>
+          <MaterialIcons
+            name="logout"
+            size={32}
+            color="white"
+            onPress={() => logoutButtonHandler()}
+          />
         ) : (
-          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-            <MaterialIcons name="login" size={32} color="white" />
-          </TouchableOpacity>
+          <MaterialIcons
+            name="login"
+            size={32}
+            color="white"
+            onPress={() => navigation.navigate('SignIn')}
+          />
         )}
       </View>
     </SafeAreaView>

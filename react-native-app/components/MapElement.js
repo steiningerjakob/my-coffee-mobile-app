@@ -1,7 +1,7 @@
 import * as Linking from 'expo-linking';
 import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Callout, Marker } from 'react-native-maps';
 import { Rating } from 'react-native-ratings';
 import coffeeLocation from '../assets/coffee-location.png';
 
@@ -89,12 +89,7 @@ export default function MapElement(props) {
   };
 
   return (
-    <MapView
-      style={mapStyles.map}
-      initialRegion={region}
-      showsUserLocation
-      provider={PROVIDER_GOOGLE}
-    >
+    <MapView style={mapStyles.map} initialRegion={region} showsUserLocation>
       {props.sellers.length > 0 &&
         props.sellers.map((seller) => (
           <Marker

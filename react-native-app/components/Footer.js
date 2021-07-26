@@ -85,8 +85,8 @@ export default function Footer(props) {
               height={56}
               withOverlay={false}
             >
-              <AntDesign
-                name="staro"
+              <Ionicons
+                name="checkmark-circle-outline"
                 size={32}
                 color="white"
                 style={footerStyles.icon}
@@ -97,7 +97,7 @@ export default function Footer(props) {
                 }
               />
             </Tooltip>
-            <Text style={footerStyles.label}>Favourites</Text>
+            <Text style={footerStyles.label}>My coffee</Text>
           </View>
           <View style={footerStyles.element}>
             <Tooltip
@@ -166,7 +166,7 @@ export default function Footer(props) {
                 style={footerStyles.icon}
               />
             </Tooltip>
-            <Text style={footerStyles.label}>Find store</Text>
+            <Text style={footerStyles.label}>Store finder</Text>
           </View>
           <View style={footerStyles.element}>
             <Tooltip
