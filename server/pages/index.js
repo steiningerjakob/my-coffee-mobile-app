@@ -3,6 +3,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
 
+const Mailto = ({ email, subject = '', body = '', children }) => {
+  let params = subject || body ? '?' : '';
+  if (subject) params += `subject=${encodeURIComponent(subject)}`;
+  if (body) params += `${subject ? '&' : ''}body=${encodeURIComponent(body)}`;
+  return <a href={`mailto:${email}${params}`}>{children}</a>;
+};
+
 export default function Home() {
   return (
     <div className={styles.container}>
@@ -30,24 +37,37 @@ export default function Home() {
           className={styles.logo}
         />
         <h1 className={styles.title}>
-          Welcome to beanify - your world of coffee!
+          Welcome to beanify - your world of coffee
         </h1>
         <p className={styles.text}>
-          Click
+          <b>Android: </b>
+          Click{' '}
           <Link href="https://expo.io/@steiningerjakob/beanify?release-channel=prod-v1">
             <a>
-              {' '}
-              --{'>'} here {'<'}--{' '}
+              --{'>'} here {'<'}--
             </a>
-          </Link>
-          to go to my Expo project and download
+          </Link>{' '}
+          to go to my Expo project and download{' '}
           <Link href="https://expo.dev/tools">
             <a>
-              {' '}
-              --{'>'} Expo Go {'<'}--{' '}
+              --{'>'} Expo Go {'<'}--
             </a>
-          </Link>
+          </Link>{' '}
           on your device to try out my mobile app!
+        </p>
+        <p className={styles.text}>
+          <b>iOS: </b>
+          Request link to TestFlight beta version by clicking
+          <Mailto
+            email="contact@steiningerjakob.me"
+            subject="Requesting access to beanify beta-test version"
+            body="Hello Jakob,
+            please give me access to the beanify beta-test version.
+            Cheers"
+          >
+            --{'>'} here {'<'}--
+          </Mailto>
+          .
         </p>
       </main>
 

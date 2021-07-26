@@ -14,7 +14,6 @@ import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import ListItemFav from '../components/ListItemFav';
-import Loading from '../components/Loading';
 import Screen from '../components/Screen';
 import { getUserFavourites } from '../util/apiFunctions';
 import { wait } from '../util/utilFunctions';
@@ -69,7 +68,7 @@ export default function Favourites() {
   return (
     <Screen>
       <Header
-        label="My coffee list"
+        label="My coffee"
         firstName={firstName}
         refreshUserContext={refreshUserContext}
       />
