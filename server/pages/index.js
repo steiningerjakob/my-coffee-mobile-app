@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Welcome to beanify - your world of coffee!</title>
+        <title>Welcome to beanify - your world of coffee</title>
         <meta
           name="beanify - your coffee bean explorer in Vienna"
           content="beanify is an application to find, rate and store your favourite coffee beans in Vienna"
@@ -47,7 +47,7 @@ export default function Home() {
               --{'>'} Expo Go {'<'}--
             </a>
           </Link>{' '}
-          on your device and go to scan the QR code on{' '}
+          on your device and scan the QR code on{' '}
           <Link href="https://expo.io/@steiningerjakob/beanify?release-channel=prod-v1">
             <a>
               --{'>'} my Expo project page {'<'}--
