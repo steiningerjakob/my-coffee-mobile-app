@@ -41,23 +41,22 @@ export default function Home() {
         </h1>
         <p className={styles.text}>
           <b>Android: </b>
-          Click{' '}
-          <Link href="https://expo.io/@steiningerjakob/beanify?release-channel=prod-v1">
-            <a>
-              --{'>'} here {'<'}--
-            </a>
-          </Link>{' '}
-          to go to my Expo project and download{' '}
+          Download{' '}
           <Link href="https://expo.dev/tools">
             <a>
               --{'>'} Expo Go {'<'}--
             </a>
           </Link>{' '}
-          on your device to try out my mobile app!
+          on your device and go to scan the QR code on{' '}
+          <Link href="https://expo.io/@steiningerjakob/beanify?release-channel=prod-v1">
+            <a>
+              --{'>'} my Expo project page {'<'}--
+            </a>
+          </Link>
         </p>
         <p className={styles.text}>
           <b>iOS: </b>
-          Request link to TestFlight beta version by clicking
+          Click{' '}
           <Mailto
             email="contact@steiningerjakob.me"
             subject="Requesting access to beanify beta-test version"
@@ -66,8 +65,9 @@ export default function Home() {
             Cheers"
           >
             --{'>'} here {'<'}--
-          </Mailto>
-          .
+          </Mailto>{' '}
+          to request your personal link to the Apple TestFlight beta version of
+          my app
         </p>
       </main>
 
